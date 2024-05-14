@@ -1,0 +1,10 @@
+[
+  {
+    "type": "WPA",
+    "date": 1706364752,
+    "essid": "awar",
+    "bssid": "CC:32:E5:FD:21:56",
+    "key": "188888888",
+    "handshake_file": "hs/handshake_awar_CC-32-E5-FD-21-56_2024-01-27T16-44-07.cap"
+  }
+]

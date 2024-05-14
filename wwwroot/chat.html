@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="messages" class="message-container"></div>
+<form id="messageForm" class="message-input-area">
+    <input id="messageInput" type="text" class="message-input" placeholder="Message" required>
+    <button type="submit" class="send-button"></button>
+</form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.7/signalr.min.js" defer></script>
+<script src="chat.js" defer></script>
+</body>
+</html>
