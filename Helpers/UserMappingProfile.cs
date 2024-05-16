@@ -25,9 +25,31 @@ public class UserMappingProfile : Profile
 
 
         // here to add
+CreateMap<Category, CategoryDto>();
+CreateMap<CategoryForm,Category>();
+CreateMap<CategoryUpdate,Category>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<Item, ItemDto>()
+    .ForMember(dist => dist.imaages,
+        opt => opt.MapFrom(src => src.imaages == null ? new string[0] : ImageListConfig(src.imaages.ToList()).ToArray()));
+CreateMap<ItemForm,Item>();
+CreateMap<ItemUpdate,Item>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<Inventory, InventoryDto>();
+CreateMap<InventoryForm,Inventory>();
+CreateMap<InventoryUpdate,Inventory>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<Governorate, GovernorateDto>();
+CreateMap<GovernorateForm,Governorate>();
+CreateMap<GovernorateUpdate,Governorate>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Message, MessageDto>();
 CreateMap<MessageForm,Message>();
 CreateMap<MessageUpdate,Message>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
     }
-   
+    public static List<string> ImageListConfig(List<string>? images)
+    {
+        if (images == null)
+        {
+            return new List<string>();
+        }
+
+        return images.Select(image => Utils.Util.Url + image).ToList();
+    }
 }

@@ -15,6 +15,10 @@ public class DataContext : DbContext
 
 
     // here to add
+public DbSet<Category> Categorys { get; set; }
+public DbSet<Item> Items { get; set; }
+public DbSet<Inventory> Inventorys { get; set; }
+public DbSet<Governorate> Governorates { get; set; }
 public DbSet<Message> Messages { get; set; }
     public DbSet<Notifications> Notifications { get; set; }
 

@@ -12,6 +12,46 @@ public class RepositoryWrapper : IRepositoryWrapper
 
 
     // here to add
+private ICategoryRepository _Category;
+
+public ICategoryRepository Category {
+    get {
+        if(_Category == null) {
+            _Category = new CategoryRepository(_context, _mapper);
+        }
+        return _Category;
+    }
+}
+private IItemRepository _Item;
+
+public IItemRepository Item {
+    get {
+        if(_Item == null) {
+            _Item = new ItemRepository(_context, _mapper);
+        }
+        return _Item;
+    }
+}
+private IInventoryRepository _Inventory;
+
+public IInventoryRepository Inventory {
+    get {
+        if(_Inventory == null) {
+            _Inventory = new InventoryRepository(_context, _mapper);
+        }
+        return _Inventory;
+    }
+}
+private IGovernorateRepository _Governorate;
+
+public IGovernorateRepository Governorate {
+    get {
+        if(_Governorate == null) {
+            _Governorate = new GovernorateRepository(_context, _mapper);
+        }
+        return _Governorate;
+    }
+}
 private IMessageRepository _Message;
 
 public IMessageRepository Message {

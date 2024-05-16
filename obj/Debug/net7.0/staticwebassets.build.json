@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "xOhuQTeQ5+XyeUomXiYs2f3dt0+PfjZYrQxBsCx+qGQ=",
+  "Hash": "7X2CxBpHu0G4+jAUFuARKttpsE8dyq6ANY/86eBEXGY=",
   "Source": "Deli",
   "BasePath": "_content/Deli",
   "Mode": "Default",
@@ -253,6 +253,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/Attachments/ced45210-b5ce-40ac-b859-86636ce10aad.json"
+    },
+    {
+      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/ec51bbe9-04a3-455e-88f5-b7f693f7a56f.avif",
+      "SourceId": "Deli",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "BasePath": "_content/Deli",
+      "RelativePath": "Attachments/ec51bbe9-04a3-455e-88f5-b7f693f7a56f.avif",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/Attachments/ec51bbe9-04a3-455e-88f5-b7f693f7a56f.avif"
     },
     {
       "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/ed1d5722-cd93-4f3d-9d9a-1ce1658a8e28.png",

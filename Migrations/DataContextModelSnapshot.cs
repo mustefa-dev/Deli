@@ -54,6 +54,121 @@ namespace Deli.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Deli.Entities.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categorys");
+                });
+
+            modelBuilder.Entity("Deli.Entities.Governorate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("DeliveryPrice")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Governorates");
+                });
+
+            modelBuilder.Entity("Deli.Entities.Inventory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("GovernorateId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GovernorateId");
+
+                    b.ToTable("Inventorys");
+                });
+
+            modelBuilder.Entity("Deli.Entities.Item", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("InventoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("MainDetails")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("double precision");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<string[]>("imaages")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("InventoryId");
+
+                    b.ToTable("Items");
+                });
+
             modelBuilder.Entity("Deli.Entities.Message", b =>
                 {
                     b.Property<Guid>("Id")
@@ -127,6 +242,45 @@ namespace Deli.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("Deli.Entities.Inventory", b =>
+                {
+                    b.HasOne("Deli.Entities.Governorate", "Governorate")
+                        .WithMany("Inventories")
+                        .HasForeignKey("GovernorateId");
+
+                    b.Navigation("Governorate");
+                });
+
+            modelBuilder.Entity("Deli.Entities.Item", b =>
+                {
+                    b.HasOne("Deli.Entities.Category", "Category")
+                        .WithMany("Items")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Deli.Entities.Inventory", "Inventory")
+                        .WithMany("Items")
+                        .HasForeignKey("InventoryId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Inventory");
+                });
+
+            modelBuilder.Entity("Deli.Entities.Category", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Deli.Entities.Governorate", b =>
+                {
+                    b.Navigation("Inventories");
+                });
+
+            modelBuilder.Entity("Deli.Entities.Inventory", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }
