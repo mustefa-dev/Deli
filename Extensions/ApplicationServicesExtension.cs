@@ -19,6 +19,7 @@ public static class ApplicationServicesExtension
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         services.AddScoped<IUserService, UserService>();
         // here to add
+services.AddScoped<IAddressServices, AddressServices>();
 services.AddScoped<ICategoryServices, CategoryServices>();
 services.AddScoped<IItemServices, ItemServices>();
 services.AddScoped<IInventoryServices, InventoryServices>();

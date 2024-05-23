@@ -12,6 +12,16 @@ public class RepositoryWrapper : IRepositoryWrapper
 
 
     // here to add
+private IAddressRepository _Address;
+
+public IAddressRepository Address {
+    get {
+        if(_Address == null) {
+            _Address = new AddressRepository(_context, _mapper);
+        }
+        return _Address;
+    }
+}
 private ICategoryRepository _Category;
 
 public ICategoryRepository Category {

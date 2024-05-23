@@ -25,6 +25,9 @@ public class UserMappingProfile : Profile
 
 
         // here to add
+CreateMap<Address, AddressDto>();
+CreateMap<AddressForm,Address>();
+CreateMap<AddressUpdate,Address>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Category, CategoryDto>();
 CreateMap<CategoryForm,Category>();
 CreateMap<CategoryUpdate,Category>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));

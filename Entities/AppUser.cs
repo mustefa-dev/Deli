@@ -11,9 +11,10 @@ namespace Deli.Entities
         public UserRole? Role { get; set; }
 
         public bool? IsActive { get; set; }
+        public ICollection<Address>? Addresses { get; set; }
+        public Guid? AddressId { get; set; }
 
-               
-        
+
     
     }
     public enum UserRole
