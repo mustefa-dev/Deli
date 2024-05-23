@@ -89,3 +89,4 @@
 /home/mu/RiderProjects/Deli/obj/Debug/net7.0/Deli.pdb
 /home/mu/RiderProjects/Deli/obj/Debug/net7.0/Deli.genruntimeconfig.cache
 /home/mu/RiderProjects/Deli/obj/Debug/net7.0/ref/Deli.dll
+/home/mu/RiderProjects/Deli/bin/Debug/net7.0/json.json

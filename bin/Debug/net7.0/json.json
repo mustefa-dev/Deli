@@ -1,0 +1,86 @@
+{
+  "data": [
+    {
+      "orderDate": "2024-05-23 11:20:47.071",
+      "orderStatus": 1,
+      "note": "string",
+      "address": {
+        "name": "string",
+        "fullAddress": "string",
+        "latidute": 0,
+        "longitude": 0,
+        "isMain": true,
+        "governorateId": "a32266b4-1a59-44ab-8d3d-e497f03032e7",
+        "governorateName": "string"
+      },
+      "orderCarDtos": null,
+      "clientName": null,
+      "clientEmail": null,
+      "rentalDays": null,
+      "rating": null,
+      "dateOfAccepted": null,
+      "dateOfCanceled": null,
+      "dateOfDelivered": null,
+      "totalPrice": 0,
+      "orderstatus": "Pending",
+      "id": "12a08a16-001f-4cce-bdff-4fba631eb0df",
+      "creationDate": "2024-05-23T08:28:10.745138Z"
+    },
+    {
+      "orderDate": "2024-05-23 11:20:47.071",
+      "orderStatus": 1,
+      "note": "string",
+      "address": {
+        "name": "string",
+        "fullAddress": "string",
+        "latidute": 0,
+        "longitude": 0,
+        "isMain": true,
+        "governorateId": "a32266b4-1a59-44ab-8d3d-e497f03032e7",
+        "governorateName": "string"
+      },
+      "orderCarDtos": null,
+      "clientName": null,
+      "clientEmail": null,
+      "rentalDays": null,
+      "rating": null,
+      "dateOfAccepted": null,
+      "dateOfCanceled": null,
+      "dateOfDelivered": null,
+      "totalPrice": 0,
+      "orderstatus": "Pending",
+      "id": "b0ad22de-e0b5-4162-8ad1-8331882b7f64",
+      "creationDate": "2024-05-23T08:27:49.657758Z"
+    },
+    {
+      "orderDate": "2024-05-23 11:20:47.071",
+      "orderStatus": 1,
+      "note": "string",
+      "address": {
+        "name": "string",
+        "fullAddress": "string",
+        "latidute": 0,
+        "longitude": 0,
+        "isMain": true,
+        "governorateId": "a32266b4-1a59-44ab-8d3d-e497f03032e7",
+        "governorateName": "string"
+      },
+      "orderCarDtos": null,
+      "clientName": null,
+      "clientEmail": null,
+      "rentalDays": null,
+      "rating": null,
+      "dateOfAccepted": null,
+      "dateOfCanceled": null,
+      "dateOfDelivered": null,
+      "totalPrice": 0,
+      "orderstatus": "Pending",
+      "id": "c4b8b469-444b-40bc-899b-5c9d033341ac",
+      "creationDate": "2024-05-23T08:25:16.545775Z"
+    }
+  ],
+  "pagesCount": 1,
+  "currentPage": 1,
+  "type": "OrderDto",
+  "totalCount": 3
+}
