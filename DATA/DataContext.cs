@@ -15,6 +15,9 @@ public class DataContext : DbContext
 
 
     // here to add
+public DbSet<FeedBack> FeedBacks { get; set; }
+public DbSet<News> Newss { get; set; }
+public DbSet<Appsettings> Appsettingss { get; set; }
 public DbSet<OrderItem> OrderItems { get; set; }
 public DbSet<Order> Orders { get; set; }
 public DbSet<Address> Addresss { get; set; }

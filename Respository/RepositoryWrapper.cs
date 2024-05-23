@@ -12,6 +12,38 @@ public class RepositoryWrapper : IRepositoryWrapper
 
 
     // here to add
+private IFeedBackRepository _FeedBack;
+
+public IFeedBackRepository FeedBack {
+    get {
+        if(_FeedBack == null) {
+            _FeedBack = new FeedBackRepository(_context, _mapper);
+        }
+        return _FeedBack;
+    }
+}
+
+
+private INewsRepository _News;
+
+public INewsRepository News {
+    get {
+        if(_News == null) {
+            _News = new NewsRepository(_context, _mapper);
+        }
+        return _News;
+    }
+}
+private IAppsettingsRepository _Appsettings;
+
+public IAppsettingsRepository Appsettings {
+    get {
+        if(_Appsettings == null) {
+            _Appsettings = new AppsettingsRepository(_context, _mapper);
+        }
+        return _Appsettings;
+    }
+}
 private IOrderItemRepository _OrderItem;
 
 public IOrderItemRepository OrderItem {
