@@ -15,13 +15,15 @@ public class DataContext : DbContext
 
 
     // here to add
+public DbSet<OrderItem> OrderItems { get; set; }
+public DbSet<Order> Orders { get; set; }
 public DbSet<Address> Addresss { get; set; }
 public DbSet<Category> Categorys { get; set; }
 public DbSet<Item> Items { get; set; }
 public DbSet<Inventory> Inventorys { get; set; }
 public DbSet<Governorate> Governorates { get; set; }
 public DbSet<Message> Messages { get; set; }
-    public DbSet<Notifications> Notifications { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
 
 
     public virtual async Task<int> SaveChangesAsync(Guid? userId = null)
@@ -31,6 +33,8 @@ public DbSet<Message> Messages { get; set; }
         return result;
     }
 }
+
+
 
 public class DbContextOptions<T>
 {

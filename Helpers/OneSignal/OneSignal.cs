@@ -5,7 +5,7 @@ namespace Deli.Helpers.OneSignal;
 
 public class OneSignal
 {
-    public static bool SendNoitications(Notifications notification, string to)
+    public static bool SendNoitications(Notification notification, string to)
     {
         var configuration = ConfigurationProvider.Configuration;
 

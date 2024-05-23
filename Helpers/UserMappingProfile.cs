@@ -3,6 +3,8 @@ using Deli.DATA.DTOs;
 using Deli.DATA.DTOs.User;
 using Deli.Entities;
 using OneSignalApi.Model;
+using Notification = Deli.Entities.Notification;
+
 
 namespace Deli.Helpers;
 
@@ -25,6 +27,23 @@ public class UserMappingProfile : Profile
 
 
         // here to add
+        
+CreateMap<Notification, NotificationDto>();
+CreateMap<NotificationForm,Notification>();
+CreateMap<NotificationUpdate,Notification>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<Order, OrderDto>()
+    .ForMember(dest => dest.OrderItemDto, opt => opt.MapFrom(src => src.OrderItem));
+CreateMap<OrderForm,Order>();
+CreateMap<OrderUpdate,Order>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<OrderItem, OrderItemDto>()
+    .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Item.Price.HasValue ? (int?)src.Item.Price.Value : null))
+    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Item.Name))
+    .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Item.imaages.FirstOrDefault()))
+    .ForMember(dist => dist.Image,
+        opt => opt.MapFrom(src => src.Item.imaages == null ? "" : Utils.Util.Url + src.Item.imaages.FirstOrDefault()));     
+CreateMap<OrderItemForm,OrderItem>();
+CreateMap<OrderItemUpdate,OrderItem>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
 CreateMap<Address, AddressDto>();
 CreateMap<AddressForm,Address>();
 CreateMap<AddressUpdate,Address>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
