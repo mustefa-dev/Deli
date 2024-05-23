@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "xOhuQTeQ5+XyeUomXiYs2f3dt0+PfjZYrQxBsCx+qGQ=",
+  "Hash": "KktCZ9PTU4JHo4ix0J0C+CHquxZRWX7awZ2qeHz0+yA=",
   "Source": "Deli",
   "BasePath": "_content/Deli",
   "Mode": "Default",
@@ -221,6 +221,23 @@
       "OriginalItemSpec": "wwwroot/Attachments/9e63265e-19f4-4841-aa57-8213b828dae5.png"
     },
     {
+      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/c0d22c2c-54f2-4878-9145-e5fea5db4b63.jpeg",
+      "SourceId": "Deli",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "BasePath": "_content/Deli",
+      "RelativePath": "Attachments/c0d22c2c-54f2-4878-9145-e5fea5db4b63.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/Attachments/c0d22c2c-54f2-4878-9145-e5fea5db4b63.jpeg"
+    },
+    {
       "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/c5ce8404-aa42-4a67-b289-69d4e115dd9e.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
@@ -253,6 +270,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/Attachments/ced45210-b5ce-40ac-b859-86636ce10aad.json"
+    },
+    {
+      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/ec51bbe9-04a3-455e-88f5-b7f693f7a56f.avif",
+      "SourceId": "Deli",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "BasePath": "_content/Deli",
+      "RelativePath": "Attachments/ec51bbe9-04a3-455e-88f5-b7f693f7a56f.avif",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/Attachments/ec51bbe9-04a3-455e-88f5-b7f693f7a56f.avif"
     },
     {
       "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/ed1d5722-cd93-4f3d-9d9a-1ce1658a8e28.png",

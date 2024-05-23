@@ -19,9 +19,14 @@ public static class ApplicationServicesExtension
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         services.AddScoped<IUserService, UserService>();
         // here to add
+services.AddScoped<IAddressServices, AddressServices>();
+services.AddScoped<ICategoryServices, CategoryServices>();
+services.AddScoped<IItemServices, ItemServices>();
+services.AddScoped<IInventoryServices, InventoryServices>();
+services.AddScoped<IGovernorateServices, GovernorateServices>();
         services.AddScoped<IMessageServices, MessageServices>();
         services.AddScoped<IFileService, FileService>();
-        services.AddSingleton<UsersHub>();
+            services.AddSingleton<UsersHub>();
         services.AddHttpClient();
         
 
