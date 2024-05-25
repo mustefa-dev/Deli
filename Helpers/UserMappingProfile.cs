@@ -27,6 +27,15 @@ public class UserMappingProfile : Profile
 
 
         // here to add
+CreateMap<FeedBack, FeedBackDto>();
+CreateMap<FeedBackForm,FeedBack>();
+CreateMap<FeedBackUpdate,FeedBack>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<News, NewsDto>();
+CreateMap<NewsForm,News>();
+CreateMap<NewsUpdate,News>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<Appsettings, AppsettingsDto>();
+CreateMap<AppsettingsForm,Appsettings>();
+CreateMap<AppsettingsUpdate,Appsettings>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         
 CreateMap<Notification, NotificationDto>();
 CreateMap<NotificationForm,Notification>();

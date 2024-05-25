@@ -5,6 +5,10 @@ public interface IRepositoryWrapper
     IUserRepository User { get; }
 
     // here to add
+IFeedBackRepository FeedBack{get;}
+
+INewsRepository News{get;}
+IAppsettingsRepository Appsettings{get;}
 IOrderItemRepository OrderItem{get;}
 INotificationRepository Notification{get;}
 IOrderRepository Order{get;}
