@@ -5,7 +5,8 @@ namespace Deli.DATA.DTOs
 
     public class OrderItemForm
     {
-        [Required] public Guid CarId { get; set; }
-        [Required] public double RentalDuration { get; set; }
+        [Required] public Guid ItemId { get; set; }
+        [Required] public int Quantity { get; set; }
+        
     }
 }

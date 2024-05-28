@@ -33,6 +33,7 @@ public class GenericRepository<T, TId> : IGenericRepository<T, TId> where T : Ba
         bool deleted = false)
     {
         var query = _dbContext.Set<T>().AsNoTracking().Where(t => t.Deleted == deleted);
+        query = query.OrderByDescending(t => t.CreationDate);
         return await ExecuteQuery<TDto>(query, pageNumber, pageSize);
     }
 

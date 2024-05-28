@@ -1,5 +1,6 @@
 using AutoMapper;
 using Deli.DATA.DTOs;
+using Deli.DATA.DTOs.Item;
 using Deli.DATA.DTOs.User;
 using Deli.Entities;
 using OneSignalApi.Model;
@@ -41,7 +42,16 @@ CreateMap<Notification, NotificationDto>();
 CreateMap<NotificationForm,Notification>();
 CreateMap<NotificationUpdate,Notification>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Order, OrderDto>()
-    .ForMember(dest => dest.OrderItemDto, opt => opt.MapFrom(src => src.OrderItem));
+    .ForMember(dest => dest.OrderItemDto, opt => opt.MapFrom(src => src.OrderItem))
+    .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.User.FullName ))
+    .ForMember(dest => dest.ClientEmail, opt => opt.MapFrom(src => src.User.Email))
+    .ForMember(dest => dest.TotalPrice, 
+        opt => 
+            opt.MapFrom(src => src.OrderItem.Sum(x => x.Quantity * x.Item.Price)))
+    .ForMember(dest => dest.orderstatus, opt => opt.MapFrom(src => src.OrderStatus.ToString())
+    );
+        
+    
 CreateMap<OrderForm,Order>();
 CreateMap<OrderUpdate,Order>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<OrderItem, OrderItemDto>()

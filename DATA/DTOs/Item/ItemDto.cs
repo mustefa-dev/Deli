@@ -1,7 +1,7 @@
-namespace Deli.DATA.DTOs
+namespace Deli.DATA.DTOs.Item
 {
 
-    public class ItemDto
+    public class ItemDto : BaseDto<Guid>
     {
         public string? Name { get; set; }
         public  string MainDetails { get; set; }

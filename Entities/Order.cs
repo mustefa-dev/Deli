@@ -30,6 +30,8 @@ namespace Deli.Entities
         [JsonIgnore]
 
         public List<OrderItem>? OrderItem { get; set; }
+
+        public decimal TotalPrice { get; set; }
     }
     public enum OrderStatus
     {

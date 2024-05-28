@@ -22,6 +22,7 @@ public interface IOrderServices
 
     Task<(Order? order, string? error)> Delete(Guid id);
     Task<(List<OrderDto>order ,int? totalCount, string? error)> GetMyOrders(Guid userId);
+    
 }
 
 public class OrderServices : IOrderServices
@@ -51,21 +52,40 @@ public class OrderServices : IOrderServices
         order.OrderStatus = OrderStatus.Pending;
         order.AddressId = user.AddressId;
 
-        var car = await _repositoryWrapper.Item.Get(x => x.Id == orderForm.ItemId);
-        if (car == null)
-            return (null, "Car not found");
-       
         var addedOrder = await _repositoryWrapper.Order.Add(order);
         if (addedOrder == null)
             return (null, "Order couldn't be created");
 
-        var orderCar = new OrderItem
-        {
-            OrderId = addedOrder.Id,
-            ItemId = orderForm.ItemId,
-        };
+        decimal totalPrice = 0;
 
-        await _repositoryWrapper.OrderItem.Add(orderCar);
+        foreach (var orderItemForm in orderForm.ItemId)
+        {
+            var item = await _repositoryWrapper.Item.Get(x => x.Id == orderItemForm.ItemId);
+            if (item == null)
+                return (null, "Item not found");
+
+            var orderItem = new OrderItem
+            {
+                OrderId = addedOrder.Id,
+                ItemId = orderItemForm.ItemId,
+                Quantity = orderItemForm.Quantity 
+            };
+
+            totalPrice += orderItem.Quantity * (decimal)(item.Price ?? 0.0);
+            await _repositoryWrapper.OrderItem.Add(orderItem);
+        }
+
+        order.TotalPrice = totalPrice;
+
+        var orderItems = await _repositoryWrapper.OrderItem.GetAll(x => x.OrderId == addedOrder.Id);
+        foreach (var orderItem in orderItems.data)
+        {
+            var item = await _repositoryWrapper.Item.Get(x => x.Id == orderItem.ItemId);
+            if (item == null)
+                return (null, "Item not found");
+            item.Quantity -= orderItem.Quantity;
+            await _repositoryWrapper.Item.Update(item);
+        }
 
         return (order, null);
     }
