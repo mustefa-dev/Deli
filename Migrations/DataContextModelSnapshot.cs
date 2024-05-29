@@ -271,6 +271,9 @@ namespace Deli.Migrations
                     b.Property<int?>("Quantity")
                         .HasColumnType("integer");
 
+                    b.Property<Guid?>("SaleId")
+                        .HasColumnType("uuid");
+
                     b.Property<string[]>("imaages")
                         .IsRequired()
                         .HasColumnType("text[]");
@@ -505,6 +508,43 @@ namespace Deli.Migrations
                     b.ToTable("OrderItems");
                 });
 
+            modelBuilder.Entity("Deli.Entities.Sale", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("ItemId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ItemId1")
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("SalePercintage")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("SalePrice")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId1");
+
+                    b.ToTable("Sales");
+                });
+
             modelBuilder.Entity("Deli.Entities.Wishlist", b =>
                 {
                     b.Property<Guid>("Id")
@@ -597,6 +637,15 @@ namespace Deli.Migrations
                     b.Navigation("Item");
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Deli.Entities.Sale", b =>
+                {
+                    b.HasOne("Deli.Entities.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId1");
+
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("Deli.Entities.AppUser", b =>
