@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Deli.Migrations
 {
     /// <inheritdoc />
-    public partial class ppznmpsz : Migration
+    public partial class ppznmpsznp : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -76,6 +76,21 @@ namespace Deli.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Governorates", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Likeds",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ItemsIds = table.Column<List<Guid>>(type: "uuid[]", nullable: true),
+                    Deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Likeds", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -231,6 +246,7 @@ namespace Deli.Migrations
                     Quantity = table.Column<int>(type: "integer", nullable: true),
                     InventoryId = table.Column<Guid>(type: "uuid", nullable: true),
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: true),
+                    SaleId = table.Column<Guid>(type: "uuid", nullable: true),
                     Deleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
@@ -282,6 +298,30 @@ namespace Deli.Migrations
                         name: "FK_Orders_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sales",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ItemId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ItemId1 = table.Column<Guid>(type: "uuid", nullable: true),
+                    SalePrice = table.Column<double>(type: "double precision", nullable: true),
+                    SalePercintage = table.Column<double>(type: "double precision", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    Deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sales", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sales_Items_ItemId1",
+                        column: x => x.ItemId1,
+                        principalTable: "Items",
                         principalColumn: "Id");
                 });
 
@@ -357,6 +397,11 @@ namespace Deli.Migrations
                 name: "IX_Orders_UserId",
                 table: "Orders",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sales_ItemId1",
+                table: "Sales",
+                column: "ItemId1");
         }
 
         /// <inheritdoc />
@@ -367,6 +412,9 @@ namespace Deli.Migrations
 
             migrationBuilder.DropTable(
                 name: "FeedBacks");
+
+            migrationBuilder.DropTable(
+                name: "Likeds");
 
             migrationBuilder.DropTable(
                 name: "Messages");
@@ -381,13 +429,19 @@ namespace Deli.Migrations
                 name: "OrderItems");
 
             migrationBuilder.DropTable(
+                name: "Sales");
+
+            migrationBuilder.DropTable(
                 name: "Wishlists");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Items");
 
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "Addresss");
 
             migrationBuilder.DropTable(
                 name: "Categorys");
@@ -396,13 +450,10 @@ namespace Deli.Migrations
                 name: "Inventorys");
 
             migrationBuilder.DropTable(
-                name: "Addresss");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Governorates");
-
-            migrationBuilder.DropTable(
-                name: "Users");
         }
     }
 }

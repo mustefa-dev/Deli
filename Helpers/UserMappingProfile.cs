@@ -28,6 +28,9 @@ public class UserMappingProfile : Profile
 
 
         // here to add
+CreateMap<Sale, SaleDto>();
+CreateMap<SaleForm,Sale>();
+CreateMap<SaleUpdate,Sale>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Liked, LikedDto>();
 CreateMap<LikedForm,Liked>();
 CreateMap<LikedUpdate,Liked>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));

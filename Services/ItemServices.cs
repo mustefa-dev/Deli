@@ -13,6 +13,7 @@ namespace Deli.Services;
 public interface IItemServices
 {
 Task<(Item? item, string? error)> Create(ItemForm itemForm );
+Task<(ItemDto? item, string? error)> GetById(Guid id);
 Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(ItemFilter filter);
 Task<(Item? item, string? error)> Update(Guid id , ItemUpdate itemUpdate);
 Task<(Item? item, string? error)> Delete(Guid id);
@@ -20,6 +21,7 @@ Task<(Wishlist? wishlist, string? error)> AddOrRemoveItemToWishlist(Guid itemId,
 Task<(ICollection<ItemDto>? items,int? count, string? error)> GetMyWishlist(Guid userId);
 Task<(Liked? liked, string? error)> AddOrRemoveItemToLiked(Guid itemId, Guid userId);
 Task<(ICollection<ItemDto>? items, int? count, string? error)> GetMyLikedItems(Guid userId);
+Task<(Sale? sale, string? error)> AddSaleToItem(Guid itemId, double salePrice, DateTime startDate, DateTime endDate);
 }
 
 public class ItemServices : IItemServices
@@ -44,7 +46,19 @@ public async Task<(Item? item, string? error)> Create(ItemForm itemForm )
     if (result == null) return (null, "Error in creating item");
     return (result, null);
 }
-
+public async Task<(ItemDto? item, string? error)> GetById(Guid id)
+    {
+        var item = await _repositoryWrapper.Item.GetById(id);
+        if (item == null) return (null, "Item not found");
+        var itemDto = _mapper.Map<ItemDto>(item);
+        var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == item.Id);
+        if (sale != null && DateTime.Now >= sale.StartDate && DateTime.Now <= sale.EndDate)
+        {
+            itemDto.Price = sale.SalePrice;
+        }
+        return (itemDto, null);
+        
+    }
 public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(ItemFilter filter)
     {
         var (item,totalCount) = await _repositoryWrapper.Item.GetAll<ItemDto>(
@@ -52,6 +66,14 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
             filter.PageNumber,
             filter.PageSize
         );
+        foreach (var itemDto in item)
+        {
+            var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == itemDto.Id);
+            if (sale != null && DateTime.Now >= sale.StartDate && DateTime.Now <= sale.EndDate)
+            {
+                itemDto.Price = sale.SalePrice;
+            }
+        }
         return (item, totalCount, null);
         
     }
@@ -169,6 +191,29 @@ public async Task<(Item? item, string? error)> Delete(Guid id)
         var count = items.Count;
 
         return (items, count, null);
+    }
+    public async Task<(Sale? sale, string? error)> AddSaleToItem(Guid itemId, double salePrice, DateTime startDate, DateTime endDate)
+    {
+        var item = await _repositoryWrapper.Item.GetById(itemId);
+        if (item == null)
+        {
+            return (null, "Item not found");
+        }
+
+        var sale = new Sale
+        {
+            ItemId = itemId,
+            SalePrice = salePrice,
+            StartDate = startDate,
+            EndDate = endDate,
+            SalePercintage = (item.Price.GetValueOrDefault() - salePrice) / item.Price.GetValueOrDefault() * 100,
+        };
+
+        await _repositoryWrapper.Sale.Add(sale);
+        item.SaleId = sale.Id;
+        await _repositoryWrapper.Item.Update(item);
+
+        return (sale, null);
     }
 
 }

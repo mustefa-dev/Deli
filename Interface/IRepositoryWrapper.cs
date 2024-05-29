@@ -5,6 +5,7 @@ public interface IRepositoryWrapper
     IUserRepository User { get; }
 
     // here to add
+ISaleRepository Sale{get;}
 ILikedRepository Liked{get;}
 IWishlistRepository Wishlist{get;}
 IFeedBackRepository FeedBack{get;}

@@ -12,6 +12,16 @@ public class RepositoryWrapper : IRepositoryWrapper
 
 
     // here to add
+private ISaleRepository _Sale;
+
+public ISaleRepository Sale {
+    get {
+        if(_Sale == null) {
+            _Sale = new SaleRepository(_context, _mapper);
+        }
+        return _Sale;
+    }
+}
 private ILikedRepository _Liked;
 
 public ILikedRepository Liked {

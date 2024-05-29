@@ -22,6 +22,8 @@ namespace Deli.Controllers
         
         [HttpGet]
         public async Task<ActionResult<List<ItemDto>>> GetAll([FromQuery] ItemFilter filter) => Ok(await _itemServices.GetAll(filter) , filter.PageNumber , filter.PageSize);
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ItemDto>> GetById(Guid id) => Ok(await _itemServices.GetById(id));
 
         
         [HttpPost]
@@ -50,5 +52,9 @@ namespace Deli.Controllers
         [HttpGet("GetMyLiked")]
         [Authorize]
         public async Task<ActionResult<Liked>> GetMyLiked() => Ok(await _itemServices.GetMyLikedItems(Id));
+        
+        [HttpPost("AddSaleToItem")]
+        [Authorize]
+        public async Task<ActionResult<Item>> AddSaleToItem([FromBody] SaleForm saleForm) => Ok(await _itemServices.AddSaleToItem(saleForm.ItemId , saleForm.SalePrice , saleForm.StartDate , saleForm.EndDate));
     }
 }
