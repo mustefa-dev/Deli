@@ -13,7 +13,7 @@ namespace Deli.Services;
 public interface IWishlistServices
 {
 Task<(Wishlist? wishlist, string? error)> AddOrRemoveItemToWishlist(Guid itemId,Guid userId);
-Task<(ICollection<ItemDto>? wishlist,int? count, string? error)> GetMyWishlist(Guid userId);
+Task<(ICollection<ItemDto>? items,int? count, string? error)> GetMyWishlist(Guid userId);
 
 }
 
@@ -62,7 +62,7 @@ public class WishlistServices : IWishlistServices
 
     }
 
-    public async Task<(ICollection<ItemDto>? wishlist,int? count, string? error)> GetMyWishlist(Guid userId)
+    public async Task<(ICollection<ItemDto>? items,int? count, string? error)> GetMyWishlist(Guid userId)
     {
         var wishlist = await _repositoryWrapper.Wishlist.Get(w => w.UserId == userId);
         if (wishlist == null)
