@@ -34,6 +34,21 @@ namespace Deli.Controllers
         
         [HttpDelete("{id}")]
         public async Task<ActionResult<Item>> Delete(Guid id) =>  Ok( await _itemServices.Delete(id));
+        [HttpPost("AddOrRemoveItemTowihslist/{itemId}")]
+        [Authorize]
+        public async Task<ActionResult<Wishlist>> AddOrRemoveItemToWishlist(Guid itemId) =>  Ok( await _itemServices.AddOrRemoveItemToWishlist(itemId,Id));
+       
+        [HttpGet("GetMYWishlist")]
+        [Authorize]
+        public async Task<ActionResult<Wishlist>> GetMyWishlist() => Ok(await _itemServices.GetMyWishlist(Id));
         
+        
+        [HttpPost("AddOrRemoveItemToLiked/{itemId}")]
+        [Authorize]
+        public async Task<ActionResult<Liked>> AddOrRemoveItemToLiked(Guid itemId) =>  Ok( await _itemServices.AddOrRemoveItemToLiked(itemId,Id));
+       
+        [HttpGet("GetMyLiked")]
+        [Authorize]
+        public async Task<ActionResult<Liked>> GetMyLiked() => Ok(await _itemServices.GetMyLikedItems(Id));
     }
 }

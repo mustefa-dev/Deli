@@ -16,6 +16,10 @@ Task<(Item? item, string? error)> Create(ItemForm itemForm );
 Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(ItemFilter filter);
 Task<(Item? item, string? error)> Update(Guid id , ItemUpdate itemUpdate);
 Task<(Item? item, string? error)> Delete(Guid id);
+Task<(Wishlist? wishlist, string? error)> AddOrRemoveItemToWishlist(Guid itemId,Guid userId);
+Task<(ICollection<ItemDto>? items,int? count, string? error)> GetMyWishlist(Guid userId);
+Task<(Liked? liked, string? error)> AddOrRemoveItemToLiked(Guid itemId, Guid userId);
+Task<(ICollection<ItemDto>? items, int? count, string? error)> GetMyLikedItems(Guid userId);
 }
 
 public class ItemServices : IItemServices
@@ -69,6 +73,102 @@ public async Task<(Item? item, string? error)> Delete(Guid id)
         var result = await _repositoryWrapper.Item.SoftDelete(id);
         if (result == null) return (null, "Error in deleting item");
         return (result, null);
+    }
+    public async Task<(Wishlist? wishlist, string? error)> AddOrRemoveItemToWishlist(Guid itemId, Guid userId)
+    {
+        var item= await _repositoryWrapper.Item.GetById(itemId);
+        if (item == null)
+        {
+            return (null, "Item not found");
+        }
+        var wishlist = await _repositoryWrapper.Wishlist.Get(w => w.UserId == userId);
+        if (wishlist == null)
+        {
+            wishlist = new Wishlist
+            {
+                UserId = userId,
+            };
+            await _repositoryWrapper.Wishlist.Add(wishlist);
+        }
+
+        if (wishlist.ItemsIds.Contains(itemId))
+        {
+            wishlist.ItemsIds.Remove(itemId);
+        }
+        else
+        {
+            wishlist.ItemsIds.Add(itemId);
+        }
+        await _repositoryWrapper.Wishlist.Update(wishlist);
+        return (wishlist, null);
+
+    }
+
+    public async Task<(ICollection<ItemDto>? items,int? count, string? error)> GetMyWishlist(Guid userId)
+    {
+        var wishlist = await _repositoryWrapper.Wishlist.Get(w => w.UserId == userId);
+        if (wishlist == null)
+        {
+            return (null,0, "Wishlist is empty");
+        }
+        var items = new List<ItemDto>();
+        foreach (var itemId in wishlist.ItemsIds)
+        {
+            var item = await _repositoryWrapper.Item.GetById(itemId);
+            var itemDto = _mapper.Map<ItemDto>(item);
+            items.Add(itemDto);
+        }
+        var count = items.Count;
+        
+        return (items,count, null);
+        
+    }  
+    public async Task<(Liked? liked, string? error)> AddOrRemoveItemToLiked(Guid itemId, Guid userId)
+    {
+        var item = await _repositoryWrapper.Item.GetById(itemId);
+        if (item == null)
+        {
+            return (null, "Item not found");
+        }
+        var liked = await _repositoryWrapper.Liked.Get(l => l.UserId == userId);
+        if (liked == null)
+        {
+            liked = new Liked
+            {
+                UserId = userId,
+            };
+            await _repositoryWrapper.Liked.Add(liked);
+        }
+
+        if (liked.ItemsIds.Contains(itemId))
+        {
+            liked.ItemsIds.Remove(itemId);
+        }
+        else
+        {
+            liked.ItemsIds.Add(itemId);
+        }
+        await _repositoryWrapper.Liked.Update(liked);
+        return (liked, null);
+    }
+
+    public async Task<(ICollection<ItemDto>? items, int? count, string? error)> GetMyLikedItems(Guid userId)
+    {
+        var liked = await _repositoryWrapper.Liked.Get(l => l.UserId == userId);
+        if (liked == null)
+        {
+            return (null, 0, "Liked list is empty");
+        }
+        var items = new List<ItemDto>();
+        foreach (var itemId in liked.ItemsIds)
+        {
+            var item = await _repositoryWrapper.Item.GetById(itemId);
+            var itemDto = _mapper.Map<ItemDto>(item);
+            items.Add(itemDto);
+        }
+        var count = items.Count;
+
+        return (items, count, null);
     }
 
 }

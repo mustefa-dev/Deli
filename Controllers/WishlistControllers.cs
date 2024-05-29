@@ -19,13 +19,7 @@ namespace Deli.Controllers
         }
 
         
-       [HttpPost]
-       [Authorize]
-       public async Task<ActionResult<Wishlist>> AddOrRemoveItemToWishlist(Guid itemId) =>  Ok( await _wishlistServices.AddOrRemoveItemToWishlist(itemId,Id));
-       
-       [HttpGet]
-       [Authorize]
-       public async Task<ActionResult<Wishlist>> GetMyWishlist() => Ok(await _wishlistServices.GetMyWishlist(Id));
+        
         
         
     }

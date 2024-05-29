@@ -17,15 +17,7 @@ namespace Deli.Controllers
         {
             _likedServices = likedServices;
         }
-
         
-        [HttpPost]
-        [Authorize]
-        public async Task<ActionResult<Liked>> AddOrRemoveItemToWishlist(Guid itemId) =>  Ok( await _likedServices.AddOrRemoveItemToLiked(itemId,Id));
-       
-        [HttpGet]
-        [Authorize]
-        public async Task<ActionResult<Liked>> GetMyWishlist() => Ok(await _likedServices.GetMyLikedItems(Id));
         
     }
 }
