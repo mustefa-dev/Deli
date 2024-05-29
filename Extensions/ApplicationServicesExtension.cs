@@ -20,6 +20,7 @@ public static class ApplicationServicesExtension
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         services.AddScoped<IUserService, UserService>();
         // here to add
+services.AddScoped<IWishlistServices, WishlistServices>();
 services.AddScoped<IFeedBackServices, FeedBackServices>();
 services.AddScoped<INewsServices, NewsServices>();
 services.AddScoped<IAppSettingsServices, AppSettingsServices>();

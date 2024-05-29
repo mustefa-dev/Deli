@@ -482,6 +482,29 @@ namespace Deli.Migrations
                     b.ToTable("OrderItems");
                 });
 
+            modelBuilder.Entity("Deli.Entities.Wishlist", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<List<Guid>>("ItemsIds")
+                        .HasColumnType("uuid[]");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Wishlists");
+                });
+
             modelBuilder.Entity("Deli.Entities.Address", b =>
                 {
                     b.HasOne("Deli.Entities.AppUser", null)
