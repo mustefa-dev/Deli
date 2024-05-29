@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "/home/mu/RiderProjects/Deli/Deli.csproj": {}
+    "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\Deli.csproj": {}
   },
   "projects": {
-    "/home/mu/RiderProjects/Deli/Deli.csproj": {
+    "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\Deli.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/mu/RiderProjects/Deli/Deli.csproj",
+        "projectUniqueName": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\Deli.csproj",
         "projectName": "Deli",
-        "projectPath": "/home/mu/RiderProjects/Deli/Deli.csproj",
-        "packagesPath": "/home/mu/.nuget/packages/",
-        "outputPath": "/home/mu/RiderProjects/Deli/obj/",
+        "projectPath": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\Deli.csproj",
+        "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/mu/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -128,6 +130,24 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[7.0.14, 7.0.14]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[7.0.14, 7.0.14]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[7.0.14, 7.0.14]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[7.0.14, 7.0.14]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -136,7 +156,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.117/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

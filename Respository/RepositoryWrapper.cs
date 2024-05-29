@@ -12,6 +12,16 @@ public class RepositoryWrapper : IRepositoryWrapper
 
 
     // here to add
+private IWishlistRepository _Wishlist;
+
+public IWishlistRepository Wishlist {
+    get {
+        if(_Wishlist == null) {
+            _Wishlist = new WishlistRepository(_context, _mapper);
+        }
+        return _Wishlist;
+    }
+}
 private IFeedBackRepository _FeedBack;
 
 public IFeedBackRepository FeedBack {

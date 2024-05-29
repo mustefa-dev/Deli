@@ -28,6 +28,9 @@ public class UserMappingProfile : Profile
 
 
         // here to add
+CreateMap<Wishlist, WishlistDto>();
+CreateMap<WishlistForm,Wishlist>();
+CreateMap<WishlistUpdate,Wishlist>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<FeedBack, FeedBackDto>();
 CreateMap<FeedBackForm,FeedBack>();
 CreateMap<FeedBackUpdate,FeedBack>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
