@@ -12,6 +12,16 @@ public class RepositoryWrapper : IRepositoryWrapper
 
 
     // here to add
+private ILikedRepository _Liked;
+
+public ILikedRepository Liked {
+    get {
+        if(_Liked == null) {
+            _Liked = new LikedRepository(_context, _mapper);
+        }
+        return _Liked;
+    }
+}
 private IWishlistRepository _Wishlist;
 
 public IWishlistRepository Wishlist {
