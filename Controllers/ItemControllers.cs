@@ -13,11 +13,14 @@ namespace Deli.Controllers
     public class ItemsController : BaseController
     {
         private readonly IItemServices _itemServices;
+        private readonly IReviewServices _reviewServices;
 
-        public ItemsController(IItemServices itemServices)
+        public ItemsController(IItemServices itemServices, IReviewServices reviewServices)
         {
             _itemServices = itemServices;
+            _reviewServices = reviewServices;
         }
+     
 
         
         [HttpGet]
@@ -56,5 +59,20 @@ namespace Deli.Controllers
         [HttpPost("AddSaleToItem")]
         [Authorize]
         public async Task<ActionResult<Item>> AddSaleToItem([FromBody] SaleForm saleForm) => Ok(await _itemServices.AddSaleToItem(saleForm.ItemId , saleForm.SalePrice , saleForm.StartDate , saleForm.EndDate));
+      
+        [HttpGet("GetAllReviews")]
+        public async Task<ActionResult<List<ReviewDto>>> GetAllReviews([FromQuery] ReviewFilter filter) => Ok(await _reviewServices.GetAll(filter) , filter.PageNumber , filter.PageSize);
+
+        
+        [HttpPost("CreateReview")]
+        public async Task<ActionResult<Review>> CreateReview([FromBody] ReviewForm reviewForm) => Ok(await _reviewServices.Create(reviewForm,Id));
+
+        
+        [HttpPut("UpdateReview{id}")]
+        public async Task<ActionResult<Review>> UpdateReview([FromBody] ReviewUpdate reviewUpdate, Guid id) => Ok(await _reviewServices.Update(id , reviewUpdate,Id));
+
+        
+        [HttpDelete("DeleteReview{id}")]
+        public async Task<ActionResult<Review>> DeleteReview(Guid id) =>  Ok( await _reviewServices.Delete(id));
     }
 }

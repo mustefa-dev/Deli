@@ -15,6 +15,7 @@ public class DataContext : DbContext
 
 
     // here to add
+public DbSet<Review> Reviews { get; set; }
 public DbSet<Sale> Sales { get; set; }
 public DbSet<Liked> Likeds { get; set; }
 public DbSet<Wishlist> Wishlists { get; set; }

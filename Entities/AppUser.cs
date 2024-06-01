@@ -13,6 +13,8 @@ namespace Deli.Entities
         public bool? IsActive { get; set; }
         public ICollection<Address>? Addresses { get; set; }
         public Guid? AddressId { get; set; }
+        public List<Review> Reviews { get; set; }
+        
 
 
     
