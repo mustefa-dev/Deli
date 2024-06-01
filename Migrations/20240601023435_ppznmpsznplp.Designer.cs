@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Deli.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240529163412_ppznmpsznp")]
-    partial class ppznmpsznp
+    [Migration("20240601023435_ppznmpsznplp")]
+    partial class ppznmpsznplp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -511,6 +511,39 @@ namespace Deli.Migrations
                     b.ToTable("OrderItems");
                 });
 
+            modelBuilder.Entity("Deli.Entities.Review", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("ItemId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("Rating")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
+                });
+
             modelBuilder.Entity("Deli.Entities.Sale", b =>
                 {
                     b.Property<Guid>("Id")
@@ -642,6 +675,21 @@ namespace Deli.Migrations
                     b.Navigation("Order");
                 });
 
+            modelBuilder.Entity("Deli.Entities.Review", b =>
+                {
+                    b.HasOne("Deli.Entities.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId");
+
+                    b.HasOne("Deli.Entities.AppUser", "User")
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Item");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Deli.Entities.Sale", b =>
                 {
                     b.HasOne("Deli.Entities.Item", "Item")
@@ -654,6 +702,8 @@ namespace Deli.Migrations
             modelBuilder.Entity("Deli.Entities.AppUser", b =>
                 {
                     b.Navigation("Addresses");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("Deli.Entities.Category", b =>

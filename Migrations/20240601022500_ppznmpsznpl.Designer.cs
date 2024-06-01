@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Deli.DATA;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Deli.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240601022500_ppznmpsznpl")]
+    partial class ppznmpsznpl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -675,7 +678,7 @@ namespace Deli.Migrations
             modelBuilder.Entity("Deli.Entities.Review", b =>
                 {
                     b.HasOne("Deli.Entities.Item", "Item")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("ItemId");
 
                     b.HasOne("Deli.Entities.AppUser", "User")
@@ -716,6 +719,11 @@ namespace Deli.Migrations
             modelBuilder.Entity("Deli.Entities.Inventory", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Deli.Entities.Item", b =>
+                {
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("Deli.Entities.Order", b =>

@@ -28,6 +28,9 @@ public class UserMappingProfile : Profile
 
 
         // here to add
+CreateMap<Review, ReviewDto>();
+CreateMap<ReviewForm,Review>();
+CreateMap<ReviewUpdate,Review>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Sale, SaleDto>();
 CreateMap<SaleForm,Sale>();
 CreateMap<SaleUpdate,Sale>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));

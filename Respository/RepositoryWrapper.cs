@@ -12,6 +12,16 @@ public class RepositoryWrapper : IRepositoryWrapper
 
 
     // here to add
+private IReviewRepository _Review;
+
+public IReviewRepository Review {
+    get {
+        if(_Review == null) {
+            _Review = new ReviewRepository(_context, _mapper);
+        }
+        return _Review;
+    }
+}
 private ISaleRepository _Sale;
 
 public ISaleRepository Sale {
