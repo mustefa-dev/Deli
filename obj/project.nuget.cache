@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "vV41kgYagZAqsXxD0uJb6yZigFsAWAEEnHpxvMA3P2bR+MMPNayimfbS1E377yMZLho7tneb8d2G08zjA1YWLA==",
+  "dgSpecHash": "Ctu9ETIn6L2ovsvbD29q4wcWnUEiL3amjptT5T7hYqTU4Y9+zL/j1KnKI9S6krryhyOqlQgQlqFgSewT6+l44g==",
   "success": true,
   "projectFilePath": "/home/mu/RiderProjects/Deli/Deli.csproj",
   "expectedPackageFiles": [
@@ -58,6 +58,7 @@
     "/home/mu/.nuget/packages/onesignalapi/2.0.2/onesignalapi.2.0.2.nupkg.sha512",
     "/home/mu/.nuget/packages/owin/1.0.0/owin.1.0.0.nupkg.sha512",
     "/home/mu/.nuget/packages/polly/7.2.3/polly.7.2.3.nupkg.sha512",
+    "/home/mu/.nuget/packages/questpdf/2024.3.10/questpdf.2024.3.10.nupkg.sha512",
     "/home/mu/.nuget/packages/restsharp/106.13.0/restsharp.106.13.0.nupkg.sha512",
     "/home/mu/.nuget/packages/restsharp.newtonsoft.json/1.4.0/restsharp.newtonsoft.json.1.4.0.nupkg.sha512",
     "/home/mu/.nuget/packages/runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl/4.3.2/runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
@@ -84,6 +85,9 @@
     "/home/mu/.nuget/packages/serilog.sinks.console/4.0.1/serilog.sinks.console.4.0.1.nupkg.sha512",
     "/home/mu/.nuget/packages/serilog.sinks.debug/2.0.0/serilog.sinks.debug.2.0.0.nupkg.sha512",
     "/home/mu/.nuget/packages/serilog.sinks.file/5.0.0/serilog.sinks.file.5.0.0.nupkg.sha512",
+    "/home/mu/.nuget/packages/skiasharp/3.0.0-preview.3.1/skiasharp.3.0.0-preview.3.1.nupkg.sha512",
+    "/home/mu/.nuget/packages/skiasharp.nativeassets.macos/3.0.0-preview.3.1/skiasharp.nativeassets.macos.3.0.0-preview.3.1.nupkg.sha512",
+    "/home/mu/.nuget/packages/skiasharp.nativeassets.win32/3.0.0-preview.3.1/skiasharp.nativeassets.win32.3.0.0-preview.3.1.nupkg.sha512",
     "/home/mu/.nuget/packages/swashbuckle.aspnetcore/6.4.0/swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
     "/home/mu/.nuget/packages/swashbuckle.aspnetcore.swagger/6.4.0/swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
     "/home/mu/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.4.0/swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",

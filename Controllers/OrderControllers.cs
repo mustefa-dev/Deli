@@ -50,5 +50,8 @@ namespace Deli.Controllers
         [HttpGet("Statistics")]
         public async Task<ActionResult<OrderStatisticsDto>> GetStatistics([FromQuery] OrderStatisticsFilter filter) => Ok(await _orderServices.GetOrderStatistics(filter));
         
+            
+        [HttpGet("CreateFinancialReport")]
+        public async Task<ActionResult<string>> CreateFinancialReport([FromQuery] OrderStatisticsFilter filter) => Ok(await _orderServices.CreateFinancialReport());
     }
 }

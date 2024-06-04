@@ -69,6 +69,10 @@
       "PackagePath": "staticwebassets/Attachments/ed1d5722-cd93-4f3d-9d9a-1ce1658a8e28.png"
     },
     {
+      "Id": "/home/mu/RiderProjects/Deli/wwwroot/alfont_com_AlFont_com_arial.ttf",
+      "PackagePath": "staticwebassets/alfont_com_AlFont_com_arial.ttf"
+    },
+    {
       "Id": "/home/mu/RiderProjects/Deli/wwwroot/chat.html",
       "PackagePath": "staticwebassets/chat.html"
     },

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "BGxZmplGIlTrgDXfc7WvPpt9Z8kNii7i0YFR8Awukic=",
+  "Hash": "q8R1HWmzZNmzOS73hoxzyOLYjq50ycc0toTxPyJ/xUs=",
   "Source": "Deli",
   "BasePath": "_content/Deli",
   "Mode": "Default",
@@ -16,6 +16,25 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/alfont_com_AlFont_com_arial.ttf",
+      "SourceId": "Deli",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "BasePath": "_content/Deli",
+      "RelativePath": "alfont_com_AlFont_com_arial.ttf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/alfont_com_AlFont_com_arial.ttf"
+    },
     {
       "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/18dcdf6a-ad6e-4215-a1dd-516f535d4b1c.png",
       "SourceId": "Deli",
