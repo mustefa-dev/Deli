@@ -1,0 +1,97 @@
+{
+  "data": [
+    {
+      "orderDate": "2024-05-28 12:58:59.829",
+      "orderStatus": 1,
+      "note": "string",
+      "address": null,
+      "orderItemDto": [
+        {
+          "id": "b1aaa3ec-1166-419b-80ae-dbe22bfa0e76",
+          "quantity": 5,
+          "name": "string",
+          "price": 5000,
+          "image": "http://localhost:5152/"
+        },
+        {
+          "id": "df335438-ef1c-4493-8708-417fe76dbc99",
+          "quantity": 5,
+          "name": "SAW",
+          "price": 5000,
+          "image": "http://localhost:5152/Attachments/c0d22c2c-54f2-4878-9145-e5fea5db4b63.jpeg"
+        }
+      ],
+      "clientName": "string",
+      "clientEmail": "user@example.com",
+      "rating": null,
+      "dateOfAccepted": null,
+      "dateOfCanceled": null,
+      "dateOfDelivered": null,
+      "totalPrice": 50000,
+      "orderstatus": "Pending",
+      "id": "0b55458a-859e-4f48-a4d7-12dc719ddf62",
+      "creationDate": "2024-05-28T10:22:06.935226Z"
+    },
+    {
+      "orderDate": "2024-05-28 12:58:59.829",
+      "orderStatus": 1,
+      "note": "string",
+      "address": null,
+      "orderItemDto": [
+        {
+          "id": "59e44801-4462-46c6-be15-39a78a8964c2",
+          "quantity": 5,
+          "name": "SAW",
+          "price": 5000,
+          "image": "http://localhost:5152/Attachments/c0d22c2c-54f2-4878-9145-e5fea5db4b63.jpeg"
+        },
+        {
+          "id": "9fe952b6-54ef-4f79-9f35-9b0887b52f1e",
+          "quantity": 5,
+          "name": "SAW",
+          "price": 5000,
+          "image": "http://localhost:5152/Attachments/c0d22c2c-54f2-4878-9145-e5fea5db4b63.jpeg"
+        }
+      ],
+      "clientName": "string",
+      "clientEmail": "user@example.com",
+      "rating": null,
+      "dateOfAccepted": null,
+      "dateOfCanceled": null,
+      "dateOfDelivered": null,
+      "totalPrice": 50000,
+      "orderstatus": "Pending",
+      "id": "0d266a96-b00c-4257-9aa7-b88a213d2c59",
+      "creationDate": "2024-05-28T10:21:32.6926Z"
+    },
+    {
+      "orderDate": "2024-05-28 12:58:59.829",
+      "orderStatus": 1,
+      "note": "string",
+      "address": null,
+      "orderItemDto": [
+        {
+          "id": "60d27618-b2f3-44e1-8b67-31df85079144",
+          "quantity": 5,
+          "name": "SAW",
+          "price": 5000,
+          "image": "http://localhost:5152/Attachments/c0d22c2c-54f2-4878-9145-e5fea5db4b63.jpeg"
+        }
+      ],
+      "clientName": "string",
+      "clientEmail": "user@example.com",
+      "rating": null,
+      "dateOfAccepted": null,
+      "dateOfCanceled": null,
+      "dateOfDelivered": null,
+      "totalPrice": 25000,
+      "orderstatus": "Pending",
+      "id": "8d66fb2a-afe8-428f-bdbc-074494bff210",
+      "creationDate": "2024-05-28T10:17:22.836419Z"
+    }
+  ],
+  "pagesCount": 1,
+  "currentPage": 1,
+  "type": "OrderDto",
+  "totalCount": 3
+}

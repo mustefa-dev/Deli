@@ -1,5 +1,6 @@
 using AutoMapper;
 using Deli.DATA.DTOs;
+using Deli.DATA.DTOs.Item;
 using Deli.Entities;
 using Deli.Helpers.OneSignal;
 using Deli.Interface;
@@ -22,7 +23,8 @@ public interface IOrderServices
 
     Task<(Order? order, string? error)> Delete(Guid id);
     Task<(List<OrderDto>order ,int? totalCount, string? error)> GetMyOrders(Guid userId);
-    
+    Task<OrderStatisticsDto> GetOrderStatistics(OrderStatisticsFilter filter);
+
 }
 
 public class OrderServices : IOrderServices
@@ -278,7 +280,50 @@ public async Task<(string? done, string? error)> Rating(Guid id, Guid userId, Ra
         var orders = await _repositoryWrapper.Order.GetAll<OrderDto>(x => x.UserId == userId);
         return (orders.data, orders.totalCount, null);
     }
-        
+    public async Task<OrderStatisticsDto> GetOrderStatistics(OrderStatisticsFilter filter)
+    {
+        var allOrdersResult = await _repositoryWrapper.Order.GetAll();
+        var allOrders = allOrdersResult.data;
+
+        if (filter.InventoryId != null)
+        {
+            allOrders = allOrders.Where(o => o.OrderItem.Any(oi => oi.Item.InventoryId == filter.InventoryId)).ToList();
+        }
+
+        if (filter.CategoryId != null)
+        {
+            allOrders = allOrders.Where(o => o.OrderItem.Any(oi => oi.Item.CategoryId == filter.CategoryId)).ToList();
+        }
+
+        if (filter.OrderStatus != null)
+        {
+            allOrders = allOrders.Where(o => o.OrderStatus == filter.OrderStatus).ToList();
+        }
+
+        if (filter.StartDate != null)
+        {
+            allOrders = allOrders.Where(o => o.OrderDate >= filter.StartDate).ToList();
+        }
+
+        if (filter.EndDate != null)
+        {
+            allOrders = allOrders.Where(o => o.OrderDate <= filter.EndDate).ToList();
+        }
+
+        var totalOrders = allOrders.Count;
+        var acceptedOrders = allOrders.Count(o => o.OrderStatus == OrderStatus.Accepted);
+        var rejectedOrders = allOrders.Count(o => o.OrderStatus == OrderStatus.Rejected);
+        var pendingOrders = allOrders.Count(o => o.OrderStatus == OrderStatus.Pending);
+
+        return new OrderStatisticsDto
+        {
+            TotalOrders = totalOrders,
+            AcceptedOrders = acceptedOrders,
+            RejectedOrders = rejectedOrders,
+            PendingOrders = pendingOrders,
+        };
+    }
+    
  
 
 }

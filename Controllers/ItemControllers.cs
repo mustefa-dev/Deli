@@ -20,8 +20,6 @@ namespace Deli.Controllers
             _itemServices = itemServices;
             _reviewServices = reviewServices;
         }
-     
-
         
         [HttpGet]
         public async Task<ActionResult<List<ItemDto>>> GetAll([FromQuery] ItemFilter filter) => Ok(await _itemServices.GetAll(filter) , filter.PageNumber , filter.PageSize);
@@ -74,5 +72,9 @@ namespace Deli.Controllers
         
         [HttpDelete("DeleteReview{id}")]
         public async Task<ActionResult<Review>> DeleteReview(Guid id) =>  Ok( await _reviewServices.Delete(id));
+        
+        
+        [HttpGet("GetAllSoldItems")]
+        public async Task<ActionResult<List<ItemDto>>>GetAllSoldItems([FromQuery] OrderStatisticsFilter filter) => Ok(await _itemServices.GetAllSoldItems(filter));
     }
 }

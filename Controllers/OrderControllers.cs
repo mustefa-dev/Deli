@@ -47,5 +47,8 @@ namespace Deli.Controllers
         [HttpGet("MyOrders")]
         public async Task<ActionResult<List<OrderDto>>> GetMyOrders([FromQuery]ItemFilter filter) => Ok(await _orderServices.GetMyOrders(Id), filter.PageNumber, filter.PageSize);
         
+        [HttpGet("Statistics")]
+        public async Task<ActionResult<OrderStatisticsDto>> GetStatistics([FromQuery] OrderStatisticsFilter filter) => Ok(await _orderServices.GetOrderStatistics(filter));
+        
     }
 }

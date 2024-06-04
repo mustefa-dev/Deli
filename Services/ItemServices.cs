@@ -22,6 +22,7 @@ Task<(ICollection<ItemDto>? items,int? count, string? error)> GetMyWishlist(Guid
 Task<(Liked? liked, string? error)> AddOrRemoveItemToLiked(Guid itemId, Guid userId);
 Task<(ICollection<ItemDto>? items, int? count, string? error)> GetMyLikedItems(Guid userId);
 Task<(Sale? sale, string? error)> AddSaleToItem(Guid itemId, double salePrice, DateTime startDate, DateTime endDate);
+Task<(List<ItemDto> items, string? error)> GetAllSoldItems(OrderStatisticsFilter filter);
 }
 
 public class ItemServices : IItemServices
@@ -216,4 +217,27 @@ public async Task<(Item? item, string? error)> Delete(Guid id)
         return (sale, null);
     }
 
+    public async Task<(List<ItemDto> items, string? error)> GetAllSoldItems(OrderStatisticsFilter filter)
+{
+    var orderItems = await _repositoryWrapper.OrderItem.GetAll();
+    if (orderItems.data == null || orderItems.data.Count == 0)
+    {
+        return (null, "No items have been sold yet.");
+    }
+
+    var soldItems = new List<ItemDto>();
+    foreach (var orderItem in orderItems.data)
+    {
+        var item = await _repositoryWrapper.Item.GetById(orderItem.ItemId);
+        if (item != null &&
+            (filter.InventoryId == null || item.InventoryId == filter.InventoryId) &&
+            (filter.CategoryId == null || item.CategoryId == filter.CategoryId))
+        {
+            var itemDto = _mapper.Map<ItemDto>(item);
+            soldItems.Add(itemDto);
+        }
+    }
+
+    return (soldItems, null);
+}
 }
