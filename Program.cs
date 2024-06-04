@@ -14,6 +14,7 @@ using Deli.Helpers;
 using ConfigurationProvider = Deli.Helpers.ConfigurationProvider;
 
 var builder = WebApplication.CreateBuilder(args);
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 builder.Services.AddSignalR();
 

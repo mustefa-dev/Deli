@@ -21,6 +21,7 @@ public static class ApplicationServicesExtension
         services.AddScoped<IUserService, UserService>();
         // here to add
 services.AddScoped<IReviewServices, ReviewServices>();
+services.AddScoped<IFinancialReportService, FinancialReportService>();
 
 services.AddScoped<IFeedBackServices, FeedBackServices>();
 services.AddScoped<INewsServices, NewsServices>();

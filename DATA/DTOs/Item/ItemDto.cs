@@ -11,6 +11,8 @@ namespace Deli.DATA.DTOs.Item
         public int? Quantity { get; set; }
         public Guid? InventoryId { get; set; }
         public Guid? CategoryId { get; set; }
-        
+        public string? CategoryName { get; set; }
+        public string? InventoryName { get; set; }
+        public string? GovernorateName { get; set; }
     }
 }
