@@ -48,9 +48,9 @@ namespace Deli.Services
                     stack.Item().Row(row =>
                     {
                         row.ConstantColumn(20);
-                        row.RelativeColumn().AlignRight().Text("الشركة العامة للنقل البحري", TextStyle.Default.Size(20).Bold());
+                        row.RelativeColumn().AlignRight().Text("\"////////////////////\"", TextStyle.Default.Size(20).Bold());
                     });
-                    stack.Item().AlignRight().Text("القسم: رصيف 6", TextStyle.Default.Size(14));
+                    stack.Item().AlignRight().Text("القسم:\"////////////////////\"", TextStyle.Default.Size(14));
                     stack.Item().AlignRight().Text("agency_bas@scmt.gov.iq", TextStyle.Default.Size(12));
                 });
         }
@@ -113,7 +113,7 @@ namespace Deli.Services
                             text.TotalPages();
                         });
                         row.ConstantColumn(20);
-                        row.RelativeColumn().AlignRight().Text("منظم امر التسليم م/ مكتب اوامر التسليم الاسم الصريح", TextStyle.Default.Size(10));
+                        row.RelativeColumn().AlignRight().Text("////////////////////", TextStyle.Default.Size(10));
                     });
                 });
         }

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "BGxZmplGIlTrgDXfc7WvPpt9Z8kNii7i0YFR8Awukic=",
+  "Hash": "R9YNqGN9OGwuCS+jIeKtTZpTWrzwyIsjQmE34daXkV4=",
   "Source": "Deli",
   "BasePath": "_content/Deli",
   "Mode": "Default",
@@ -8,19 +8,38 @@
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [
     {
-      "Name": "Deli/wwwroot",
+      "Name": "Deli\\wwwroot",
       "Source": "Deli",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/18dcdf6a-ad6e-4215-a1dd-516f535d4b1c.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\alfont_com_AlFont_com_arial.ttf",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
+      "BasePath": "_content/Deli",
+      "RelativePath": "alfont_com_AlFont_com_arial.ttf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\alfont_com_AlFont_com_arial.ttf"
+    },
+    {
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\18dcdf6a-ad6e-4215-a1dd-516f535d4b1c.png",
+      "SourceId": "Deli",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/18dcdf6a-ad6e-4215-a1dd-516f535d4b1c.png",
       "AssetKind": "All",
@@ -33,13 +52,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/18dcdf6a-ad6e-4215-a1dd-516f535d4b1c.png"
+      "OriginalItemSpec": "wwwroot\\Attachments\\18dcdf6a-ad6e-4215-a1dd-516f535d4b1c.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/1ef2575f-3696-4560-8d99-0b05205c8b9a.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\1ef2575f-3696-4560-8d99-0b05205c8b9a.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/1ef2575f-3696-4560-8d99-0b05205c8b9a.png",
       "AssetKind": "All",
@@ -52,13 +71,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/1ef2575f-3696-4560-8d99-0b05205c8b9a.png"
+      "OriginalItemSpec": "wwwroot\\Attachments\\1ef2575f-3696-4560-8d99-0b05205c8b9a.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/2e07769d-8a89-4296-8dd0-dca86a1359f5.json",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\2e07769d-8a89-4296-8dd0-dca86a1359f5.json",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/2e07769d-8a89-4296-8dd0-dca86a1359f5.json",
       "AssetKind": "All",
@@ -71,13 +90,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/2e07769d-8a89-4296-8dd0-dca86a1359f5.json"
+      "OriginalItemSpec": "wwwroot\\Attachments\\2e07769d-8a89-4296-8dd0-dca86a1359f5.json"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/35ab43e0-e361-425f-a072-7f07c72a3289.json",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\35ab43e0-e361-425f-a072-7f07c72a3289.json",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/35ab43e0-e361-425f-a072-7f07c72a3289.json",
       "AssetKind": "All",
@@ -90,13 +109,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/35ab43e0-e361-425f-a072-7f07c72a3289.json"
+      "OriginalItemSpec": "wwwroot\\Attachments\\35ab43e0-e361-425f-a072-7f07c72a3289.json"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/425368ba-7790-40b4-babb-c06d0a6d56ed.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\425368ba-7790-40b4-babb-c06d0a6d56ed.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/425368ba-7790-40b4-babb-c06d0a6d56ed.png",
       "AssetKind": "All",
@@ -109,13 +128,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/425368ba-7790-40b4-babb-c06d0a6d56ed.png"
+      "OriginalItemSpec": "wwwroot\\Attachments\\425368ba-7790-40b4-babb-c06d0a6d56ed.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/4976316e-272a-4665-9f5c-58550e726a06.json",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\4976316e-272a-4665-9f5c-58550e726a06.json",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/4976316e-272a-4665-9f5c-58550e726a06.json",
       "AssetKind": "All",
@@ -128,13 +147,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/4976316e-272a-4665-9f5c-58550e726a06.json"
+      "OriginalItemSpec": "wwwroot\\Attachments\\4976316e-272a-4665-9f5c-58550e726a06.json"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/6236720b-58ec-44ee-a89d-8f7a81a43c83.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\6236720b-58ec-44ee-a89d-8f7a81a43c83.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/6236720b-58ec-44ee-a89d-8f7a81a43c83.png",
       "AssetKind": "All",
@@ -147,13 +166,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/6236720b-58ec-44ee-a89d-8f7a81a43c83.png"
+      "OriginalItemSpec": "wwwroot\\Attachments\\6236720b-58ec-44ee-a89d-8f7a81a43c83.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/6ebf5683-f1e5-4463-bedf-ac67f1a20d71.json",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\6ebf5683-f1e5-4463-bedf-ac67f1a20d71.json",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/6ebf5683-f1e5-4463-bedf-ac67f1a20d71.json",
       "AssetKind": "All",
@@ -166,13 +185,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/6ebf5683-f1e5-4463-bedf-ac67f1a20d71.json"
+      "OriginalItemSpec": "wwwroot\\Attachments\\6ebf5683-f1e5-4463-bedf-ac67f1a20d71.json"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/709893a6-5ba2-4b93-b1e5-a76341a0744d.json",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\709893a6-5ba2-4b93-b1e5-a76341a0744d.json",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/709893a6-5ba2-4b93-b1e5-a76341a0744d.json",
       "AssetKind": "All",
@@ -185,13 +204,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/709893a6-5ba2-4b93-b1e5-a76341a0744d.json"
+      "OriginalItemSpec": "wwwroot\\Attachments\\709893a6-5ba2-4b93-b1e5-a76341a0744d.json"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/7d5805d9-13d1-4566-8847-aa66a9b57d4e.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\7d5805d9-13d1-4566-8847-aa66a9b57d4e.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/7d5805d9-13d1-4566-8847-aa66a9b57d4e.png",
       "AssetKind": "All",
@@ -204,13 +223,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/7d5805d9-13d1-4566-8847-aa66a9b57d4e.png"
+      "OriginalItemSpec": "wwwroot\\Attachments\\7d5805d9-13d1-4566-8847-aa66a9b57d4e.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/8e63ad4f-ebb5-4aaa-8ace-fe0a5e19c7ab.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\8e63ad4f-ebb5-4aaa-8ace-fe0a5e19c7ab.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/8e63ad4f-ebb5-4aaa-8ace-fe0a5e19c7ab.png",
       "AssetKind": "All",
@@ -223,13 +242,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/8e63ad4f-ebb5-4aaa-8ace-fe0a5e19c7ab.png"
+      "OriginalItemSpec": "wwwroot\\Attachments\\8e63ad4f-ebb5-4aaa-8ace-fe0a5e19c7ab.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/9e63265e-19f4-4841-aa57-8213b828dae5.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\9e63265e-19f4-4841-aa57-8213b828dae5.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/9e63265e-19f4-4841-aa57-8213b828dae5.png",
       "AssetKind": "All",
@@ -242,13 +261,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/9e63265e-19f4-4841-aa57-8213b828dae5.png"
+      "OriginalItemSpec": "wwwroot\\Attachments\\9e63265e-19f4-4841-aa57-8213b828dae5.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/c0d22c2c-54f2-4878-9145-e5fea5db4b63.jpeg",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\c0d22c2c-54f2-4878-9145-e5fea5db4b63.jpeg",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/c0d22c2c-54f2-4878-9145-e5fea5db4b63.jpeg",
       "AssetKind": "All",
@@ -261,13 +280,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/c0d22c2c-54f2-4878-9145-e5fea5db4b63.jpeg"
+      "OriginalItemSpec": "wwwroot\\Attachments\\c0d22c2c-54f2-4878-9145-e5fea5db4b63.jpeg"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/c5ce8404-aa42-4a67-b289-69d4e115dd9e.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\c5ce8404-aa42-4a67-b289-69d4e115dd9e.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/c5ce8404-aa42-4a67-b289-69d4e115dd9e.png",
       "AssetKind": "All",
@@ -280,13 +299,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/c5ce8404-aa42-4a67-b289-69d4e115dd9e.png"
+      "OriginalItemSpec": "wwwroot\\Attachments\\c5ce8404-aa42-4a67-b289-69d4e115dd9e.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/ced45210-b5ce-40ac-b859-86636ce10aad.json",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\ced45210-b5ce-40ac-b859-86636ce10aad.json",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/ced45210-b5ce-40ac-b859-86636ce10aad.json",
       "AssetKind": "All",
@@ -299,13 +318,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/ced45210-b5ce-40ac-b859-86636ce10aad.json"
+      "OriginalItemSpec": "wwwroot\\Attachments\\ced45210-b5ce-40ac-b859-86636ce10aad.json"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/ec51bbe9-04a3-455e-88f5-b7f693f7a56f.avif",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\ec51bbe9-04a3-455e-88f5-b7f693f7a56f.avif",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/ec51bbe9-04a3-455e-88f5-b7f693f7a56f.avif",
       "AssetKind": "All",
@@ -318,13 +337,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/ec51bbe9-04a3-455e-88f5-b7f693f7a56f.avif"
+      "OriginalItemSpec": "wwwroot\\Attachments\\ec51bbe9-04a3-455e-88f5-b7f693f7a56f.avif"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/Attachments/ed1d5722-cd93-4f3d-9d9a-1ce1658a8e28.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\Attachments\\ed1d5722-cd93-4f3d-9d9a-1ce1658a8e28.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "Attachments/ed1d5722-cd93-4f3d-9d9a-1ce1658a8e28.png",
       "AssetKind": "All",
@@ -337,13 +356,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/Attachments/ed1d5722-cd93-4f3d-9d9a-1ce1658a8e28.png"
+      "OriginalItemSpec": "wwwroot\\Attachments\\ed1d5722-cd93-4f3d-9d9a-1ce1658a8e28.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/chat.html",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\chat.html",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "chat.html",
       "AssetKind": "All",
@@ -356,13 +375,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/chat.html"
+      "OriginalItemSpec": "wwwroot\\chat.html"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/chat.js",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\chat.js",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "chat.js",
       "AssetKind": "All",
@@ -375,13 +394,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/chat.js"
+      "OriginalItemSpec": "wwwroot\\chat.js"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/images/3e37f236-4b39-4e04-bec2-2ad024541f7c.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\images\\3e37f236-4b39-4e04-bec2-2ad024541f7c.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "images/3e37f236-4b39-4e04-bec2-2ad024541f7c.png",
       "AssetKind": "All",
@@ -394,13 +413,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/images/3e37f236-4b39-4e04-bec2-2ad024541f7c.png"
+      "OriginalItemSpec": "wwwroot\\images\\3e37f236-4b39-4e04-bec2-2ad024541f7c.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/images/6029191f-8268-475e-8493-636eb1c25c79.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\images\\6029191f-8268-475e-8493-636eb1c25c79.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "images/6029191f-8268-475e-8493-636eb1c25c79.png",
       "AssetKind": "All",
@@ -413,13 +432,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/images/6029191f-8268-475e-8493-636eb1c25c79.png"
+      "OriginalItemSpec": "wwwroot\\images\\6029191f-8268-475e-8493-636eb1c25c79.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/images/67bae8a8-de19-4e57-95e3-fbf2720d4778.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\images\\67bae8a8-de19-4e57-95e3-fbf2720d4778.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "images/67bae8a8-de19-4e57-95e3-fbf2720d4778.png",
       "AssetKind": "All",
@@ -432,13 +451,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/images/67bae8a8-de19-4e57-95e3-fbf2720d4778.png"
+      "OriginalItemSpec": "wwwroot\\images\\67bae8a8-de19-4e57-95e3-fbf2720d4778.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/images/682a4778-83e5-4c0f-95b4-71d56dca7156.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\images\\682a4778-83e5-4c0f-95b4-71d56dca7156.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "images/682a4778-83e5-4c0f-95b4-71d56dca7156.png",
       "AssetKind": "All",
@@ -451,13 +470,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/images/682a4778-83e5-4c0f-95b4-71d56dca7156.png"
+      "OriginalItemSpec": "wwwroot\\images\\682a4778-83e5-4c0f-95b4-71d56dca7156.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/images/683d5197-fbf9-4541-87c5-24cb6b34aa43.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\images\\683d5197-fbf9-4541-87c5-24cb6b34aa43.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "images/683d5197-fbf9-4541-87c5-24cb6b34aa43.png",
       "AssetKind": "All",
@@ -470,13 +489,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/images/683d5197-fbf9-4541-87c5-24cb6b34aa43.png"
+      "OriginalItemSpec": "wwwroot\\images\\683d5197-fbf9-4541-87c5-24cb6b34aa43.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/images/6b56c491-1208-4fe6-8572-77e4cbff5c58.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\images\\6b56c491-1208-4fe6-8572-77e4cbff5c58.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "images/6b56c491-1208-4fe6-8572-77e4cbff5c58.png",
       "AssetKind": "All",
@@ -489,13 +508,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/images/6b56c491-1208-4fe6-8572-77e4cbff5c58.png"
+      "OriginalItemSpec": "wwwroot\\images\\6b56c491-1208-4fe6-8572-77e4cbff5c58.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/images/761cc686-55da-4ba0-9def-2c8a94cde0c5.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\images\\761cc686-55da-4ba0-9def-2c8a94cde0c5.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "images/761cc686-55da-4ba0-9def-2c8a94cde0c5.png",
       "AssetKind": "All",
@@ -508,13 +527,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/images/761cc686-55da-4ba0-9def-2c8a94cde0c5.png"
+      "OriginalItemSpec": "wwwroot\\images\\761cc686-55da-4ba0-9def-2c8a94cde0c5.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/images/be19ae4f-0e21-4815-a47b-5cf374b64e34.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\images\\be19ae4f-0e21-4815-a47b-5cf374b64e34.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "images/be19ae4f-0e21-4815-a47b-5cf374b64e34.png",
       "AssetKind": "All",
@@ -527,13 +546,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/images/be19ae4f-0e21-4815-a47b-5cf374b64e34.png"
+      "OriginalItemSpec": "wwwroot\\images\\be19ae4f-0e21-4815-a47b-5cf374b64e34.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/images/c3e0d523-1790-4a3c-8fd4-567cd19f4feb.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\images\\c3e0d523-1790-4a3c-8fd4-567cd19f4feb.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "images/c3e0d523-1790-4a3c-8fd4-567cd19f4feb.png",
       "AssetKind": "All",
@@ -546,13 +565,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/images/c3e0d523-1790-4a3c-8fd4-567cd19f4feb.png"
+      "OriginalItemSpec": "wwwroot\\images\\c3e0d523-1790-4a3c-8fd4-567cd19f4feb.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/images/d156001c-bd56-49b4-97fa-0a2abc3aea2f.png",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\images\\d156001c-bd56-49b4-97fa-0a2abc3aea2f.png",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "images/d156001c-bd56-49b4-97fa-0a2abc3aea2f.png",
       "AssetKind": "All",
@@ -565,13 +584,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/images/d156001c-bd56-49b4-97fa-0a2abc3aea2f.png"
+      "OriginalItemSpec": "wwwroot\\images\\d156001c-bd56-49b4-97fa-0a2abc3aea2f.png"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/index.html",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\index.html",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "index.html",
       "AssetKind": "All",
@@ -584,13 +603,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/index.html"
+      "OriginalItemSpec": "wwwroot\\index.html"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/js/site.js",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\js\\site.js",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "js/site.js",
       "AssetKind": "All",
@@ -603,13 +622,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/js/site.js"
+      "OriginalItemSpec": "wwwroot\\js\\site.js"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/login.html",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\login.html",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "login.html",
       "AssetKind": "All",
@@ -622,13 +641,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/login.html"
+      "OriginalItemSpec": "wwwroot\\login.html"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/login.js",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\login.js",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "login.js",
       "AssetKind": "All",
@@ -641,13 +660,13 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/login.js"
+      "OriginalItemSpec": "wwwroot\\login.js"
     },
     {
-      "Identity": "/home/mu/RiderProjects/Deli/wwwroot/styles.css",
+      "Identity": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\styles.css",
       "SourceId": "Deli",
       "SourceType": "Discovered",
-      "ContentRoot": "/home/mu/RiderProjects/Deli/wwwroot/",
+      "ContentRoot": "C:\\Users\\Lenovo\\RiderProjects\\DeliAPI\\wwwroot\\",
       "BasePath": "_content/Deli",
       "RelativePath": "styles.css",
       "AssetKind": "All",
@@ -660,7 +679,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/styles.css"
+      "OriginalItemSpec": "wwwroot\\styles.css"
     }
   ]
 }

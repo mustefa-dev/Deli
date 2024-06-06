@@ -41,6 +41,8 @@ namespace Deli.Controllers
         
         [HttpPut("Cancel/{id}")]
         public async Task<ActionResult<string>> Cancel(Guid id) => Ok(await _orderServices.Cancel(id, Id));
+        [HttpPut("Delivered/{id}")]
+        // public async Task<ActionResult<string>> Delive
         
         [HttpPut("Rating/{id}")]
         public async Task<ActionResult<string>> Rating(Guid id, [FromBody] RatingOrderForm ratingOrderForm) => Ok(await _orderServices.Rating(id, Id, ratingOrderForm));
