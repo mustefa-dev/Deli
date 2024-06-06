@@ -2,7 +2,7 @@ name: Setup the dev server project
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
     
   workflow_dispatch:
 
