@@ -70,8 +70,8 @@ namespace Deli.Services
         {
             var user = await _repositoryWrapper.User.Get(u => u.Email == registerForm.Email);
             if (user != null) return (null, "User already exists");
-            var address = await _repositoryWrapper.Address.GetById(registerForm.AddressId);
-            if (address == null) return (null, "Address not found");
+            /*var address = await _repositoryWrapper.Address.GetById(registerForm.AddressId);
+         if (address == null) return (null, "Address not found");*/
 
             var newUser = new AppUser
             {
