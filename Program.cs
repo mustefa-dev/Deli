@@ -26,12 +26,13 @@ Log.Logger = new LoggerConfiguration()
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigins",
-        builder => builder
-            .WithOrigins("http://localhost:63342") 
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials()); 
+    options.AddPolicy("AllowLocalhost",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
 });
 
 builder.Services.AddControllers()
@@ -74,6 +75,8 @@ IConfiguration configuration = builder.Configuration;
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseCors("AllowSpecificOrigins");
+app.UseCors("AllowLocalhost");
+       
        // app.UseMiddleware<CustomUnauthorizedMiddleware>();
         //app.UseMiddleware<CustomPayloadTooLargeMiddleware>();
         app.UseRouting();
