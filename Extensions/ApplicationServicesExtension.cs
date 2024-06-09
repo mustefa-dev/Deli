@@ -14,13 +14,13 @@ public static class ApplicationServicesExtension
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
     {
         services.AddDbContext<DataContext>(
-            options => options.UseNpgsql(config.GetConnectionString("LocalHost")));
+            options => options.UseNpgsql(config.GetConnectionString("server")));
         services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         services.AddScoped<IUserService, UserService>();
         // here to add
-        services.AddScoped<IContentService, ContentService>();
+        services.AddScoped<IAboutUsService, AboutUsService>();
 services.AddScoped<IReviewServices, ReviewServices>();
 services.AddScoped<IFinancialReportService, FinancialReportService>();
 

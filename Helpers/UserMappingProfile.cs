@@ -28,6 +28,9 @@ public class UserMappingProfile : Profile
 
 
         // here to add
+CreateMap<QualityTools, QualityToolsDto>();
+CreateMap<QualityToolsForm,QualityTools>();
+CreateMap<QualityToolsUpdate,QualityTools>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<MileStone, MileStoneDto>();
 CreateMap<MileStoneForm,MileStone>();
 CreateMap<MileStoneUpdate,MileStone>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));

@@ -5,7 +5,7 @@ using Deli.Interface;
 
 namespace Deli.Services;
 
-public interface IContentService
+public interface IAboutUsService
 {
     Task<(DeliDifferenceDto? deliDifference, string? error)> Update(Guid id, DeliDifferenceUpdate deliDifferenceUpdate);
     Task<DeliDifferenceDto> GetDeliDifference();
@@ -17,14 +17,16 @@ public interface IContentService
     Task<(MileStone? milestone, string? error)> Update(Guid id ,MileStoneUpdate milestoneUpdate);
     Task<(MileStone? milestone, string? error)> Delete(Guid id);
     Task<(MileStone? milestone, string? error)> GetById(Guid id);
+    Task<(QualityToolsDto? qualityTools, string? error)> Update(Guid id, QualityToolsUpdate qualityToolsUpdate);
+    Task<QualityToolsDto> GetQualityTools();
 
 }
-public class ContentService : IContentService
+public class AboutUsService : IAboutUsService
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
 
-    public ContentService(
+    public AboutUsService(
         IMapper mapper ,
         IRepositoryWrapper repositoryWrapper
     )
@@ -56,7 +58,8 @@ public class ContentService : IContentService
 
     public async Task<(List<MileStoneDto> milestones, int? totalCount, string? error)> GetAll(MileStoneFilter filter)
     {
-        var (milestones,Count) = await _repositoryWrapper.MileStone.GetAll<MileStoneDto>();
+        var (milestones,Count) = await _repositoryWrapper.MileStone.GetAll<MileStoneDto>( x=>filter.Year==null || x.Year==filter.Year
+            ,filter.PageNumber,filter.PageSize);
         if (milestones == null)
         {
             return (null, null, "Error fetching MileStones");
@@ -155,6 +158,35 @@ public class ContentService : IContentService
         _mapper.Map(deliDifferenceUpdate, deliDifference);
         deliDifference = await _repositoryWrapper.DeliDifference.Update(deliDifference, id);
         return (_mapper.Map<DeliDifferenceDto>(deliDifference), null);
+    }
+    public async Task<QualityToolsDto> GetQualityTools()
+    {
+        // Try to retrieve the QualityTools from the database
+        var qualityTools1 = await _repositoryWrapper.QualityTools.GetAll();
+        var qualityTools = qualityTools1.data.FirstOrDefault();
+
+        // If it doesn't exist, create a default one
+        if (qualityTools == null)
+        {
+            var defaultQualityTools = new QualityTools
+            {
+                // Set default values here
+            };
+
+            qualityTools = await _repositoryWrapper.QualityTools.Add(defaultQualityTools);
+        }
+
+        // Map it to QualityToolsDto and return
+        return _mapper.Map<QualityToolsDto>(qualityTools);
+    }
+
+    public async Task<(QualityToolsDto? qualityTools, string? error)> Update(Guid id, QualityToolsUpdate qualityToolsUpdate)
+    {
+        var qualityTools = await _repositoryWrapper.QualityTools.GetById(id);
+        if (qualityTools == null) return (null, "QualityTools not found");
+        _mapper.Map(qualityToolsUpdate, qualityTools);
+        qualityTools = await _repositoryWrapper.QualityTools.Update(qualityTools, id);
+        return (_mapper.Map<QualityToolsDto>(qualityTools), null);
     }
 
 }

@@ -12,6 +12,16 @@ public class RepositoryWrapper : IRepositoryWrapper
 
 
     // here to add
+private IQualityToolsRepository _QualityTools;
+
+public IQualityToolsRepository QualityTools {
+    get {
+        if(_QualityTools == null) {
+            _QualityTools = new QualityToolsRepository(_context, _mapper);
+        }
+        return _QualityTools;
+    }
+}
 private IMileStoneRepository _MileStone;
 
 public IMileStoneRepository MileStone {

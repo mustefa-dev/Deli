@@ -15,6 +15,7 @@ public class DataContext : DbContext
 
 
     // here to add
+public DbSet<QualityTools> QualityToolss { get; set; }
 public DbSet<MileStone> MileStones { get; set; }
 public DbSet<OurMission> OurMissions { get; set; }
 public DbSet<DeliDifference> DeliDifferences { get; set; }
