@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Deli.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240609135812_aabbns")]
-    partial class aabbns
+    [Migration("20240609151808_aabbnss")]
+    partial class aabbnss
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -164,6 +164,32 @@ namespace Deli.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categorys");
+                });
+
+            modelBuilder.Entity("Deli.Entities.DeliDifference", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DeliDifferences");
                 });
 
             modelBuilder.Entity("Deli.Entities.FeedBack", b =>
@@ -347,6 +373,32 @@ namespace Deli.Migrations
                     b.ToTable("Messages");
                 });
 
+            modelBuilder.Entity("Deli.Entities.MileStone", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("Year")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MileStones");
+                });
+
             modelBuilder.Entity("Deli.Entities.News", b =>
                 {
                     b.Property<Guid>("Id")
@@ -515,6 +567,50 @@ namespace Deli.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("Deli.Entities.OurMission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MiniDescription1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MiniDescription2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MiniDescription3")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MiniTitle1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MiniTitle2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MiniTitle3")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OurMissions");
                 });
 
             modelBuilder.Entity("Deli.Entities.Review", b =>

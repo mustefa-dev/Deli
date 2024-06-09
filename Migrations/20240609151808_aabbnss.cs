@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Deli.Migrations
 {
     /// <inheritdoc />
-    public partial class aabbns : Migration
+    public partial class aabbnss : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,6 +43,22 @@ namespace Deli.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categorys", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DeliDifferences",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Image = table.Column<string>(type: "text", nullable: true),
+                    Deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeliDifferences", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -110,6 +126,22 @@ namespace Deli.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MileStones",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Year = table.Column<int>(type: "integer", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Image = table.Column<string>(type: "text", nullable: true),
+                    Deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MileStones", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Newss",
                 columns: table => new
                 {
@@ -147,6 +179,28 @@ namespace Deli.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Notifications", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OurMissions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Image = table.Column<string>(type: "text", nullable: true),
+                    MiniTitle1 = table.Column<string>(type: "text", nullable: true),
+                    MiniDescription1 = table.Column<string>(type: "text", nullable: true),
+                    MiniTitle2 = table.Column<string>(type: "text", nullable: true),
+                    MiniDescription2 = table.Column<string>(type: "text", nullable: true),
+                    MiniTitle3 = table.Column<string>(type: "text", nullable: true),
+                    MiniDescription3 = table.Column<string>(type: "text", nullable: true),
+                    Deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OurMissions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -450,6 +504,9 @@ namespace Deli.Migrations
                 name: "Appsettingss");
 
             migrationBuilder.DropTable(
+                name: "DeliDifferences");
+
+            migrationBuilder.DropTable(
                 name: "FeedBacks");
 
             migrationBuilder.DropTable(
@@ -459,6 +516,9 @@ namespace Deli.Migrations
                 name: "Messages");
 
             migrationBuilder.DropTable(
+                name: "MileStones");
+
+            migrationBuilder.DropTable(
                 name: "Newss");
 
             migrationBuilder.DropTable(
@@ -466,6 +526,9 @@ namespace Deli.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrderItems");
+
+            migrationBuilder.DropTable(
+                name: "OurMissions");
 
             migrationBuilder.DropTable(
                 name: "Reviews");

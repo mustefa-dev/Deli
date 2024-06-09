@@ -28,6 +28,15 @@ public class UserMappingProfile : Profile
 
 
         // here to add
+CreateMap<MileStone, MileStoneDto>();
+CreateMap<MileStoneForm,MileStone>();
+CreateMap<MileStoneUpdate,MileStone>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<OurMission, OurMissionDto>();
+CreateMap<OurMissionForm,OurMission>();
+CreateMap<OurMissionUpdate,OurMission>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<DeliDifference, DeliDifferenceDto>();
+CreateMap<DeliDifferenceForm,DeliDifference>();
+CreateMap<DeliDifferenceUpdate,DeliDifference>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Review, ReviewDto>();
 CreateMap<ReviewForm,Review>();
 CreateMap<ReviewUpdate,Review>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
