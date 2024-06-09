@@ -22,6 +22,8 @@ namespace Deli.Services
 
         Task<(List<UserDto>? user, int? totalCount, string? error)> GetAll(UserFilter filter);
         Task<(UserDto? user, string? error)> GetMyProfile(Guid id);
+        Task<(UserDto? user, string? error)> OTPverification(string? email, string? otp);
+
     }
 
     public class UserService : IUserService
@@ -50,7 +52,13 @@ namespace Deli.Services
             var user = await _repositoryWrapper.User.Get(u => u.Email == loginForm.Email);
             if (user == null) return (null, "المستخدم غير متوفر");
             if (!BCrypt.Net.BCrypt.Verify(loginForm.Password, user.Password)) return (null, "خطاء في الرقم السري");
+            
             var userDto = _mapper.Map<UserDto>(user);
+            if (user.OTPrequired == true)
+            {
+                userDto.Token = null;
+                return (user != null ? userDto : null, "OTP verification required");
+            }
             var TokenDto = _mapper.Map<TokenDTO>(user);
             userDto.Token = _tokenService.CreateToken(TokenDto);
             return (userDto, null);
@@ -80,17 +88,19 @@ namespace Deli.Services
                 FullName = registerForm.FullName,
                 Password = BCrypt.Net.BCrypt.HashPassword(registerForm.Password),
                 AddressId = registerForm.AddressId,
+                OTPrequired= true,
+                OTP = GenerateOTP()
             };
 
             await _repositoryWrapper.User.CreateUser(newUser);
 
-            var  userEvent= new GenericDataUpdateDto<AppUser> { Event = "Created", Data = newUser };
+            var userEvent = new GenericDataUpdateDto<AppUser> { Event = "Created", Data = newUser };
             await _usersHubContext.Clients.All.SendAsync("event", userEvent);
-            
-           
+
+
             var userDto = _mapper.Map<UserDto>(newUser);
-            var TokenDto = _mapper.Map<TokenDTO>(newUser);
-            userDto.Token = _tokenService.CreateToken(TokenDto);
+            //var TokenDto = _mapper.Map<TokenDTO>(newUser);
+           // userDto.Token = _tokenService.CreateToken(TokenDto);
             return (userDto, null);
         }
 
@@ -103,7 +113,7 @@ namespace Deli.Services
 
             user = _mapper.Map(updateUserForm, user);
             await _repositoryWrapper.User.UpdateUser(user);
-            var  userEvent= new GenericDataUpdateDto<AppUser> { Event = "Updated", Data = user };
+            var userEvent = new GenericDataUpdateDto<AppUser> { Event = "Updated", Data = user };
             await _usersHub.BroadcastUserEvent(userEvent);
 
             return (user, null);
@@ -135,6 +145,32 @@ namespace Deli.Services
             if (user == null) return (null, "User not found");
             var userDto = _mapper.Map<UserDto>(user);
             return (userDto, null);
+        }
+
+       public async Task<(UserDto? user, string? error)> OTPverification(string? email, string? otp)
+        {
+            var user = await _repositoryWrapper.User.Get(u =>u.Email == email);
+            if (user.OTP == otp)
+            {
+                user.OTP = null;
+                user.OTPrequired = false;
+                user = await _repositoryWrapper.User.Update(user, user.Id);
+                var userdto = _mapper.Map<UserDto>(user);
+                userdto.Token = _tokenService.CreateToken(_mapper.Map<TokenDTO>(user));
+                return (userdto, null);
+            }
+
+            return (null, "Invalid OTP");
+        }
+
+
+
+        public string? GenerateOTP() //ToDo : Implement OTP
+        {
+            // var otp = new Random().Next(10000, 99999).ToString();
+            var otp = "11111";
+
+            return otp;
         }
     }
 }

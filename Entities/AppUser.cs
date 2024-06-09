@@ -9,6 +9,8 @@ namespace Deli.Entities
         public string? Password { get; set; }
         
         public UserRole? Role { get; set; }
+        public string? OTP { get; set; }
+        public bool? OTPrequired { get; set; } = true;
 
         public bool? IsActive { get; set; }
         public ICollection<Address>? Addresses { get; set; }
