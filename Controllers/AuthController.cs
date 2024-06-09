@@ -47,4 +47,8 @@ public class UsersController : BaseController{
  
     [HttpGet("/api/MyProfile")]
     public async Task<ActionResult> GetMyProfile() => OkObject(await _userService.GetMyProfile(Id));
+    
+    [HttpPost("OTPverification")]
+    public async Task<ActionResult> OTPverification(string email, string otp) =>
+        Ok(await _userService.OTPverification(email, otp));
 }
