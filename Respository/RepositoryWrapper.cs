@@ -12,6 +12,46 @@ public class RepositoryWrapper : IRepositoryWrapper
 
 
     // here to add
+private IQualityToolsRepository _QualityTools;
+
+public IQualityToolsRepository QualityTools {
+    get {
+        if(_QualityTools == null) {
+            _QualityTools = new QualityToolsRepository(_context, _mapper);
+        }
+        return _QualityTools;
+    }
+}
+private IMileStoneRepository _MileStone;
+
+public IMileStoneRepository MileStone {
+    get {
+        if(_MileStone == null) {
+            _MileStone = new MileStoneRepository(_context, _mapper);
+        }
+        return _MileStone;
+    }
+}
+private IOurMissionRepository _OurMission;
+
+public IOurMissionRepository OurMission {
+    get {
+        if(_OurMission == null) {
+            _OurMission = new OurMissionRepository(_context, _mapper);
+        }
+        return _OurMission;
+    }
+}
+private IDeliDifferenceRepository _DeliDifference;
+
+public IDeliDifferenceRepository DeliDifference {
+    get {
+        if(_DeliDifference == null) {
+            _DeliDifference = new DeliDifferenceRepository(_context, _mapper);
+        }
+        return _DeliDifference;
+    }
+}
 private IReviewRepository _Review;
 
 public IReviewRepository Review {
