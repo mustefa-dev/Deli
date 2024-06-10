@@ -11,19 +11,19 @@ namespace Deli.Services;
 
 public interface IOrderServices
 {
-    Task<(Order? order, string? error)> Create(OrderForm orderForm , Guid UserId);
-    Task<(List<OrderDto> orders, int? totalCount, string? error)> GetAll(OrderFilter filter);
-    Task<(OrderDto? order, string? error)> GetById(Guid id);
-    Task<(Order? order, string? error)> Update(Guid id , OrderUpdate orderUpdate);
-    Task<(string? done, string? error)> Approve(Guid id, Guid userId);
-    Task<(string? done, string? error)> Delivered(Guid id, Guid userId);
-    Task<(string? done, string? error)> Cancel(Guid id, Guid userId);
-    Task<(string? done, string? error)> Reject(Guid id, Guid userId);
-    Task<(string? done, string? error)> Rating(Guid id, Guid userId, RatingOrderForm ratingOrderForm);
+    Task<(Order? order, string? error)> Create(OrderForm orderForm , Guid UserId, string language);
+    Task<(List<OrderDto> orders, int? totalCount, string? error)> GetAll(OrderFilter filter, string language);
+    Task<(OrderDto? order, string? error)> GetById(Guid id, string language);
+    Task<(Order? order, string? error)> Update(Guid id , OrderUpdate orderUpdate, string language);
+    Task<(string? done, string? error)> Approve(Guid id, Guid userId, string language);
+    Task<(string? done, string? error)> Delivered(Guid id, Guid userId, string language);
+    Task<(string? done, string? error)> Cancel(Guid id, Guid userId, string language);
+    Task<(string? done, string? error)> Reject(Guid id, Guid userId, string language);
+    Task<(string? done, string? error)> Rating(Guid id, Guid userId, RatingOrderForm ratingOrderForm, string language);
 
-    Task<(Order? order, string? error)> Delete(Guid id);
-    Task<(List<OrderDto>order ,int? totalCount, string? error)> GetMyOrders(Guid userId);
-    Task<OrderStatisticsDto> GetOrderStatistics(OrderStatisticsFilter filter);
+    Task<(Order? order, string? error)> Delete(Guid id, string language);
+    Task<(List<OrderDto>order ,int? totalCount, string? error)> GetMyOrders(Guid userId, string language);
+    Task<OrderStatisticsDto> GetOrderStatistics(OrderStatisticsFilter filter, string language);
     Task<FinancialReport> CreateFinancialReport();
 
 }
@@ -43,7 +43,7 @@ public class OrderServices : IOrderServices
     }
 
 
-    public async Task<(Order? order, string? error)> Create(OrderForm orderForm, Guid userId)
+    public async Task<(Order? order, string? error)> Create(OrderForm orderForm, Guid userId, string language)
     {
         var order = _mapper.Map<Order>(orderForm);
         order.UserId = userId;
@@ -51,13 +51,13 @@ public class OrderServices : IOrderServices
 
         var user = await _repositoryWrapper.User.Get(x => x.Id == userId);
         if (user == null)
-            return (null, "User not found");
+            return (null,ErrorResponseException.GenerateErrorResponse("User not found", "المستخدم غير موجود", language));
         order.OrderStatus = OrderStatus.Pending;
         order.AddressId = user.AddressId;
 
         var addedOrder = await _repositoryWrapper.Order.Add(order);
         if (addedOrder == null)
-            return (null, "Order couldn't be created");
+            return (null,ErrorResponseException.GenerateErrorResponse("Error in Creating a Order", "خطأ في انشاء الطلب", language));
 
         decimal totalPrice = 0;
 
@@ -65,7 +65,7 @@ public class OrderServices : IOrderServices
         {
             var item = await _repositoryWrapper.Item.Get(x => x.Id == orderItemForm.ItemId);
             if (item == null)
-                return (null, "Item not found");
+                return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "العنصر غير موجود", language));
 
             var orderItem = new OrderItem
             {
@@ -85,7 +85,7 @@ public class OrderServices : IOrderServices
         {
             var item = await _repositoryWrapper.Item.Get(x => x.Id == orderItem.ItemId);
             if (item == null)
-                return (null, "Item not found");
+                return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "العنصر غير موجود", language));
             item.Quantity -= orderItem.Quantity;
             await _repositoryWrapper.Item.Update(item);
         }
@@ -94,7 +94,7 @@ public class OrderServices : IOrderServices
     }
 
 
-    public async Task<(List<OrderDto> orders, int? totalCount, string? error)> GetAll(OrderFilter filter)
+    public async Task<(List<OrderDto> orders, int? totalCount, string? error)> GetAll(OrderFilter filter, string language)
     {
         var orders = await _repositoryWrapper.Order.GetAll<OrderDto>(
             x =>
@@ -113,27 +113,27 @@ public class OrderServices : IOrderServices
         return (orders.data, orders.totalCount, null);
     }
 
-    public async Task<(OrderDto? order, string? error)> GetById(Guid id)
+    public async Task<(OrderDto? order, string? error)> GetById(Guid id, string language)
     {
         var order = await _repositoryWrapper.Order.GetAll<OrderDto>(x => x.Id == id);
         if (order.data == null)
-            return (null, "Order not found");
+            return (null, ErrorResponseException.GenerateErrorResponse("Order not found", "الطلب غير موجود", language));
         return (order.data.FirstOrDefault(), null);
     }
 
-    public async Task<(Order? order, string? error)> Update(Guid id, OrderUpdate orderUpdate)
+    public async Task<(Order? order, string? error)> Update(Guid id, OrderUpdate orderUpdate, string language)
     {
         throw new NotImplementedException();
 
     }
 
-    public async Task<(string? done, string? error)> Approve(Guid id, Guid userId)
+    public async Task<(string? done, string? error)> Approve(Guid id, Guid userId, string language)
     {
         var order = await _repositoryWrapper.Order.Get(x => x.Id == id,
             i => i.Include(s => s.Address));
 
         if (order == null) return (null, "الطلب غير موجود");
-        if (order.OrderStatus != OrderStatus.Pending) return (null, "لا يمكن الموافقة على الطلب");
+        if (order.OrderStatus != OrderStatus.Pending) return (null, ErrorResponseException.GenerateErrorResponse("Order is not pending", "الطلب ليس معلق", language));
 
 
         if (order.OrderItem != null)
@@ -159,13 +159,13 @@ public class OrderServices : IOrderServices
         foreach (var orderCar in orderCars.data)
         {
             var item = await _repositoryWrapper.Item.Get(x => x.Id == orderCar.ItemId);
-            if (item == null) return (null, "السيارة غير موجودة");
+            if (item == null) return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "العنصر غير موجود", language));
             await _repositoryWrapper.Item.Update(item);
         }
 
 
         var update = await _repositoryWrapper.Order.Update(order);
-        if (update == null) return (null, "لا يمكن الموافقة على الطلب");
+        if (update == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in updating order", "خطأ في تحديث الطلب", language));
 
         var oneSignalNotification = new Notification
         {
@@ -177,11 +177,11 @@ public class OrderServices : IOrderServices
         return ("تمت الموافقة على الطلب", null);
     }
 
-    public async Task<(string? done, string? error)> Delivered(Guid id, Guid userId)
+    public async Task<(string? done, string? error)> Delivered(Guid id, Guid userId, string language)
     {
         var order = await _repositoryWrapper.Order.Get(x => x.Id == id,
             i => i.Include(a => a.Address));
-        if (order == null) return (null, "الطلب غير موجود");
+        if (order == null) return (null, ErrorResponseException.GenerateErrorResponse("Order not found", "الطلب غير موجود", language));
         order.OrderStatus = OrderStatus.Delivered;
         order.DateOfDelivered = DateTime.UtcNow;
         var update = await _repositoryWrapper.Order.Update(order);
@@ -200,14 +200,14 @@ public class OrderServices : IOrderServices
         };
         OneSignal.SendNoitications(oneSignalNotification, userId.ToString());
 
-        if (update == null) return (null, "لا يمكن تسليم الطلب");
+        if (update == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in updating order", "خطأ في تحديث الطلب", language));
         return ("تم تسليم الطلب", null);
     }
 
-    public async Task<(string? done, string? error)> Cancel(Guid id, Guid userId)
+    public async Task<(string? done, string? error)> Cancel(Guid id, Guid userId, string language)
     {
         var order = await _repositoryWrapper.Order.Get(x => x.Id == id);
-        if (order == null) return (null, "الطلب غير موجود");
+        if (order == null) return (null, ErrorResponseException.GenerateErrorResponse("Order not found", "الطلب غير موجود", language));
         order.OrderStatus = OrderStatus.Canceled;
         order.DateOfCanceled = DateTime.UtcNow;
         var orderCars = await _repositoryWrapper.OrderItem.GetAll(x => x.OrderId == id);
@@ -215,7 +215,7 @@ public class OrderServices : IOrderServices
         {
             
             if (order.UserId != userId)
-                return (null, "Only the user can cancel the order");
+                return (null, ErrorResponseException.GenerateErrorResponse("You are not authorized to cancel this order", "غير مصرح لك بالغاء هذا الطلب", language));
             var car = await _repositoryWrapper.Item.Get(x => x.Id == orderCar.ItemId);
             await _repositoryWrapper.Item.Update(car);
         }
@@ -236,52 +236,52 @@ public class OrderServices : IOrderServices
         };
         OneSignal.SendNoitications(oneSignalNotification, userId.ToString());
 
-        if (update == null) return (null, "لا يمكن الغاء الطلب");
+        if (update == null) return (null,ErrorResponseException.GenerateErrorResponse("Error in updating order", "خطأ في تحديث الطلب", language));
         return ("تم الغاء الطلب", null);
 
     }
 
-    public async Task<(string? done, string? error)> Reject(Guid id, Guid userId)
+    public async Task<(string? done, string? error)> Reject(Guid id, Guid userId, string language)
     {
         var order = await _repositoryWrapper.Order.Get(x => x.Id == id);
-        if (order == null) return (null, "الطلب غير موجود");
+        if (order == null) return (null, ErrorResponseException.GenerateErrorResponse("Order not found", "الطلب غير موجود", language));
         order.OrderStatus = OrderStatus.Rejected;
         var orderCars = await _repositoryWrapper.OrderItem.GetAll(x => x.OrderId == id);
 
         var update = await _repositoryWrapper.Order.Update(order);
-            if (update == null) return (null, "لا يمكن رفض الطلب");
+            if (update == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in updating order", "خطأ في تحديث الطلب", language));
             return ("تم رفض الطلب", null);
 
         }
 
-public async Task<(string? done, string? error)> Rating(Guid id, Guid userId, RatingOrderForm ratingOrderForm)
+public async Task<(string? done, string? error)> Rating(Guid id, Guid userId, RatingOrderForm ratingOrderForm, string language)
     {
         var order =await _repositoryWrapper.Order.Get(x => x.Id == id);
-        if (order == null) return (null, "الطلب غير موجود");
+        if (order == null) return (null, ErrorResponseException.GenerateErrorResponse("Order not found", "الطلب غير موجود", language));
         order.Rating = ratingOrderForm.Rating;
         var update = await _repositoryWrapper.Order.Update(order);
-        if (update == null) return (null, "لا يمكن تقييم الطلب");
+        if (update == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in updating order", "خطأ في تحديث الطلب", language));
         return ("تم تقييم الطلب", null);
         
     }
 
-    public async Task<(Order? order, string? error)> Delete(Guid id)
+    public async Task<(Order? order, string? error)> Delete(Guid id, string language)
     {
         var order = await _repositoryWrapper.Order.Get(x => x.Id == id);
-        if (order == null) return (null, "الطلب غير موجود");
+        if (order == null) return (null, ErrorResponseException.GenerateErrorResponse("Order not found", "الطلب غير موجود", language));
         var delete = await _repositoryWrapper.Order.SoftDelete(id);
-        if (delete == null) return (null, "لا يمكن حذف الطلب");
+        if (delete == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in deleting order", "خطأ في حذف الطلب", language));
         return (order, null);
     }
-    public async Task<(List<OrderDto> order,int? totalCount,string?error)>GetMyOrders(Guid userId)
+    public async Task<(List<OrderDto> order,int? totalCount,string?error)>GetMyOrders(Guid userId, string language)
     {
         var user = await _repositoryWrapper.User.Get(x => x.Id == userId);
         if (user == null)
-            return (null, null, "User not found");
+            return (null, null, ErrorResponseException.GenerateErrorResponse("User not found", "المستخدم غير موجود", language));
         var orders = await _repositoryWrapper.Order.GetAll<OrderDto>(x => x.UserId == userId);
         return (orders.data, orders.totalCount, null);
     }
-    public async Task<OrderStatisticsDto> GetOrderStatistics(OrderStatisticsFilter filter)
+    public async Task<OrderStatisticsDto> GetOrderStatistics(OrderStatisticsFilter filter, string language)
     {
         var allOrdersResult = await _repositoryWrapper.Order.GetAll();
         var allOrders = allOrdersResult.data;

@@ -20,19 +20,19 @@ namespace Deli.Controllers
 
         
         [HttpGet]
-        public async Task<ActionResult<List<FeedBackDto>>> GetAll([FromQuery] FeedBackFilter filter) => Ok(await _feedbackServices.GetAll(filter) , filter.PageNumber , filter.PageSize);
+        public async Task<ActionResult<List<FeedBackDto>>> GetAll([FromQuery] FeedBackFilter filter) => Ok(await _feedbackServices.GetAll(filter,Language) , filter.PageNumber , filter.PageSize);
 
         
         [HttpPost]
-        public async Task<ActionResult<FeedBack>> Create([FromBody] FeedBackForm feedbackForm) => Ok(await _feedbackServices.Create(feedbackForm));
+        public async Task<ActionResult<FeedBack>> Create([FromBody] FeedBackForm feedbackForm) => Ok(await _feedbackServices.Create(feedbackForm,Language));
 
         
         [HttpPut("{id}")]
-        public async Task<ActionResult<FeedBack>> Update([FromBody] FeedBackUpdate feedbackUpdate, Guid id) => Ok(await _feedbackServices.Update(id , feedbackUpdate));
+        public async Task<ActionResult<FeedBack>> Update([FromBody] FeedBackUpdate feedbackUpdate, Guid id) => Ok(await _feedbackServices.Update(id , feedbackUpdate,Language));
 
         
         [HttpDelete("{id}")]
-        public async Task<ActionResult<FeedBack>> Delete(Guid id) =>  Ok( await _feedbackServices.Delete(id));
+        public async Task<ActionResult<FeedBack>> Delete(Guid id) =>  Ok( await _feedbackServices.Delete(id,Language));
         
     }
 }

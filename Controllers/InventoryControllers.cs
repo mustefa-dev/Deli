@@ -20,19 +20,19 @@ namespace Deli.Controllers
 
         
         [HttpGet]
-        public async Task<ActionResult<List<InventoryDto>>> GetAll([FromQuery] InventoryFilter filter) => Ok(await _inventoryServices.GetAll(filter) , filter.PageNumber , filter.PageSize);
+        public async Task<ActionResult<List<InventoryDto>>> GetAll([FromQuery] InventoryFilter filter) => Ok(await _inventoryServices.GetAll(filter,Language) , filter.PageNumber , filter.PageSize);
 
         
         [HttpPost]
-        public async Task<ActionResult<Inventory>> Create([FromBody] InventoryForm inventoryForm) => Ok(await _inventoryServices.Create(inventoryForm));
+        public async Task<ActionResult<Inventory>> Create([FromBody] InventoryForm inventoryForm) => Ok(await _inventoryServices.Create(inventoryForm,Language));
 
         
         [HttpPut("{id}")]
-        public async Task<ActionResult<Inventory>> Update([FromBody] InventoryUpdate inventoryUpdate, Guid id) => Ok(await _inventoryServices.Update(id , inventoryUpdate));
+        public async Task<ActionResult<Inventory>> Update([FromBody] InventoryUpdate inventoryUpdate, Guid id) => Ok(await _inventoryServices.Update(id , inventoryUpdate,Language));
 
         
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Inventory>> Delete(Guid id) =>  Ok( await _inventoryServices.Delete(id));
+        public async Task<ActionResult<Inventory>> Delete(Guid id) =>  Ok( await _inventoryServices.Delete(id,Language));
         
     }
 }

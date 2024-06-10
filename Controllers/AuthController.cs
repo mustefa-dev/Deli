@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Deli.DATA.DTOs.User;
 using Deli.Services;
 using Deli.Utils;
-    
+using Tweetinvi.Models;
+
 namespace Deli.Controllers;
 //[Authorize(Roles = "Admin")]
 
@@ -21,34 +22,34 @@ public class UsersController : BaseController{
     [AllowAnonymous]
 
     [HttpPost("/api/Login")]
-    public async Task<ActionResult> Login(LoginForm loginForm) => Ok(await _userService.Login(loginForm));
+    public async Task<ActionResult> Login(LoginForm loginForm) => Ok(await _userService.Login(loginForm,Language));
     
     [AllowAnonymous]
 
     [HttpPost("/api/Users")]
     public async Task<ActionResult> Create(RegisterForm registerForm) =>
-        Ok(await _userService.Register(registerForm));
+        Ok(await _userService.Register(registerForm,Language));
 
 
     [HttpGet("/api/Users/{id}")]
-    public async Task<ActionResult> GetById(Guid id) => OkObject(await _userService.GetUserById(id));
+    public async Task<ActionResult> GetById(Guid id) => OkObject(await _userService.GetUserById(id,Language));
 
     [HttpPut("/api/Users/{id}")]
     public async Task<ActionResult> Update(UpdateUserForm updateUserForm, Guid id) =>
-        Ok(await _userService.UpdateUser(updateUserForm, id));
+        Ok(await _userService.UpdateUser(updateUserForm, id,Language));
 
     [HttpDelete("/api/Users/{id}")]
-    public async Task<ActionResult> Delete(Guid id) => Ok(await _userService.DeleteUser(id));
+    public async Task<ActionResult> Delete(Guid id) => Ok(await _userService.DeleteUser(id,Language));
 
 
     [HttpGet("/api/Users")]
     public async Task<ActionResult<Respons<UserDto>>> GetAll([FromQuery] UserFilter filter) =>
-        Ok(await _userService.GetAll(filter), filter.PageNumber, filter.PageSize);
+        Ok(await _userService.GetAll(filter,Language), filter.PageNumber, filter.PageSize);
  
     [HttpGet("/api/MyProfile")]
-    public async Task<ActionResult> GetMyProfile() => OkObject(await _userService.GetMyProfile(Id));
+    public async Task<ActionResult> GetMyProfile() => OkObject(await _userService.GetMyProfile(Id,Language));
     
     [HttpPost("OTPverification")]
     public async Task<ActionResult> OTPverification(string email, string otp) =>
-        Ok(await _userService.OTPverification(email, otp));
+        Ok(await _userService.OTPverification(email, otp,Language));
 }

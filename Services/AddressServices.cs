@@ -11,10 +11,10 @@ namespace Deli.Services;
 
 public interface IAddressServices
 {
-Task<(Address? address, string? error)> Create(AddressForm addressForm );
-Task<(List<AddressDto> addresss, int? totalCount, string? error)> GetAll(AddressFilter filter);
-Task<(Address? address, string? error)> Update(Guid id , AddressUpdate addressUpdate);
-Task<(Address? address, string? error)> Delete(Guid id);
+Task<(Address? address, string? error)> Create(AddressForm addressForm, string language);
+Task<(List<AddressDto> addresss, int? totalCount, string? error)> GetAll(AddressFilter filter, string language);
+Task<(Address? address, string? error)> Update(Guid id , AddressUpdate addressUpdate, string language);
+Task<(Address? address, string? error)> Delete(Guid id, string language);
 }
 
 public class AddressServices : IAddressServices
@@ -32,40 +32,42 @@ public AddressServices(
 }
    
    
-public async Task<(Address? address, string? error)> Create(AddressForm addressForm )
+public async Task<(Address? address, string? error)> Create(AddressForm addressForm, string language )
 {
     var address = _mapper.Map<Address>(addressForm);
     var result = await _repositoryWrapper.Address.Add(address);
-    if (result == null) return (null, "Error in creating address");
+    if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in creating Address", "خطأ في إنشاء العنوان", language));
     return (result, null);
 }
 
-public async Task<(List<AddressDto> addresss, int? totalCount, string? error)> GetAll(AddressFilter filter)
+public async Task<(List<AddressDto> addresss, int? totalCount, string? error)> GetAll(AddressFilter filter, string language)
     {
         var (address,totalCount) = await _repositoryWrapper.Address.GetAll<AddressDto>(
             x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name)),
             filter.PageNumber,
             filter.PageSize
         );
+        if (address == null) return (null, null, ErrorResponseException.GenerateErrorResponse("Error in getting Addresses", "خطأ في الحصول على العناوين", language));
+        
         return (address, totalCount, null);
     }
 
-public async Task<(Address? address, string? error)> Update(Guid id ,AddressUpdate addressUpdate)
+public async Task<(Address? address, string? error)> Update(Guid id ,AddressUpdate addressUpdate, string language)
     {
         var address = await _repositoryWrapper.Address.Get(x => x.Id == id);
-        if (address == null) return (null, "Address not found");
+        if (address == null) return (null, ErrorResponseException.GenerateErrorResponse("Address not found", "لم يتم العثور على العنوان", language));
         _mapper.Map(addressUpdate, address);
         var result = await _repositoryWrapper.Address.Update(address);
-        if (result == null) return (null, "Error in updating address");
+        if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in updating Address", "خطأ في تحديث العنوان", language));
         return (result, null);
     }
 
-public async Task<(Address? address, string? error)> Delete(Guid id)
+public async Task<(Address? address, string? error)> Delete(Guid id, string language)
     {
         var address = await _repositoryWrapper.Address.Get(x => x.Id == id);
-        if (address == null) return (null, "Address not found");
+        if (address == null) return (null, ErrorResponseException.GenerateErrorResponse("Address not found", "لم يتم العثور على العنوان", language));
         var result = await _repositoryWrapper.Address.SoftDelete(id);
-        if (result == null) return (null, "Error in deleting address");
+        if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in deleting Address", "خطأ في حذف العنوان", language));
         return (result, null);
     }
 

@@ -12,7 +12,7 @@ namespace Deli.Services;
 public interface IAppSettingsServices
 {
     Task<AppsettingsDto> GetMyAppSetting();
-    Task<(AppsettingsDto? appsetting, string? error)> Update(Guid id, AppsettingsUpdate appsettingUpdate);
+    Task<(AppsettingsDto? appsetting, string? error)> Update(Guid id, AppsettingsUpdate appsettingUpdate, string language);
 }
 
 public class AppSettingsServices : IAppSettingsServices
@@ -54,10 +54,10 @@ public async Task<AppsettingsDto> GetMyAppSetting()
     return _mapper.Map<AppsettingsDto>(appsetting);
 }
 
-public async Task<(AppsettingsDto? appsetting, string? error)> Update(Guid id, AppsettingsUpdate appsettingUpdate)
+public async Task<(AppsettingsDto? appsetting, string? error)> Update(Guid id, AppsettingsUpdate appsettingUpdate, string language)
 {
     var appsetting = await _repositoryWrapper.Appsettings.GetById(id);
-    if (appsetting == null) return (null, "appsetting not found");
+    if (appsetting == null) return (null, ErrorResponseException.GenerateErrorResponse("AppSetting not found", "لم يتم العثور على الإعدادات", language));
     _mapper.Map(appsettingUpdate, appsetting);
     appsetting = await _repositoryWrapper.Appsettings.Update(appsetting, id);
     return (_mapper.Map<AppsettingsDto>(appsetting), null);
