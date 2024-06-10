@@ -55,7 +55,17 @@ public async Task<(ItemDto? item, string? error)> GetById(Guid id, string langua
         var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == item.Id);
         if (sale != null && DateTime.Now >= sale.StartDate && DateTime.Now <= sale.EndDate)
         {
-            itemDto.Price = sale.SalePrice;
+            itemDto.SalePrice = sale.SalePrice;
+            itemDto.SalePercintage = sale.SalePercintage;
+            itemDto.SaleStartDate = sale.StartDate;
+            itemDto.SaleEndDate = sale.EndDate;
+        }
+        else
+        {
+            itemDto.SalePrice = null;
+            itemDto.SalePercintage = null;
+            itemDto.SaleStartDate = null;
+            itemDto.SaleEndDate = null;
         }
         return (itemDto, null);
         
@@ -72,7 +82,17 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
             var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == itemDto.Id);
             if (sale != null && DateTime.Now >= sale.StartDate && DateTime.Now <= sale.EndDate)
             {
-                itemDto.Price = sale.SalePrice;
+                itemDto.SalePrice = sale.SalePrice;
+                itemDto.SalePercintage = sale.SalePercintage;
+                itemDto.SaleStartDate = sale.StartDate;
+                itemDto.SaleEndDate = sale.EndDate;
+            }
+            else
+            {
+                itemDto.SalePrice = null;
+                itemDto.SalePercintage = null;
+                itemDto.SaleStartDate = null;
+                itemDto.SaleEndDate = null;
             }
         }
         return (item, totalCount, null);

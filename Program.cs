@@ -29,10 +29,14 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowLocalhost",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000")
+            builder.WithOrigins(
+                    "http://localhost:3000",
+                    "http://localhost:2295",
+                    "http://139.84.174.215:2295")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
+    
 });
 
 builder.Services.AddControllers()
