@@ -11,11 +11,11 @@ namespace Deli.Services;
 
 public interface IFeedBackServices
 {
-Task<(FeedBack? feedback, string? error)> Create(FeedBackForm feedbackForm );
-Task<(List<FeedBackDto> feedbacks, int? totalCount, string? error)> GetAll(FeedBackFilter filter);
-Task<(FeedBack? feedback, string? error)> GetById(Guid id);
-Task<(FeedBack? feedback, string? error)> Update(Guid id , FeedBackUpdate feedbackUpdate);
-Task<(FeedBack? feedback, string? error)> Delete(Guid id);
+Task<(FeedBack? feedback, string? error)> Create(FeedBackForm feedbackForm, string language);
+Task<(List<FeedBackDto> feedbacks, int? totalCount, string? error)> GetAll(FeedBackFilter filter, string language);
+Task<(FeedBack? feedback, string? error)> GetById(Guid id, string language);
+Task<(FeedBack? feedback, string? error)> Update(Guid id , FeedBackUpdate feedbackUpdate, string language);
+Task<(FeedBack? feedback, string? error)> Delete(Guid id, string language);
 }
 
 public class FeedBackServices : IFeedBackServices
@@ -33,7 +33,7 @@ public FeedBackServices(
 }
    
    
-public async Task<(FeedBack? feedback, string? error)> Create(FeedBackForm feedbackForm )
+public async Task<(FeedBack? feedback, string? error)> Create(FeedBackForm feedbackForm, string language)
 {
     var feedback = _mapper.Map<FeedBack>(feedbackForm);
     feedback = await _repositoryWrapper.FeedBack.Add(feedback);
@@ -47,13 +47,13 @@ public async Task<(FeedBack? feedback, string? error)> Create(FeedBackForm feedb
     return (feedback, null);
 }
 
-public async Task<(FeedBack? feedback, string? error)> GetById(Guid id)
+public async Task<(FeedBack? feedback, string? error)> GetById(Guid id, string language)
     {
         var feedback = await _repositoryWrapper.FeedBack.GetById(id);
-        if (feedback == null) return (null, "Feedback not found");
+        if (feedback == null) return (null, ErrorResponseException.GenerateErrorResponse("Feedback not found", "لم يتم العثور على الرسالة", language));
         return (feedback, null);
     }
-public async Task<(List<FeedBackDto> feedbacks, int? totalCount, string? error)> GetAll(FeedBackFilter filter)
+public async Task<(List<FeedBackDto> feedbacks, int? totalCount, string? error)> GetAll(FeedBackFilter filter, string language)
     {
         var (feedbacks, totalCount) = await _repositoryWrapper.FeedBack.GetAll<FeedBackDto>(
             x =>
@@ -65,20 +65,20 @@ public async Task<(List<FeedBackDto> feedbacks, int? totalCount, string? error)>
         return (feedbacks, totalCount, null);
     }
 
-public async Task<(FeedBack? feedback, string? error)> Update(Guid id ,FeedBackUpdate feedbackUpdate)
+public async Task<(FeedBack? feedback, string? error)> Update(Guid id ,FeedBackUpdate feedbackUpdate, string language)
     {
         var feedback = await _repositoryWrapper.FeedBack.GetById(id);
-        if (feedback == null) return (null, "Feedback not found");
+        if (feedback == null) return (null, ErrorResponseException.GenerateErrorResponse("Feedback not found", "لم يتم العثور على الرسالة", language));
         feedback = _mapper.Map(feedbackUpdate, feedback);
         feedback = await _repositoryWrapper.FeedBack.Update(feedback, id);
         return (feedback, null);
         
     }
 
-public async Task<(FeedBack? feedback, string? error)> Delete(Guid id)
+public async Task<(FeedBack? feedback, string? error)> Delete(Guid id, string language)
     {
         var feedback = await _repositoryWrapper.FeedBack.GetById(id);
-        if (feedback == null) return (null, "Feedback not found");
+        if (feedback == null) return (null, ErrorResponseException.GenerateErrorResponse("Feedback not found", "لم يتم العثور على الرسالة", language));
         await _repositoryWrapper.FeedBack.SoftDelete(id);
         return (feedback, null);
     }

@@ -24,7 +24,7 @@ namespace Deli.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Update([FromBody] AppsettingsUpdate appsettingUpdate, Guid id) 
         { 
-            return Ok(await _appSettingServices.Update(id, appsettingUpdate)); 
+            return Ok(await _appSettingServices.Update(id, appsettingUpdate,Language)); 
         }  
        
         [HttpGet("GetMyAppSetting")]

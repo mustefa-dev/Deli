@@ -7,17 +7,18 @@ namespace Deli.Services;
 
 public interface IAboutUsService
 {
-    Task<(DeliDifferenceDto? deliDifference, string? error)> Update(Guid id, DeliDifferenceUpdate deliDifferenceUpdate);
+    Task<(DeliDifferenceDto? deliDifference, string? error)> Update(Guid id, DeliDifferenceUpdate deliDifferenceUpdate, string language);
     Task<DeliDifferenceDto> GetDeliDifference();
     
-    Task<(OurMissionDto? ourMission, string? error)> Update(Guid id, OurMissionUpdate ourMissionUpdate); Task<OurMissionDto> GetOurMission();
+    Task<(OurMissionDto? ourMission, string? error)> Update(Guid id, OurMissionUpdate ourMissionUpdate, string language);
+    Task<OurMissionDto> GetOurMission();
     
-    Task<(MileStone? milestone, string? error)> Create(MileStoneForm milestoneForm );
-    Task<(List<MileStoneDto> milestones, int? totalCount, string? error)> GetAll(MileStoneFilter filter);
-    Task<(MileStone? milestone, string? error)> Update(Guid id ,MileStoneUpdate milestoneUpdate);
-    Task<(MileStone? milestone, string? error)> Delete(Guid id);
-    Task<(MileStone? milestone, string? error)> GetById(Guid id);
-    Task<(QualityToolsDto? qualityTools, string? error)> Update(Guid id, QualityToolsUpdate qualityToolsUpdate);
+    Task<(MileStone? milestone, string? error)> Create(MileStoneForm milestoneForm , string language);
+    Task<(List<MileStoneDto> milestones, int? totalCount, string? error)> GetAll(MileStoneFilter filter, string language);
+    Task<(MileStone? milestone, string? error)> Update(Guid id ,MileStoneUpdate milestoneUpdate, string language);
+    Task<(MileStone? milestone, string? error)> Delete(Guid id, string language);
+    Task<(MileStone? milestone, string? error)> GetById(Guid id, string language);
+    Task<(QualityToolsDto? qualityTools, string? error)> Update(Guid id, QualityToolsUpdate qualityToolsUpdate, string language);
     Task<QualityToolsDto> GetQualityTools();
 
 }
@@ -34,69 +35,69 @@ public class AboutUsService : IAboutUsService
         _mapper = mapper;
         _repositoryWrapper = repositoryWrapper;
     }
-   public async Task<(MileStone? milestone, string? error)> GetById(Guid id)
+   public async Task<(MileStone? milestone, string? error)> GetById(Guid id, string language)
     {
         var milestone = await _repositoryWrapper.MileStone.GetById(id);
         if (milestone == null)
         {
-            return (null, "MileStone not found");
+            return (null,ErrorResponseException.GenerateErrorResponse("MileStone not found", "لم يتم العثور على الحدث", language));
         }
         return (milestone, null);
     }
    
-    public async Task<(MileStone? milestone, string? error)> Create(MileStoneForm milestoneForm )
+    public async Task<(MileStone? milestone, string? error)> Create(MileStoneForm milestoneForm, string language )
     {
         var milestone = _mapper.Map<MileStone>(milestoneForm);
         var result = await _repositoryWrapper.MileStone.Add(milestone);
         if (result == null)
         {
-            return (null, "Error creating MileStone");
+            return (null, ErrorResponseException.GenerateErrorResponse("Error in creating MileStone", "خطأ في إنشاء الحدث", language));
         }
         return (result, null);
         
     }
 
-    public async Task<(List<MileStoneDto> milestones, int? totalCount, string? error)> GetAll(MileStoneFilter filter)
+    public async Task<(List<MileStoneDto> milestones, int? totalCount, string? error)> GetAll(MileStoneFilter filter, string language)
     {
         var (milestones,Count) = await _repositoryWrapper.MileStone.GetAll<MileStoneDto>( x=>filter.Year==null || x.Year==filter.Year
             ,filter.PageNumber,filter.PageSize);
         if (milestones == null)
         {
-            return (null, null, "Error fetching MileStones");
+            return (null, null,ErrorResponseException.GenerateErrorResponse("Error in getting MileStones", "خطأ في الحصول على الأحداث", language));
         }
         return (milestones, Count, null);
 
     }
 
-    public async Task<(MileStone? milestone, string? error)> Update(Guid id ,MileStoneUpdate milestoneUpdate)
+    public async Task<(MileStone? milestone, string? error)> Update(Guid id ,MileStoneUpdate milestoneUpdate, string language)
     {
         var milestone = await _repositoryWrapper.MileStone.GetById(id);
         if (milestone == null)
         {
-            return (null, "MileStone not found");
+            return (null, ErrorResponseException.GenerateErrorResponse("MileStone not found", "لم يتم العثور على الحدث", language));
         }
         _mapper.Map(milestoneUpdate, milestone);
         var result = await _repositoryWrapper.MileStone.Update(milestone);
         if (result == null)
         {
-            return (null, "Error updating MileStone");
+            return (null, ErrorResponseException.GenerateErrorResponse("Error in updating MileStone", "خطأ في تحديث الحدث", language));
         }
         return (result, null);
       
     }
 
-    public async Task<(MileStone? milestone, string? error)> Delete(Guid id)
+    public async Task<(MileStone? milestone, string? error)> Delete(Guid id, string language)
     {
         var milestone = await _repositoryWrapper.MileStone.Get(x => x.Id == id);
         if (milestone == null)
         {
-            return (null, "MileStone not found");
+            return (null, ErrorResponseException.GenerateErrorResponse("MileStone not found", "لم يتم العثور على الحدث", language));
         }
 
         var result = await _repositoryWrapper.MileStone.SoftDelete(id);
         if (result == null)
         {
-            return (null, "Error deleting MileStone");
+            return (null, ErrorResponseException.GenerateErrorResponse("Error in deleting MileStone", "خطأ في حذف الحدث", language));
         }
         return (milestone, null);
    
@@ -122,10 +123,10 @@ public class AboutUsService : IAboutUsService
         return _mapper.Map<OurMissionDto>(ourMission);
     }
 
-    public async Task<(OurMissionDto? ourMission, string? error)> Update(Guid id, OurMissionUpdate ourMissionUpdate)
+    public async Task<(OurMissionDto? ourMission, string? error)> Update(Guid id, OurMissionUpdate ourMissionUpdate, string language)
     {
         var ourMission = await _repositoryWrapper.OurMission.GetById(id);
-        if (ourMission == null) return (null, "OurMission not found");
+        if (ourMission == null) return (null,ErrorResponseException.GenerateErrorResponse("OurMission not found", "لم يتم العثور على المعلومات", language));
         _mapper.Map(ourMissionUpdate, ourMission);
         ourMission = await _repositoryWrapper.OurMission.Update(ourMission, id);
         return (_mapper.Map<OurMissionDto>(ourMission), null);
@@ -151,10 +152,10 @@ public class AboutUsService : IAboutUsService
         return _mapper.Map<DeliDifferenceDto>(deliDifference);
     }
 
-    public async Task<(DeliDifferenceDto? deliDifference, string? error)> Update(Guid id, DeliDifferenceUpdate deliDifferenceUpdate)
+    public async Task<(DeliDifferenceDto? deliDifference, string? error)> Update(Guid id, DeliDifferenceUpdate deliDifferenceUpdate, string language)
     {
         var deliDifference = await _repositoryWrapper.DeliDifference.GetById(id);
-        if (deliDifference == null) return (null, "DeliDifference not found");
+        if (deliDifference == null) return (null, ErrorResponseException.GenerateErrorResponse("DeliDifference not found", "لم يتم العثور على المعلومات", language));
         _mapper.Map(deliDifferenceUpdate, deliDifference);
         deliDifference = await _repositoryWrapper.DeliDifference.Update(deliDifference, id);
         return (_mapper.Map<DeliDifferenceDto>(deliDifference), null);
@@ -180,10 +181,10 @@ public class AboutUsService : IAboutUsService
         return _mapper.Map<QualityToolsDto>(qualityTools);
     }
 
-    public async Task<(QualityToolsDto? qualityTools, string? error)> Update(Guid id, QualityToolsUpdate qualityToolsUpdate)
+    public async Task<(QualityToolsDto? qualityTools, string? error)> Update(Guid id, QualityToolsUpdate qualityToolsUpdate , string language)
     {
         var qualityTools = await _repositoryWrapper.QualityTools.GetById(id);
-        if (qualityTools == null) return (null, "QualityTools not found");
+        if (qualityTools == null) return (null, ErrorResponseException.GenerateErrorResponse("QualityTools not found", "لم يتم العثور على المعلومات", language));
         _mapper.Map(qualityToolsUpdate, qualityTools);
         qualityTools = await _repositoryWrapper.QualityTools.Update(qualityTools, id);
         return (_mapper.Map<QualityToolsDto>(qualityTools), null);

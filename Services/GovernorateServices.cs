@@ -7,11 +7,11 @@ namespace Deli.Services;
 
 public interface IGovernorateServices
 {
-    Task<(Governorate? governorate, string? error)> Create(GovernorateForm governorateForm);
-    Task<(List<GovernorateDto> governorates, int? totalCount, string? error)> GetAll(GovernorateFilter filter);
-    Task <(GovernorateDto? governorate, string? error)> GetById(Guid id);
-    Task<(GovernorateDto? governorate, string? error)> Update(Guid id, GovernorateUpdate governorateUpdate);
-    Task<(GovernorateDto? governorate, string? error)> Delete(Guid id);
+    Task<(Governorate? governorate, string? error)> Create(GovernorateForm governorateForm, string language);
+    Task<(List<GovernorateDto> governorates, int? totalCount, string? error)> GetAll(GovernorateFilter filter, string language);
+    Task <(GovernorateDto? governorate, string? error)> GetById(Guid id, string language);
+    Task<(GovernorateDto? governorate, string? error)> Update(Guid id, GovernorateUpdate governorateUpdate, string language);
+    Task<(GovernorateDto? governorate, string? error)> Delete(Guid id, string language);
 }
 
 public class GovernorateServices : IGovernorateServices
@@ -28,16 +28,17 @@ public class GovernorateServices : IGovernorateServices
         _repositoryWrapper = repositoryWrapper;
     }
 
+    
 
-    public async Task<(Governorate? governorate, string? error)> Create(GovernorateForm governorateForm)
+    public async Task<(Governorate? governorate, string? error)> Create(GovernorateForm governorateForm, string language)
     {
         var governorate =_mapper.Map<Governorate>(governorateForm);
         var response = await _repositoryWrapper.Governorate.Add(governorate);
-        return response == null ? (null, "Governorate"): (response,null);
+        return response == null ? (null,ErrorResponseException.GenerateErrorResponse("Error in Creating a Governorate","خطأ في انشاء المنطقة",language)): (response,null);
     }
 
     public async Task<(List<GovernorateDto> governorates, int? totalCount, string? error)> GetAll(
-        GovernorateFilter filter)
+        GovernorateFilter filter, string language)
     {
         var (governorate, totalCount) = await _repositoryWrapper.Governorate.GetAll<GovernorateDto>(
             x =>
@@ -48,28 +49,32 @@ public class GovernorateServices : IGovernorateServices
         return (responseDto, totalCount, null);
     }
 
-    public Task<(GovernorateDto? governorate, string? error)> GetById(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<(GovernorateDto? governorate, string? error)> Update(Guid id, GovernorateUpdate governorateUpdate)
+    public async Task<(GovernorateDto? governorate, string? error)> GetById(Guid id, string language)
     {
         var governorate = await _repositoryWrapper.Governorate.Get(x => x.Id == id);
-        if (governorate == null) return (null, "governorate not found");
+        if (governorate == null) return (null, ErrorResponseException.GenerateErrorResponse("Governorate not found", "لم يتم العثور على المنطقة", language));
+        var responseDto = _mapper.Map<GovernorateDto>(governorate);
+        return (responseDto, null);
+       
+    }
+
+    public async Task<(GovernorateDto? governorate, string? error)> Update(Guid id, GovernorateUpdate governorateUpdate, string language)
+    {
+        var governorate = await _repositoryWrapper.Governorate.Get(x => x.Id == id);
+        if (governorate == null) return (null, ErrorResponseException.GenerateErrorResponse("Governorate not found", "لم يتم العثور على المنطقة", language));
         governorate = _mapper.Map(governorateUpdate, governorate);
         var response = await _repositoryWrapper.Governorate.Update(governorate);
         var responseDto = _mapper.Map<GovernorateDto>(response);
-        return response == null ? (null, "Ticket couldn't be updated") : (responseDto, null);
+        return response == null ? (null, ErrorResponseException.GenerateErrorResponse("Error in updating governorate","خطأ في تحديث المنطقة",language)) : (responseDto, null);
     }
 
-    public async Task<(GovernorateDto? governorate, string? error)> Delete(Guid id)
+    public async Task<(GovernorateDto? governorate, string? error)> Delete(Guid id, string language)
     {
         var governorate = _repositoryWrapper.Governorate.Get(x => x.Id == id);
-        if (governorate == null) return (null, "governorate not found");
+        if (governorate == null) return (null, ErrorResponseException.GenerateErrorResponse("Governorate not found", "لم يتم العثور على المنطقة", language));
         var response = await _repositoryWrapper.Governorate.SoftDelete(id);
         var responseDto = _mapper.Map<GovernorateDto>(governorate);
-        return response == null ? (null, "governorate couldn't be deleted") : (responseDto, null);
+        return response == null ? (null, ErrorResponseException.GenerateErrorResponse("Error in deleting governorate","خطأ في حذف المنطقة",language)) : (responseDto, null);
 
     }
 }

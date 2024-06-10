@@ -12,17 +12,17 @@ namespace Deli.Services;
 
 public interface IItemServices
 {
-Task<(Item? item, string? error)> Create(ItemForm itemForm );
-Task<(ItemDto? item, string? error)> GetById(Guid id);
-Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(ItemFilter filter);
-Task<(Item? item, string? error)> Update(Guid id , ItemUpdate itemUpdate);
-Task<(Item? item, string? error)> Delete(Guid id);
-Task<(Wishlist? wishlist, string? error)> AddOrRemoveItemToWishlist(Guid itemId,Guid userId);
-Task<(ICollection<ItemDto>? items,int? count, string? error)> GetMyWishlist(Guid userId);
-Task<(Liked? liked, string? error)> AddOrRemoveItemToLiked(Guid itemId, Guid userId);
-Task<(ICollection<ItemDto>? items, int? count, string? error)> GetMyLikedItems(Guid userId);
-Task<(Sale? sale, string? error)> AddSaleToItem(Guid itemId, double salePrice, DateTime startDate, DateTime endDate);
-Task<(List<ItemDto> items, string? error)> GetAllSoldItems(OrderStatisticsFilter filter);
+Task<(Item? item, string? error)> Create(ItemForm itemForm, string language);
+Task<(ItemDto? item, string? error)> GetById(Guid id, string language);
+Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(ItemFilter filter, string language);
+Task<(Item? item, string? error)> Update(Guid id , ItemUpdate itemUpdate, string language);
+Task<(Item? item, string? error)> Delete(Guid id, string language);
+Task<(Wishlist? wishlist, string? error)> AddOrRemoveItemToWishlist(Guid itemId,Guid userId, string language);
+Task<(ICollection<ItemDto>? items,int? count, string? error)> GetMyWishlist(Guid userId, string language);
+Task<(Liked? liked, string? error)> AddOrRemoveItemToLiked(Guid itemId, Guid userId, string language);
+Task<(ICollection<ItemDto>? items, int? count, string? error)> GetMyLikedItems(Guid userId, string language);
+Task<(Sale? sale, string? error)> AddSaleToItem(Guid itemId, double salePrice, DateTime startDate, DateTime endDate, string language);
+Task<(List<ItemDto> items, string? error)> GetAllSoldItems(OrderStatisticsFilter filter, string language);
 }
 
 public class ItemServices : IItemServices
@@ -40,17 +40,17 @@ public ItemServices(
 }
    
    
-public async Task<(Item? item, string? error)> Create(ItemForm itemForm )
+public async Task<(Item? item, string? error)> Create(ItemForm itemForm , string language)
 {
     var item = _mapper.Map<Item>(itemForm);
     var result = await _repositoryWrapper.Item.Add(item);
-    if (result == null) return (null, "Error in creating item");
+    if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in Creating a Item", "خطأ في انشاء العنصر", language));
     return (result, null);
 }
-public async Task<(ItemDto? item, string? error)> GetById(Guid id)
+public async Task<(ItemDto? item, string? error)> GetById(Guid id, string language)
     {
         var item = await _repositoryWrapper.Item.GetById(id);
-        if (item == null) return (null, "Item not found");
+        if (item == null) return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
         var itemDto = _mapper.Map<ItemDto>(item);
         var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == item.Id);
         if (sale != null && DateTime.Now >= sale.StartDate && DateTime.Now <= sale.EndDate)
@@ -60,7 +60,7 @@ public async Task<(ItemDto? item, string? error)> GetById(Guid id)
         return (itemDto, null);
         
     }
-public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(ItemFilter filter)
+public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(ItemFilter filter, string language)
     {
         var (item,totalCount) = await _repositoryWrapper.Item.GetAll<ItemDto>(
             x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name)),
@@ -79,30 +79,30 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
         
     }
 
-public async Task<(Item? item, string? error)> Update(Guid id ,ItemUpdate itemUpdate)
+public async Task<(Item? item, string? error)> Update(Guid id ,ItemUpdate itemUpdate, string language)
     {
         var item = await _repositoryWrapper.Item.Get(x => x.Id == id);
-        if (item == null) return (null, "Item not found");
+        if (item == null) return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
         _mapper.Map(itemUpdate, item);
         var result = await _repositoryWrapper.Item.Update(item);
-        if (result == null) return (null, "Error in updating item");
+        if (result == null) return (null, error: ErrorResponseException.GenerateErrorResponse("Error in updating item", "خطأ في تحديث العنصر", language));
         return (result, null);
     }
 
-public async Task<(Item? item, string? error)> Delete(Guid id)
+public async Task<(Item? item, string? error)> Delete(Guid id, string language)
     {
         var item = await _repositoryWrapper.Item.Get(x => x.Id == id);
-        if (item == null) return (null, "Item not found");
+        if (item == null) return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
         var result = await _repositoryWrapper.Item.SoftDelete(id);
-        if (result == null) return (null, "Error in deleting item");
+        if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in deleting item", "خطأ في حذف العنصر", language));
         return (result, null);
     }
-    public async Task<(Wishlist? wishlist, string? error)> AddOrRemoveItemToWishlist(Guid itemId, Guid userId)
+    public async Task<(Wishlist? wishlist, string? error)> AddOrRemoveItemToWishlist(Guid itemId, Guid userId, string language)
     {
         var item= await _repositoryWrapper.Item.GetById(itemId);
         if (item == null)
         {
-            return (null, "Item not found");
+            return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
         }
         var wishlist = await _repositoryWrapper.Wishlist.Get(w => w.UserId == userId);
         if (wishlist == null)
@@ -127,12 +127,12 @@ public async Task<(Item? item, string? error)> Delete(Guid id)
 
     }
 
-    public async Task<(ICollection<ItemDto>? items,int? count, string? error)> GetMyWishlist(Guid userId)
+    public async Task<(ICollection<ItemDto>? items,int? count, string? error)> GetMyWishlist(Guid userId, string language)
     {
         var wishlist = await _repositoryWrapper.Wishlist.Get(w => w.UserId == userId);
         if (wishlist == null)
         {
-            return (null,0, "Wishlist is empty");
+            return (null,0, ErrorResponseException.GenerateErrorResponse("Wishlist is empty", "القائمة المفضلة فارغة", language));
         }
         var items = new List<ItemDto>();
         foreach (var itemId in wishlist.ItemsIds)
@@ -146,12 +146,12 @@ public async Task<(Item? item, string? error)> Delete(Guid id)
         return (items,count, null);
         
     }  
-    public async Task<(Liked? liked, string? error)> AddOrRemoveItemToLiked(Guid itemId, Guid userId)
+    public async Task<(Liked? liked, string? error)> AddOrRemoveItemToLiked(Guid itemId, Guid userId, string language)
     {
         var item = await _repositoryWrapper.Item.GetById(itemId);
         if (item == null)
         {
-            return (null, "Item not found");
+            return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
         }
         var liked = await _repositoryWrapper.Liked.Get(l => l.UserId == userId);
         if (liked == null)
@@ -175,12 +175,12 @@ public async Task<(Item? item, string? error)> Delete(Guid id)
         return (liked, null);
     }
 
-    public async Task<(ICollection<ItemDto>? items, int? count, string? error)> GetMyLikedItems(Guid userId)
+    public async Task<(ICollection<ItemDto>? items, int? count, string? error)> GetMyLikedItems(Guid userId, string language)
     {
         var liked = await _repositoryWrapper.Liked.Get(l => l.UserId == userId);
         if (liked == null)
         {
-            return (null, 0, "Liked list is empty");
+            return (null, 0, ErrorResponseException.GenerateErrorResponse("Liked list is empty", "قائمة الإعجاب فارغة", language));
         }
         var items = new List<ItemDto>();
         foreach (var itemId in liked.ItemsIds)
@@ -193,12 +193,12 @@ public async Task<(Item? item, string? error)> Delete(Guid id)
 
         return (items, count, null);
     }
-    public async Task<(Sale? sale, string? error)> AddSaleToItem(Guid itemId, double salePrice, DateTime startDate, DateTime endDate)
+    public async Task<(Sale? sale, string? error)> AddSaleToItem(Guid itemId, double salePrice, DateTime startDate, DateTime endDate, string language)
     {
         var item = await _repositoryWrapper.Item.GetById(itemId);
         if (item == null)
         {
-            return (null, "Item not found");
+            return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
         }
 
         var sale = new Sale
@@ -217,12 +217,12 @@ public async Task<(Item? item, string? error)> Delete(Guid id)
         return (sale, null);
     }
 
-    public async Task<(List<ItemDto> items, string? error)> GetAllSoldItems(OrderStatisticsFilter filter)
+    public async Task<(List<ItemDto> items, string? error)> GetAllSoldItems(OrderStatisticsFilter filter, string language)
 {
     var orderItems = await _repositoryWrapper.OrderItem.GetAll();
     if (orderItems.data == null || orderItems.data.Count == 0)
     {
-        return (null, "No items have been sold yet.");
+        return (null, ErrorResponseException.GenerateErrorResponse("No sold items found", "لم يتم العثور على عناصر مباعة", language));
     }
 
     var soldItems = new List<ItemDto>();

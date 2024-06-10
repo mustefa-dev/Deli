@@ -20,32 +20,32 @@ namespace Deli.Controllers
         public async Task<ActionResult<DeliDifferenceDto>> GetDeliDifference() => Ok(await _aboutUsService.GetDeliDifference());
 
         [HttpPut("UpdateDeliDifference/{id}")]
-        public async Task<ActionResult> UpdateDeliDifference(Guid id, DeliDifferenceUpdate deliDifferenceUpdate) => Ok(await _aboutUsService.Update(id, deliDifferenceUpdate));
+        public async Task<ActionResult> UpdateDeliDifference(Guid id, DeliDifferenceUpdate deliDifferenceUpdate) => Ok(await _aboutUsService.Update(id, deliDifferenceUpdate,Language));
 
         [HttpGet("GetOurMission")]
         public async Task<ActionResult<OurMissionDto>> GetOurMission() => Ok(await _aboutUsService.GetOurMission());
 
         [HttpPut("UpdateOurMission/{id}")]
-        public async Task<ActionResult> UpdateOurMission(Guid id, OurMissionUpdate ourMissionUpdate) => Ok(await _aboutUsService.Update(id, ourMissionUpdate));
+        public async Task<ActionResult> UpdateOurMission(Guid id, OurMissionUpdate ourMissionUpdate) => Ok(await _aboutUsService.Update(id, ourMissionUpdate,Language));
 
         [HttpGet("GetMileStone/{id}")]
-        public async Task<ActionResult<MileStone>> GetMileStone(Guid id) => Ok(await _aboutUsService.GetById(id));
+        public async Task<ActionResult<MileStone>> GetMileStone(Guid id) => Ok(await _aboutUsService.GetById(id,Language));
 
         [HttpPost("CreateMileStone")]
-        public async Task<ActionResult<MileStone>> CreateMileStone(MileStoneForm milestoneForm) => Ok(await _aboutUsService.Create(milestoneForm));
+        public async Task<ActionResult<MileStone>> CreateMileStone(MileStoneForm milestoneForm) => Ok(await _aboutUsService.Create(milestoneForm,Language));
 
         [HttpGet("GetAllMileStones")]
-        public async Task<ActionResult<List<MileStoneDto>>> GetAllMileStones([FromQuery] MileStoneFilter filter) => Ok(await _aboutUsService.GetAll(filter));
+        public async Task<ActionResult<List<MileStoneDto>>> GetAllMileStones([FromQuery] MileStoneFilter filter) => Ok(await _aboutUsService.GetAll(filter,Language));
 
         [HttpPut("UpdateMileStone/{id}")]
-        public async Task<ActionResult<MileStone>> UpdateMileStone(Guid id, MileStoneUpdate milestoneUpdate) => Ok(await _aboutUsService.Update(id, milestoneUpdate));
+        public async Task<ActionResult<MileStone>> UpdateMileStone(Guid id, MileStoneUpdate milestoneUpdate) => Ok(await _aboutUsService.Update(id, milestoneUpdate,Language));
 
         [HttpDelete("DeleteMileStone/{id}")]
-        public async Task<ActionResult<MileStone>> DeleteMileStone(Guid id) => Ok(await _aboutUsService.Delete(id));
+        public async Task<ActionResult<MileStone>> DeleteMileStone(Guid id) => Ok(await _aboutUsService.Delete(id,Language));
         [HttpGet("GetQualityTools")]
         public async Task<ActionResult<QualityToolsDto>> GetQualityTools() => Ok(await _aboutUsService.GetQualityTools());
 
         [HttpPut("UpdateQualityTools/{id}")]
-        public async Task<ActionResult> UpdateQualityTools(Guid id, QualityToolsUpdate qualityToolsUpdate) => Ok(await _aboutUsService.Update(id, qualityToolsUpdate));
+        public async Task<ActionResult> UpdateQualityTools(Guid id, QualityToolsUpdate qualityToolsUpdate) => Ok(await _aboutUsService.Update(id, qualityToolsUpdate,Language));
     }
 }

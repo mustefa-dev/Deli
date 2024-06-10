@@ -12,17 +12,17 @@ namespace Deli.Services
 {
     public interface IUserService
     {
-        Task<(UserDto? user, string? error)> Login(LoginForm loginForm);
-        Task<(AppUser? user, string? error)> DeleteUser(Guid id);
-        Task<(UserDto? UserDto, string? error)> Register(RegisterForm registerForm);
-        Task<(AppUser? user, string? error)> UpdateUser(UpdateUserForm updateUserForm, Guid id);
+        Task<(UserDto? user, string? error)> Login(LoginForm loginForm, string language);
+        Task<(AppUser? user, string? error)> DeleteUser(Guid id, string language);
+        Task<(UserDto? UserDto, string? error)> Register(RegisterForm registerForm, string language);
+        Task<(AppUser? user, string? error)> UpdateUser(UpdateUserForm updateUserForm, Guid id, string language);
 
-        Task<(UserDto? user, string? error)> GetUserById(Guid id);
+        Task<(UserDto? user, string? error)> GetUserById(Guid id, string language);
 
 
-        Task<(List<UserDto>? user, int? totalCount, string? error)> GetAll(UserFilter filter);
-        Task<(UserDto? user, string? error)> GetMyProfile(Guid id);
-        Task<(UserDto? user, string? error)> OTPverification(string? email, string? otp);
+        Task<(List<UserDto>? user, int? totalCount, string? error)> GetAll(UserFilter filter, string language);
+        Task<(UserDto? user, string? error)> GetMyProfile(Guid id, string language);
+        Task<(UserDto? user, string? error)> OTPverification(string? email, string? otp, string language);
 
     }
 
@@ -47,37 +47,37 @@ namespace Deli.Services
         }
 
 
-        public async Task<(UserDto? user, string? error)> Login(LoginForm loginForm)
+        public async Task<(UserDto? user, string? error)> Login(LoginForm loginForm, string language)
         {
             var user = await _repositoryWrapper.User.Get(u => u.Email == loginForm.Email);
-            if (user == null) return (null, "المستخدم غير متوفر");
-            if (!BCrypt.Net.BCrypt.Verify(loginForm.Password, user.Password)) return (null, "خطاء في الرقم السري");
+            if (user == null) return (null, ErrorResponseException.GenerateErrorResponse("User not found", "المستخدم غير متوفر", language));
+            if (!BCrypt.Net.BCrypt.Verify(loginForm.Password, user.Password)) return (null, ErrorResponseException.GenerateErrorResponse("Wrong password", "خطأ في الرقم السري", language));
             
             var userDto = _mapper.Map<UserDto>(user);
             if (user.OTPrequired == true)
             {
                 userDto.Token = null;
-                return (user != null ? userDto : null, "OTP verification required");
+                return (user != null ? userDto : null, ErrorResponseException.GenerateErrorResponse("OTP required", "الرجاء تأكيد الحساب من خلال ادخال الرمز المرسل الى البريد الالكتروني", language));
             }
             var TokenDto = _mapper.Map<TokenDTO>(user);
             userDto.Token = _tokenService.CreateToken(TokenDto);
             return (userDto, null);
         }
 
-        public async Task<(AppUser? user, string? error)> DeleteUser(Guid id)
+        public async Task<(AppUser? user, string? error)> DeleteUser(Guid id, string language)
         {
             var user = await _repositoryWrapper.User.Get(u => u.Id == id);
-            if (user == null) return (null, "User not found");
+            if (user == null) return (null, ErrorResponseException.GenerateErrorResponse("User not found", "المستخدم غير متوفر", language));
             await _repositoryWrapper.User.SoftDelete(id);
             var userEvent = new GenericDataUpdateDto<AppUser> { Event = "Deleted", Data = user };
             await _usersHub.BroadcastUserEvent(userEvent);
             return (user, null);
         }
 
-        public async Task<(UserDto? UserDto, string? error)> Register(RegisterForm registerForm)
+        public async Task<(UserDto? UserDto, string? error)> Register(RegisterForm registerForm, string language)
         {
             var user = await _repositoryWrapper.User.Get(u => u.Email == registerForm.Email);
-            if (user != null) return (null, "User already exists");
+            if (user != null) return (null, ErrorResponseException.GenerateErrorResponse("User already exists", "المستخدم موجود بالفعل", language));
             /*var address = await _repositoryWrapper.Address.GetById(registerForm.AddressId);
          if (address == null) return (null, "Address not found");*/
 
@@ -105,10 +105,10 @@ namespace Deli.Services
         }
 
 
-        public async Task<(AppUser? user, string? error)> UpdateUser(UpdateUserForm updateUserForm, Guid id)
+        public async Task<(AppUser? user, string? error)> UpdateUser(UpdateUserForm updateUserForm, Guid id, string language)
         {
             var user = await _repositoryWrapper.User.Get(u => u.Id == id);
-            if (user == null) return (null, "User not found");
+            if (user == null) return (null, ErrorResponseException.GenerateErrorResponse("User not found", "المستخدم غير متوفر", language));
 
 
             user = _mapper.Map(updateUserForm, user);
@@ -119,15 +119,15 @@ namespace Deli.Services
             return (user, null);
         }
 
-        public async Task<(UserDto? user, string? error)> GetUserById(Guid id)
+        public async Task<(UserDto? user, string? error)> GetUserById(Guid id, string language)
         {
             var user = await _repositoryWrapper.User.Get(u => u.Id == id);
-            if (user == null) return (null, "User not found");
+            if (user == null) return (null, ErrorResponseException.GenerateErrorResponse("User not found", "المستخدم غير متوفر", language));
             var userDto = _mapper.Map<UserDto>(user);
             return (userDto, null);
         }
 
-        public async Task<(List<UserDto>? user, int? totalCount, string? error)> GetAll(UserFilter filter)
+        public async Task<(List<UserDto>? user, int? totalCount, string? error)> GetAll(UserFilter filter, string language)
         {
             var (users, totalCount) = await _repositoryWrapper.User.GetAll<UserDto>(
                 x => (
@@ -139,15 +139,15 @@ namespace Deli.Services
             return (users, totalCount, null);
         }
 
-        public async Task<(UserDto? user, string? error)> GetMyProfile(Guid id)
+        public async Task<(UserDto? user, string? error)> GetMyProfile(Guid id, string language)
         {
             var user = await _repositoryWrapper.User.Get(u => u.Id == id);
-            if (user == null) return (null, "User not found");
+            if (user == null) return (null, ErrorResponseException.GenerateErrorResponse("User not found", "المستخدم غير متوفر", language));
             var userDto = _mapper.Map<UserDto>(user);
             return (userDto, null);
         }
 
-       public async Task<(UserDto? user, string? error)> OTPverification(string? email, string? otp)
+       public async Task<(UserDto? user, string? error)> OTPverification(string? email, string? otp, string language)
         {
             var user = await _repositoryWrapper.User.Get(u =>u.Email == email);
             if (user.OTP == otp)
@@ -160,7 +160,7 @@ namespace Deli.Services
                 return (userdto, null);
             }
 
-            return (null, "Invalid OTP");
+            return (null, ErrorResponseException.GenerateErrorResponse("OTP is incorrect", "الرمز غير صحيح", language));
         }
 
 

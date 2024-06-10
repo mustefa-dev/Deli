@@ -11,10 +11,10 @@ namespace Deli.Services;
 
 public interface IInventoryServices
 {
-Task<(Inventory? inventory, string? error)> Create(InventoryForm inventoryForm );
-Task<(List<InventoryDto> inventorys, int? totalCount, string? error)> GetAll(InventoryFilter filter);
-Task<(Inventory? inventory, string? error)> Update(Guid id , InventoryUpdate inventoryUpdate);
-Task<(Inventory? inventory, string? error)> Delete(Guid id);
+Task<(Inventory? inventory, string? error)> Create(InventoryForm inventoryForm, string language);
+Task<(List<InventoryDto> inventorys, int? totalCount, string? error)> GetAll(InventoryFilter filter, string language);
+Task<(Inventory? inventory, string? error)> Update(Guid id , InventoryUpdate inventoryUpdate,string language);
+Task<(Inventory? inventory, string? error)> Delete(Guid id, string language);
 }
 
 public class InventoryServices : IInventoryServices
@@ -32,15 +32,15 @@ public InventoryServices(
 }
    
    
-public async Task<(Inventory? inventory, string? error)> Create(InventoryForm inventoryForm )
+public async Task<(Inventory? inventory, string? error)> Create(InventoryForm inventoryForm, string language)
 {
     var inventory = _mapper.Map<Inventory>(inventoryForm);
     var result = await _repositoryWrapper.Inventory.Add(inventory);
-    if (result == null) return (null, "Error in creating inventory");
+    if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in Creating a Inventory", "خطأ في انشاء المخزن", language));
     return (result, null);
 }
 
-public async Task<(List<InventoryDto> inventorys, int? totalCount, string? error)> GetAll(InventoryFilter filter)
+public async Task<(List<InventoryDto> inventorys, int? totalCount, string? error)> GetAll(InventoryFilter filter, string language)
     {
         var (inventory,totalCount) = await _repositoryWrapper.Inventory.GetAll<InventoryDto>(
             x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name)),
@@ -50,22 +50,22 @@ public async Task<(List<InventoryDto> inventorys, int? totalCount, string? error
         return (inventory, totalCount, null);
     }
 
-public async Task<(Inventory? inventory, string? error)> Update(Guid id ,InventoryUpdate inventoryUpdate)
+public async Task<(Inventory? inventory, string? error)> Update(Guid id ,InventoryUpdate inventoryUpdate, string language)
     {
         var inventory = await _repositoryWrapper.Inventory.Get(x => x.Id == id);
-        if (inventory == null) return (null, "Inventory not found");
+        if (inventory == null) return (null, ErrorResponseException.GenerateErrorResponse("Inventory not found", "لم يتم العثور على المخزن", language));
         _mapper.Map(inventoryUpdate, inventory);
         var result = await _repositoryWrapper.Inventory.Update(inventory);
-        if (result == null) return (null, "Error in updating inventory");
+        if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in updating inventory", "خطأ في تحديث المخزن", language));
         return (result, null);
     }
 
-public async Task<(Inventory? inventory, string? error)> Delete(Guid id)
+public async Task<(Inventory? inventory, string? error)> Delete(Guid id, string language)
     {
         var inventory = await _repositoryWrapper.Inventory.Get(x => x.Id == id);
-        if (inventory == null) return (null, "Inventory not found");
+        if (inventory == null) return (null, ErrorResponseException.GenerateErrorResponse("Inventory not found", "لم يتم العثور على المخزن", language));
         var result = await _repositoryWrapper.Inventory.SoftDelete(id);
-        if (result == null) return (null, "Error in deleting inventory");
+        if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in deleting inventory", "خطأ في حذف المخزن", language));
         return (result, null);
     }
 

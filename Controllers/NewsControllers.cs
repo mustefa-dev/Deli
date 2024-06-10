@@ -20,19 +20,19 @@ namespace Deli.Controllers
 
         
         [HttpGet]
-        public async Task<ActionResult<List<NewsDto>>> GetAll([FromQuery] NewsFilter filter) => Ok(await _newsServices.GetAll(filter) , filter.PageNumber , filter.PageSize);
+        public async Task<ActionResult<List<NewsDto>>> GetAll([FromQuery] NewsFilter filter) => Ok(await _newsServices.GetAll(filter,Language) , filter.PageNumber , filter.PageSize);
 
         
         [HttpPost]
-        public async Task<ActionResult<Entities.News>> Create([FromBody] NewsForm newsForm) => Ok(await _newsServices.Create(newsForm));
+        public async Task<ActionResult<Entities.News>> Create([FromBody] NewsForm newsForm) => Ok(await _newsServices.Create(newsForm,Language));
 
         
         [HttpPut("{id}")]
-        public async Task<ActionResult<Entities.News>> Update([FromBody] NewsUpdate newsUpdate, Guid id) => Ok(await _newsServices.Update(id , newsUpdate));
+        public async Task<ActionResult<Entities.News>> Update([FromBody] NewsUpdate newsUpdate, Guid id) => Ok(await _newsServices.Update(id , newsUpdate,Language));
 
         
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Entities.News>> Delete(Guid id) =>  Ok( await _newsServices.Delete(id));
+        public async Task<ActionResult<Entities.News>> Delete(Guid id) =>  Ok( await _newsServices.Delete(id,Language));
         
     }
 }

@@ -9,6 +9,7 @@ namespace Deli.Controllers;
 public abstract class BaseController : ControllerBase
 {
     protected Guid Id => Guid.TryParse(GetClaim("Id"), out var id) ? id : Guid.Empty;
+    protected string Language =>  Request.Headers["Accept-Language"].ToString();
 
     protected string Role => GetClaim("Role");
 

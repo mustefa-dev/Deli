@@ -11,10 +11,10 @@ namespace Deli.Services;
 
 public interface IReviewServices
 {
-Task<(ReviewDto? review, string? error)> Create(ReviewForm reviewForm, Guid userId);
-Task<(List<ReviewDto> reviews, int? totalCount, string? error)> GetAll(ReviewFilter filter);
-Task<(ReviewDto? review, string? error)> Update(Guid id , ReviewUpdate reviewUpdate, Guid userId);
-Task<(ReviewDto? review, string? error)> Delete(Guid id);
+Task<(ReviewDto? review, string? error)> Create(ReviewForm reviewForm, Guid userId, string language);
+Task<(List<ReviewDto> reviews, int? totalCount, string? error)> GetAll(ReviewFilter filter, string language);
+Task<(ReviewDto? review, string? error)> Update(Guid id , ReviewUpdate reviewUpdate, Guid userId, string language);
+Task<(ReviewDto? review, string? error)> Delete(Guid id, string language);
 }
 
 public class ReviewServices : IReviewServices
@@ -32,22 +32,22 @@ public ReviewServices(
 }
    
    
-public async Task<(ReviewDto? review, string? error)> Create(ReviewForm reviewForm , Guid userId)
+public async Task<(ReviewDto? review, string? error)> Create(ReviewForm reviewForm , Guid userId, string language)
 {
     
     if (reviewForm.Rating < 0 || reviewForm.Rating > 5)
     {
-        return (null, "Rating must be between 0 and 5");
+        return (null, ErrorResponseException.GenerateErrorResponse("Rating must be between 0 and 5", "يجب أن يكون التقييم بين 0 و 5", language));
     }
     var item = await _repositoryWrapper.Item.GetById(reviewForm.ItemId);
     if (item == null)
     {
-        return (null, "Item not found");
+        return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
     }
     var reviewExists = await _repositoryWrapper.Review.Get(x => x.UserId == userId && x.ItemId == reviewForm.ItemId);
     if (reviewExists != null)
     {
-        return (null, "You have already reviewed this item");
+        return (null, ErrorResponseException.GenerateErrorResponse("You have already reviewed this item", "لقد قمت بتقييم هذا العنصر بالفعل", language));
     }
     
     var review = _mapper.Map<Review>(reviewForm);
@@ -55,13 +55,13 @@ public async Task<(ReviewDto? review, string? error)> Create(ReviewForm reviewFo
     var result = await _repositoryWrapper.Review.Add(review);
     if (result == null)
     {
-        return (null, "Failed to create review");
+        return (null, ErrorResponseException.GenerateErrorResponse("Error in Creating a Review", "خطأ في انشاء التقييم", language));
     }
     return (_mapper.Map<ReviewDto>(result), null);
       
 }
 
-public async Task<(List<ReviewDto> reviews, int? totalCount, string? error)> GetAll(ReviewFilter filter)
+public async Task<(List<ReviewDto> reviews, int? totalCount, string? error)> GetAll(ReviewFilter filter, string language)
     {
         var (reviews,totalCount) = await _repositoryWrapper.Review.GetAll<ReviewDto>(
             x=> (filter.ItemId == null || x.ItemId == filter.ItemId)&&
@@ -75,28 +75,28 @@ public async Task<(List<ReviewDto> reviews, int? totalCount, string? error)> Get
        
     }
 
-public async Task<(ReviewDto? review, string? error)> Update(Guid id ,ReviewUpdate reviewUpdate, Guid userId)
+public async Task<(ReviewDto? review, string? error)> Update(Guid id ,ReviewUpdate reviewUpdate, Guid userId, string language)
     {
         var review = await _repositoryWrapper.Review.Get(x => x.Id == id);
-        if (review == null) return (null, "Review not found");
-       if (review.UserId != userId) return (null, "You are not authorized to update this review");
+        if (review == null) return (null, ErrorResponseException.GenerateErrorResponse("Review not found", "لم يتم العثور على التقييم", language));
+       if (review.UserId != userId) return (null, ErrorResponseException.GenerateErrorResponse("You are not authorized to update this review", "غير مصرح لك بتحديث هذا التقييم", language));
         if (reviewUpdate.Rating < 0 || reviewUpdate.Rating > 5)
         {
-            return (null, "Rating must be between 0 and 5");
+            return (null, ErrorResponseException.GenerateErrorResponse("Rating must be between 0 and 5", "يجب أن يكون التقييم بين 0 و 5", language));
         }
         _mapper.Map(reviewUpdate, review);
         var result = await _repositoryWrapper.Review.Update(review);
-        if (result == null) return (null, "Error in updating review");
+        if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in updating review", "خطأ في تحديث التقييم", language));
         return (_mapper.Map<ReviewDto>(result), null);
       
     }
 
-public async Task<(ReviewDto? review, string? error)> Delete(Guid id)
+public async Task<(ReviewDto? review, string? error)> Delete(Guid id, string language)
     {
         var review = await _repositoryWrapper.Review.Get(x => x.Id == id);
-        if (review == null) return (null, "Review not found");
+        if (review == null) return (null, ErrorResponseException.GenerateErrorResponse("Review not found", "لم يتم العثور على التقييم", language));
         var result = await _repositoryWrapper.Review.SoftDelete(id);
-        if (result == null) return (null, "Error in deleting review");
+        if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in deleting review", "خطأ في حذف التقييم", language));
         return (_mapper.Map<ReviewDto>(result), null);
    
     }

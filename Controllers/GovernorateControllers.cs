@@ -20,20 +20,20 @@ namespace Deli.Controllers
 
         
         [HttpGet]
-        public async Task<ActionResult<List<GovernorateDto>>> GetAll([FromQuery] GovernorateFilter filter) => Ok(await _governorateServices.GetAll(filter) , filter.PageNumber , filter.PageSize);
+        public async Task<ActionResult<List<GovernorateDto>>> GetAll([FromQuery] GovernorateFilter filter) => Ok(await _governorateServices.GetAll(filter,Language) , filter.PageNumber , filter.PageSize);
 
         
         [HttpPost]
-        public async Task<ActionResult<Governorate>> Create([FromBody] GovernorateForm governorateForm) => Ok(await _governorateServices.Create(governorateForm));
+        public async Task<ActionResult<Governorate>> Create([FromBody] GovernorateForm governorateForm) => Ok(await _governorateServices.Create(governorateForm,Language));
         
         [ HttpGet("{id}")]
-        public async Task<ActionResult<GovernorateDto>> GetById(Guid id) => Ok(await _governorateServices.GetById(id));
+        public async Task<ActionResult<GovernorateDto>> GetById(Guid id) => Ok(await _governorateServices.GetById(id,Language));
         [HttpPut("{id}")]
-        public async Task<ActionResult<Governorate>> Update([FromBody] GovernorateUpdate governorateUpdate, Guid id) => Ok(await _governorateServices.Update(id , governorateUpdate));
+        public async Task<ActionResult<Governorate>> Update([FromBody] GovernorateUpdate governorateUpdate, Guid id) => Ok(await _governorateServices.Update(id , governorateUpdate,Language));
 
         
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Governorate>> Delete(Guid id) =>  Ok( await _governorateServices.Delete(id));
+        public async Task<ActionResult<Governorate>> Delete(Guid id) =>  Ok( await _governorateServices.Delete(id,Language));
         
     }
 }
