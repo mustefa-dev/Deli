@@ -51,22 +51,23 @@ public async Task<(ItemDto? item, string? error)> GetById(Guid id, string langua
     {
         var item = await _repositoryWrapper.Item.GetById(id);
         if (item == null) return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
-        var itemDto = _mapper.Map<ItemDto>(item);
-        var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == item.Id);
-        if (sale != null && DateTime.Now >= sale.StartDate && DateTime.Now <= sale.EndDate)
+        var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == item.Id && DateTime.Now >= s.StartDate && DateTime.Now <= s.EndDate);
+        if (sale != null)
         {
-            itemDto.SalePrice = sale.SalePrice;
-            itemDto.SalePercintage = sale.SalePercintage;
-            itemDto.SaleStartDate = sale.StartDate;
-            itemDto.SaleEndDate = sale.EndDate;
+            item.SalePrice = sale.SalePrice;
+            item.SalePercintage = sale.SalePercintage;
+            item.SaleStartDate = sale.StartDate;
+            item.SaleEndDate = sale.EndDate;
         }
         else
         {
-            itemDto.SalePrice = null;
-            itemDto.SalePercintage = null;
-            itemDto.SaleStartDate = null;
-            itemDto.SaleEndDate = null;
+            item.SalePrice = null;
+            item.SalePercintage = null;
+            item.SaleStartDate = null;
+            item.SaleEndDate = null;
         }
+        var itemDto = _mapper.Map<ItemDto>(item);
+    
         return (itemDto, null);
         
     }
@@ -79,8 +80,8 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
         );
         foreach (var itemDto in item)
         {
-            var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == itemDto.Id);
-            if (sale != null && DateTime.Now >= sale.StartDate && DateTime.Now <= sale.EndDate)
+            var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == itemDto.Id && DateTime.Now >= s.StartDate && DateTime.Now <= s.EndDate);
+            if (sale != null)
             {
                 itemDto.SalePrice = sale.SalePrice;
                 itemDto.SalePercintage = sale.SalePercintage;
@@ -94,6 +95,8 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
                 itemDto.SaleStartDate = null;
                 itemDto.SaleEndDate = null;
             }
+            
+            
         }
         return (item, totalCount, null);
         
@@ -220,6 +223,11 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
         {
             return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
         }
+        var saleExist = await _repositoryWrapper.Sale.Get(s => s.ItemId == itemId && DateTime.Now >= s.StartDate && DateTime.Now <= s.EndDate);
+        if (saleExist != null)
+        {
+            return (null, ErrorResponseException.GenerateErrorResponse("Item already in sale", "العنصر لديه تخفيض بالفعل", language));
+        }
 
         var sale = new Sale
         {
@@ -232,10 +240,16 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
 
         await _repositoryWrapper.Sale.Add(sale);
         item.SaleId = sale.Id;
+        item.SalePrice = salePrice;
+        item.SaleStartDate = startDate;
+        item.SaleEndDate = endDate;
+        item.SalePercintage = sale.SalePercintage;
         await _repositoryWrapper.Item.Update(item);
 
         return (sale, null);
     }
+   
+    
 
     public async Task<(List<ItemDto> items, string? error)> GetAllSoldItems(OrderStatisticsFilter filter, string language)
 {

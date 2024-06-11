@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Deli.Entities
 {
     public class Sale : BaseEntity<Guid>
     {
+       [ForeignKey(nameof(ItemId))]
         public Guid? ItemId { get; set; }
         public Item? Item { get; set; }
         public double? SalePrice { get; set; }
