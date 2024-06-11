@@ -70,14 +70,14 @@ CreateMap<Order, OrderDto>()
     .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.User.FullName ))
     .ForMember(dest => dest.ClientEmail, opt => opt.MapFrom(src => src.User.Email))
     .ForMember(dest => dest.TotalPrice, 
-        opt => opt.MapFrom(src => src.OrderItem.Sum(x => x.Quantity * ((x.Item.SalePrice != null && x.Order.OrderDate >= x.Item.SaleStartDate && x.Order.OrderDate <= x.Item.SaleEndDate) ? x.Item.SalePrice.Value : x.Item.Price.Value))))
+        opt => opt.MapFrom(src => src.OrderItem.Sum(o=>o.ItemPrice*o.Quantity)))
     .ForMember(dest => dest.orderstatus, opt => opt.MapFrom(src => src.OrderStatus.ToString())
     );
         
     
 CreateMap<OrderForm,Order>();
 CreateMap<OrderUpdate,Order>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-CreateMap<OrderItem, OrderItemDto>().ForMember(dest => dest.Price, opt => opt.MapFrom(src => (src.Item.SalePrice!=null &&  src.Order.OrderDate >= src.Item.SaleStartDate && src.Order.OrderDate <= src.Item.SaleEndDate )? src.Item.SalePrice : src.Item.Price))
+CreateMap<OrderItem, OrderItemDto>()
     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Item.Name))
     .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Item.imaages.FirstOrDefault()))
     .ForMember(dist => dist.Image,
