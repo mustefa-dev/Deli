@@ -58,6 +58,11 @@ namespace Deli.Controllers
         [Authorize]
         public async Task<ActionResult<Item>> AddSaleToItem([FromBody] SaleForm saleForm) => Ok(await _itemServices.AddSaleToItem(saleForm.ItemId , saleForm.SalePrice , saleForm.StartDate , saleForm.EndDate,Language));
       
+        [HttpPut("EndCurrentSale{id}")]
+        public async Task<ActionResult<Item>> EndSale(Guid id) => Ok(await _itemServices.EndSale(id,Language));
+        [HttpDelete("DeleteScheduledSale{id}")]
+        public async Task<ActionResult<Item>> DeleteScheduledSale(Guid id) => Ok(await _itemServices.DeleteScheduledSale(id,Language));
+        
         [HttpGet("GetAllReviews")]
         public async Task<ActionResult<List<ReviewDto>>> GetAllReviews([FromQuery] ReviewFilter filter) => Ok(await _reviewServices.GetAll(filter,Language) , filter.PageNumber , filter.PageSize);
 
@@ -76,5 +81,7 @@ namespace Deli.Controllers
         
         [HttpGet("GetAllSoldItems")]
         public async Task<ActionResult<List<ItemDto>>>GetAllSoldItems([FromQuery] OrderStatisticsFilter filter) => Ok(await _itemServices.GetAllSoldItems(filter,Language));
+     
+        
     }
 }
