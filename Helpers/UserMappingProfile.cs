@@ -28,6 +28,12 @@ public class UserMappingProfile : Profile
 
 
         // here to add
+CreateMap<WhoAreWe, WhoAreWeDto>();
+CreateMap<WhoAreWeForm,WhoAreWe>();
+CreateMap<WhoAreWeUpdate,WhoAreWe>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<DiscoverDeli, DiscoverDeliDto>();
+CreateMap<DiscoverDeliForm,DiscoverDeli>();
+CreateMap<DiscoverDeliUpdate,DiscoverDeli>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<QualityTools, QualityToolsDto>();
 CreateMap<QualityToolsForm,QualityTools>();
 CreateMap<QualityToolsUpdate,QualityTools>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));

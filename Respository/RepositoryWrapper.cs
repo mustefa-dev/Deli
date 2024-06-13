@@ -12,6 +12,26 @@ public class RepositoryWrapper : IRepositoryWrapper
 
 
     // here to add
+private IWhoAreWeRepository _WhoAreWe;
+
+public IWhoAreWeRepository WhoAreWe {
+    get {
+        if(_WhoAreWe == null) {
+            _WhoAreWe = new WhoAreWeRepository(_context, _mapper);
+        }
+        return _WhoAreWe;
+    }
+}
+private IDiscoverDeliRepository _DiscoverDeli;
+
+public IDiscoverDeliRepository DiscoverDeli {
+    get {
+        if(_DiscoverDeli == null) {
+            _DiscoverDeli = new DiscoverDeliRepository(_context, _mapper);
+        }
+        return _DiscoverDeli;
+    }
+}
 private IQualityToolsRepository _QualityTools;
 
 public IQualityToolsRepository QualityTools {
