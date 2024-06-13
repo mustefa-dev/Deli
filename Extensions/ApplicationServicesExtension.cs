@@ -20,9 +20,10 @@ public static class ApplicationServicesExtension
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         services.AddScoped<IUserService, UserService>();
         // here to add
-        services.AddScoped<IAboutUsService, AboutUsService>();
+        services.AddScoped<IAboutUsServices, AboutUsServiceses>();
 services.AddScoped<IReviewServices, ReviewServices>();
 services.AddScoped<IFinancialReportService, FinancialReportService>();
+services.AddScoped<IHomepageServices, HomePageServices>();
 
 services.AddScoped<IFeedBackServices, FeedBackServices>();
 services.AddScoped<INewsServices, NewsServices>();

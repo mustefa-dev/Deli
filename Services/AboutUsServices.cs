@@ -5,7 +5,7 @@ using Deli.Interface;
 
 namespace Deli.Services;
 
-public interface IAboutUsService
+public interface IAboutUsServices
 {
     Task<(DeliDifferenceDto? deliDifference, string? error)> Update(Guid id, DeliDifferenceUpdate deliDifferenceUpdate, string language);
     Task<DeliDifferenceDto> GetDeliDifference();
@@ -22,12 +22,12 @@ public interface IAboutUsService
     Task<QualityToolsDto> GetQualityTools();
 
 }
-public class AboutUsService : IAboutUsService
+public class AboutUsServiceses : IAboutUsServices
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
 
-    public AboutUsService(
+    public AboutUsServiceses(
         IMapper mapper ,
         IRepositoryWrapper repositoryWrapper
     )
