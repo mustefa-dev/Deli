@@ -45,6 +45,9 @@ public class UsersController : BaseController{
     [HttpGet("/api/Users")]
     public async Task<ActionResult<Respons<UserDto>>> GetAll([FromQuery] UserFilter filter) =>
         Ok(await _userService.GetAll(filter,Language), filter.PageNumber, filter.PageSize);
+    [HttpPost("AddAddressToUser/{addressId}")]
+    public async Task<ActionResult> AddAddressToUser( Guid addressId) =>
+        Ok(await _userService.AddAddressToUser(Id, addressId,Language));
  
     [HttpGet("/api/MyProfile")]
     public async Task<ActionResult> GetMyProfile() => OkObject(await _userService.GetMyProfile(Id,Language));

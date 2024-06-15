@@ -1,4 +1,5 @@
 using AutoMapper;
+using Deli.DATA.DTOs;
 using Deli.DATA.DTOs.User;
 using Deli.DATA.GenericDataUpdate;
 using Deli.Entities;
@@ -23,6 +24,7 @@ namespace Deli.Services
         Task<(List<UserDto>? user, int? totalCount, string? error)> GetAll(UserFilter filter, string language);
         Task<(UserDto? user, string? error)> GetMyProfile(Guid id, string language);
         Task<(UserDto? user, string? error)> OTPverification(string? email, string? otp, string language);
+        Task<(UserDto? user, string? error)> AddAddressToUser(Guid userId, Guid addressId, string language);
 
     }
 
@@ -78,8 +80,8 @@ namespace Deli.Services
         {
             var user = await _repositoryWrapper.User.Get(u => u.Email == registerForm.Email);
             if (user != null) return (null, ErrorResponseException.GenerateErrorResponse("User already exists", "المستخدم موجود بالفعل", language));
-            /*var address = await _repositoryWrapper.Address.GetById(registerForm.AddressId);
-         if (address == null) return (null, "Address not found");*/
+            var governorate = await _repositoryWrapper.Governorate.Get(g => g.Id == registerForm.GovernorateId);
+            if (governorate == null) return (null, ErrorResponseException.GenerateErrorResponse("Governorate not found", "المحافظة غير متوفرة", language));
 
             var newUser = new AppUser
             {
@@ -87,7 +89,7 @@ namespace Deli.Services
                 Role = (UserRole)(Enum)Enum.Parse(typeof(UserRole), registerForm.Role),
                 FullName = registerForm.FullName,
                 Password = BCrypt.Net.BCrypt.HashPassword(registerForm.Password),
-                AddressId = registerForm.AddressId,
+                GovernorateId = registerForm.GovernorateId,
                 OTPrequired= true,
                 OTP = GenerateOTP()
             };
@@ -146,6 +148,17 @@ namespace Deli.Services
             var userDto = _mapper.Map<UserDto>(user);
             return (userDto, null);
         }
+        public async Task<(UserDto? user, string? error)> AddAddressToUser(Guid userId, Guid addressId, string language)
+        {
+            var user = await _repositoryWrapper.User.Get(u => u.Id == userId);
+            if (user == null) return (null, ErrorResponseException.GenerateErrorResponse("User not found", "المستخدم غير متوفر", language));
+            var address = await _repositoryWrapper.Address.Get(a => a.Id == addressId);
+            if (address == null) return (null, ErrorResponseException.GenerateErrorResponse("Address not found", "العنوان غير متوفر", language));
+            user.AddressId = addressId;
+            await _repositoryWrapper.User.Update(user, user.Id);
+            return (_mapper.Map<UserDto>(user), null);
+        }
+        
 
        public async Task<(UserDto? user, string? error)> OTPverification(string? email, string? otp, string language)
         {

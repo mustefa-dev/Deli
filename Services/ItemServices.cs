@@ -77,7 +77,8 @@ public async Task<(ItemDto? item, string? error)> GetById(Guid id, string langua
 public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(ItemFilter filter, string language)
     {
         var (item,totalCount) = await _repositoryWrapper.Item.GetAll<ItemDto>(
-            x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name)),
+            x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name)&&
+                    filter.RefNumber == null || x.RefNumber == filter.RefNumber ),
             filter.PageNumber,
             filter.PageSize
         );

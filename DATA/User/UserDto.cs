@@ -9,6 +9,7 @@ namespace Deli.DATA.DTOs.User
         public string? Role { get; set; }
         public string Token { get; set; }
         public Guid? AddressId { get; set; }
+        public Guid? GovernorateId { get; set; }
         public bool? OTPRequired { get; set; }
 
 

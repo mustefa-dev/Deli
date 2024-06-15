@@ -17,7 +17,7 @@ namespace Deli.DATA.DTOs.User
         public string? FullName { get; set; }
         public string? Role { get; set; }
         
-        public Guid? AddressId { get; set; }
+        public Guid? GovernorateId { get; set; }
 
 
         
