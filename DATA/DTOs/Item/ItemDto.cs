@@ -6,6 +6,8 @@ namespace Deli.DATA.DTOs.Item
         public string? Name { get; set; }
         public  string MainDetails { get; set; }
         public string? Description { get; set; }
+        public string? RefNumber { get; set; }
+        public Dictionary<string, string> AdditionalInfo{ get; set; }
         public string[] imaages { get; set; }
         public double? Price { get; set; }
         public double? SalePrice { get; set; }
