@@ -7,6 +7,7 @@ public class UserFilter : BaseFilter
     public string? FullName { get; set; }
 
     public Guid? RoleId { get; set; }
+    public bool? IsSubbedToNews { get; set; }
     
     public bool? IsActive { get; set; }
     

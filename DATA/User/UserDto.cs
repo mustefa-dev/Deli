@@ -10,6 +10,8 @@ namespace Deli.DATA.DTOs.User
         public string Token { get; set; }
         public Guid? AddressId { get; set; }
         public Guid? GovernorateId { get; set; }
+        public bool? IsSubbedToNews { get; set; }
+        public string? SubbedEmail { get; set; }
         public bool? OTPRequired { get; set; }
 
 

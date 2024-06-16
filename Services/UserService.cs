@@ -25,6 +25,10 @@ namespace Deli.Services
         Task<(UserDto? user, string? error)> GetMyProfile(Guid id, string language);
         Task<(UserDto? user, string? error)> OTPverification(string? email, string? otp, string language);
         Task<(UserDto? user, string? error)> AddAddressToUser(Guid userId, Guid addressId, string language);
+        Task<(NewsSubscribedUser? newssubscribeduser, string? error)> SubscribeToNews(Guid userId,string email, string language);
+        Task<(NewsSubscribedUser? newssubscribeduser, string? error)> UnSubscribeToNews(Guid userId,string email, string language);
+        Task<(EmailSendingResultDto emailSendingResultDto , string? error)> SendEmailToAllSubscribedUsers( string subject, string body,string language);
+        
 
     }
 
@@ -135,7 +139,8 @@ namespace Deli.Services
                 x => (
                     (filter.FullName == null || x.FullName.Contains(filter.FullName)) &&
                     (filter.Email == null || x.Email.Contains(filter.Email)) &&
-                    (filter.IsActive == null || x.IsActive.Equals(filter.IsActive))
+                    (filter.IsActive == null || x.IsActive.Equals(filter.IsActive)) &&
+                    (filter.IsSubbedToNews == null || x.IsSubbedToNews.Equals(filter.IsSubbedToNews)) 
                 ),
                 filter.PageNumber, filter.PageSize);
             return (users, totalCount, null);
@@ -175,6 +180,55 @@ namespace Deli.Services
 
             return (null, ErrorResponseException.GenerateErrorResponse("OTP is incorrect", "الرمز غير صحيح", language));
         }
+       public async Task<(NewsSubscribedUser? newssubscribeduser, string? error)> SubscribeToNews(Guid userId,string email, string language)
+        {
+            var user = await _repositoryWrapper.User.Get(u => u.Id == userId);
+            if (user == null) return (null, ErrorResponseException.GenerateErrorResponse("User not found", "المستخدم غير متوفر", language));
+            var checknewsSubscribedUser = await _repositoryWrapper.NewsSubscribedUser.Get(u => u.UserId == userId);
+            if (checknewsSubscribedUser != null) return (null, ErrorResponseException.GenerateErrorResponse("User already subscribed", "المستخدم مشترك بالفعل", language));
+            checknewsSubscribedUser = await _repositoryWrapper.NewsSubscribedUser.Get(u => u.Email == email);
+            if (checknewsSubscribedUser != null) return (null, ErrorResponseException.GenerateErrorResponse("Email already subscribed", "البريد الالكتروني مشترك بالفعل", language));
+            var newsSubscribedUser = new NewsSubscribedUser
+            {
+                UserId = userId,
+                Email = email
+            };
+            await _repositoryWrapper.NewsSubscribedUser.Add(newsSubscribedUser);
+            user.IsSubbedToNews = true;
+            user.SubbedEmail = email;
+            await _repositoryWrapper.User.Update(user, user.Id);
+            return (newsSubscribedUser, null);
+        }
+       public async Task<(NewsSubscribedUser? newssubscribeduser, string? error)> UnSubscribeToNews(Guid userId,string email, string language)
+        {
+            var user = await _repositoryWrapper.User.Get(u => u.Id == userId);
+            if (user == null) return (null, ErrorResponseException.GenerateErrorResponse("User not found", "المستخدم غير متوفر", language));
+            var newsSubscribedUser = await _repositoryWrapper.NewsSubscribedUser.Get(u => u.UserId == userId && u.Email == email);
+            if (newsSubscribedUser == null) return (null, ErrorResponseException.GenerateErrorResponse("User not subscribed", "المستخدم غير مشترك", language));
+            await _repositoryWrapper.NewsSubscribedUser.SoftDelete(newsSubscribedUser.Id);
+            user.IsSubbedToNews = false;
+            user.SubbedEmail = null;
+            await _repositoryWrapper.User.Update(user, user.Id);
+            return (newsSubscribedUser, null);
+        }
+
+       public async Task<(EmailSendingResultDto emailSendingResultDto , string? error)> SendEmailToAllSubscribedUsers( string subject, string body,string language)
+        {
+            var newsSubscribedUsers = await _repositoryWrapper.NewsSubscribedUser.GetAll();
+            if (newsSubscribedUsers.totalCount == 0) return (null, ErrorResponseException.GenerateErrorResponse("No subscribed users", "لا يوجد مستخدمين مشتركين", language));
+            var emailService = new EmailService();
+            foreach (var newsSubscribedUser in newsSubscribedUsers.data)
+            {
+                await emailService.SendEmail(newsSubscribedUser.Email, subject, body);
+            }
+            return( new EmailSendingResultDto
+            {
+                Subject = subject,
+                Body = body,
+                NumOfUsersSentTo = newsSubscribedUsers.totalCount,
+            }, null);
+        }
+      
 
 
 

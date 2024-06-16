@@ -5,6 +5,7 @@ public interface IRepositoryWrapper
     IUserRepository User { get; }
 
     // here to add
+INewsSubscribedUserRepository NewsSubscribedUser{get;}
 IWhoAreWeRepository WhoAreWe{get;}
 IDiscoverDeliRepository DiscoverDeli{get;}
 IQualityToolsRepository QualityTools{get;}

@@ -28,6 +28,9 @@ public class UserMappingProfile : Profile
 
 
         // here to add
+CreateMap<NewsSubscribedUser, NewsSubscribedUserDto>();
+CreateMap<NewsSubscribedUserForm,NewsSubscribedUser>();
+CreateMap<NewsSubscribedUserUpdate,NewsSubscribedUser>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<WhoAreWe, WhoAreWeDto>();
 CreateMap<WhoAreWeForm,WhoAreWe>();
 CreateMap<WhoAreWeUpdate,WhoAreWe>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
