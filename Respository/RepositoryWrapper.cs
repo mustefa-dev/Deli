@@ -12,6 +12,16 @@ public class RepositoryWrapper : IRepositoryWrapper
 
 
     // here to add
+private INewsSubscribedUserRepository _NewsSubscribedUser;
+
+public INewsSubscribedUserRepository NewsSubscribedUser {
+    get {
+        if(_NewsSubscribedUser == null) {
+            _NewsSubscribedUser = new NewsSubscribedUserRepository(_context, _mapper);
+        }
+        return _NewsSubscribedUser;
+    }
+}
 private IWhoAreWeRepository _WhoAreWe;
 
 public IWhoAreWeRepository WhoAreWe {

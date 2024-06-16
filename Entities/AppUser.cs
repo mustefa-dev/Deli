@@ -11,6 +11,8 @@ namespace Deli.Entities
         public UserRole? Role { get; set; }
         public string? OTP { get; set; }
         public bool? OTPrequired { get; set; } = true;
+        public bool? IsSubbedToNews { get; set; } = false;
+        public string? SubbedEmail { get; set; }
 
         public bool? IsActive { get; set; }
         public ICollection<Address>? Addresses { get; set; }
