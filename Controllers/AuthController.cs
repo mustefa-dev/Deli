@@ -51,11 +51,11 @@ public class UsersController : BaseController{
  
     [HttpGet("/api/MyProfile")]
     public async Task<ActionResult> GetMyProfile() => OkObject(await _userService.GetMyProfile(Id,Language));
-    [HttpPost("/api/MyProfile/SubscribeToNews/{email}")]
+    [HttpPost("/api/SubscribeToNews/{email}")]
     public async Task<ActionResult> SubscribeToNews(string email) => Ok(await _userService.SubscribeToNews(Id,email,Language));
-    [HttpPost("/api/MyProfile/UnSubscribeToNews{email}")]
+    [HttpPost("/api/UnSubscribeToNews{email}")]
     public async Task<ActionResult> UnSubscribeToNews(string email) => Ok(await _userService.UnSubscribeToNews(Id,email,Language));
-    [HttpPost("/api/MyProfile/SendEmailToAllSubscribedUsers")]
+    [HttpPost("/api/SendEmailToAllSubscribedUsers")]
     public async Task<ActionResult> SendEmailToSubscribedToNewsUsers(string subject, string body) =>
         Ok(await _userService.SendEmailToAllSubscribedUsers(subject, body, Language)); 
     
