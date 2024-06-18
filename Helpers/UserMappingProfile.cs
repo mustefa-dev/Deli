@@ -122,8 +122,6 @@ CreateMap<Item, ItemDto>()
     .ForMember(dist => dist.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
     .ForMember(dist => dist.InventoryName, opt => opt.MapFrom(src => src.Inventory.Name))
     .ForMember(dist => dist.GovernorateName, opt => opt.MapFrom(src => src.Inventory.Governorate.Name))
-    .ForMember(dist=>dist.AvgRating,
-        opt=>opt.MapFrom(src=>src.Reviews.Count==0?0:src.Reviews.Average(r=>r.Rating)))
     .ForMember(dest=>dest.IsSale,
         opt=>opt.MapFrom(src=>src.SalePrice!=null?true:false));
     
