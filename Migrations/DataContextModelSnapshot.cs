@@ -84,6 +84,12 @@ namespace Deli.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
+                    b.Property<string>("FacebookAccessToken")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FacebookId")
+                        .HasColumnType("text");
+
                     b.Property<string>("FullName")
                         .HasColumnType("text");
 

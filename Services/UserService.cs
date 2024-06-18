@@ -28,7 +28,7 @@ namespace Deli.Services
         Task<(NewsSubscribedUser? newssubscribeduser, string? error)> SubscribeToNews(Guid userId,string email, string language);
         Task<(NewsSubscribedUser? newssubscribeduser, string? error)> UnSubscribeToNews(Guid userId,string email, string language);
         Task<(EmailSendingResultDto emailSendingResultDto , string? error)> SendEmailToAllSubscribedUsers( string subject, string body,string language);
-        
+        Task<(UserDto? user, string? error)> LoginWithFacebook(string facebookId, string accessToken, string language);
 
     }
 
@@ -238,6 +238,29 @@ namespace Deli.Services
             var otp = "11111";
 
             return otp;
+        }
+        
+        public async Task<(UserDto? user, string? error)> LoginWithFacebook(string facebookId, string accessToken, string language)
+        {
+            var user = await _repositoryWrapper.User.Get(u => u.FacebookId == facebookId);
+            if (user == null)
+            {
+                user = new AppUser
+                {
+                    FacebookId = facebookId,
+                    FacebookAccessToken = accessToken,
+                };
+                await _repositoryWrapper.User.CreateUser(user);
+            }
+            else if (user.FacebookAccessToken != accessToken)
+            {
+                user.FacebookAccessToken = accessToken;
+                await _repositoryWrapper.User.UpdateUser(user);
+            }
+
+            var userDto = _mapper.Map<UserDto>(user);
+            userDto.Token = _tokenService.CreateToken(_mapper.Map<TokenDTO>(user));
+            return (userDto, null);
         }
     }
 }

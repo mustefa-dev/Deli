@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Deli.DATA;
+using Deli.DATA.DTOs.User;
 using Deli.Entities;
 using Deli.Helpers;
 using Deli.Interface;
@@ -13,6 +14,7 @@ public static class ApplicationServicesExtension
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
     {
+        
         services.AddDbContext<DataContext>(
             options => options.UseNpgsql(config.GetConnectionString("server")));
         services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
@@ -20,6 +22,8 @@ public static class ApplicationServicesExtension
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         services.AddScoped<IUserService, UserService>();
         // here to add
+        services.Configure<FacebookAuthSettings>(config.GetSection("FacebookAuthSettings"));
+    
         services.AddScoped<IAboutUsServices, AboutUsServiceses>();
 services.AddScoped<IReviewServices, ReviewServices>();
 services.AddScoped<IFinancialReportService, FinancialReportService>();
