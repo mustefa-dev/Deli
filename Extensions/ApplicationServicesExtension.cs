@@ -14,7 +14,7 @@ public static class ApplicationServicesExtension
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
     {
         services.AddDbContext<DataContext>(
-            options => options.UseNpgsql(config.GetConnectionString("server")));
+            options => options.UseNpgsql(config.GetConnectionString("LocalHost")));
         services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
