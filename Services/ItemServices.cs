@@ -13,8 +13,8 @@ namespace Deli.Services;
 public interface IItemServices
 {
 Task<(Item? item, string? error)> Create(ItemForm itemForm, string language);
-Task<(ItemDto? item, string? error)> GetById(Guid id, string language);
-Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(ItemFilter filter, string language);
+Task<(ItemDto? item, string? error)> GetById(Guid userId,Guid id, string language);
+Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(Guid userId,ItemFilter filter, string language);
 Task<(Item? item, string? error)> Update(Guid id , ItemUpdate itemUpdate, string language);
 Task<(Item? item, string? error)> Delete(Guid id, string language);
 Task<(Wishlist? wishlist, string? error)> AddOrRemoveItemToWishlist(Guid itemId,Guid userId, string language);
@@ -26,6 +26,7 @@ Task<(Sale? sale, string? error)> EndSale(Guid itemid,string language);
 Task<(Sale? sale, string? error)> DeleteScheduledSale(Guid saleId, string language);
 
 Task<(List<ItemDto> items, string? error)> GetAllSoldItems(OrderStatisticsFilter filter, string language);
+Task<(PriceRangeDto priceRangeDto, string? error)> GetPriceRange(string language);
 }
 
 public class ItemServices : IItemServices
@@ -46,11 +47,12 @@ public ItemServices(
 public async Task<(Item? item, string? error)> Create(ItemForm itemForm , string language)
 {
     var item = _mapper.Map<Item>(itemForm);
+    var category = await _repositoryWrapper.Category.Get(c => c.Id == itemForm.CategoryId);
     var result = await _repositoryWrapper.Item.Add(item);
     if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in Creating a Item", "خطأ في انشاء العنصر", language));
     return (result, null);
 }
-public async Task<(ItemDto? item, string? error)> GetById(Guid id, string language)
+public async Task<(ItemDto? item, string? error)> GetById(Guid userId,Guid id, string language)
     {
         var item = await _repositoryWrapper.Item.GetById(id);
         if (item == null) return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
@@ -69,21 +71,45 @@ public async Task<(ItemDto? item, string? error)> GetById(Guid id, string langua
             item.SaleStartDate = null;
             item.SaleEndDate = null;
         }
+       
         var itemDto = _mapper.Map<ItemDto>(item);
+        var wishlistedItem = await _repositoryWrapper.Wishlist.Get(l => l.UserId == userId && l.ItemsIds.Contains(itemDto.Id));
+        if(userId==null) itemDto.IsWishlist = null;
+        else itemDto.IsWishlist = wishlistedItem != null;
+        var reviews = await _repositoryWrapper.Review.GetAll(r => r.ItemId == itemDto.Id);
+        if (reviews.data != null && reviews.data.Count > 0)
+        {
+            itemDto.AvgRating = (float)reviews.data.Average(r => r.Rating);
+        }
+        else
+        {
+            itemDto.AvgRating = 0;
+        }
+
     
         return (itemDto, null);
         
     }
-public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(ItemFilter filter, string language)
+public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(Guid userId,ItemFilter filter, string language)
     {
         var (item,totalCount) = await _repositoryWrapper.Item.GetAll<ItemDto>(
             x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name)&&
-                    filter.RefNumber == null || x.RefNumber == filter.RefNumber ),
+                    filter.RefNumber == null || x.RefNumber == filter.RefNumber )&&
+           
+                 (filter.EndPrice ==null ||x.Price >= filter.StartPrice && x.Price<=filter.EndPrice) &&
+                 
+                
+            
+           // (filter.StartPrice == null || x.SalePrice >= filter.StartPrice) &&   // to filter items based on start and end prices with sale
+            //(filter.EndPrice == null || x.SalePrice <= filter.EndPrice)&&
+            (filter.AvgRating == null || x.AvgRating >= filter.AvgRating)&&
+            (filter.IsSale==null || x.SalePrice!=null),
             filter.PageNumber,
             filter.PageSize
         );
         foreach (var itemDto in item)
         {
+            
             var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == itemDto.Id && DateTime.Now >= s.StartDate && DateTime.Now <= s.EndDate);
             if (sale != null)
             {
@@ -99,6 +125,18 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
                 itemDto.SaleStartDate = null;
                 itemDto.SaleEndDate = null;
             }
+            var wishlistedItem = await _repositoryWrapper.Wishlist.Get(l => l.UserId == userId && l.ItemsIds.Contains(itemDto.Id));
+            if(userId==null) itemDto.IsWishlist = null;
+            else itemDto.IsWishlist = wishlistedItem != null;
+            var reviews = await _repositoryWrapper.Review.GetAll(r => r.ItemId == itemDto.Id);
+            if (reviews.data != null && reviews.data.Count > 0)
+            {
+                itemDto.AvgRating = (float)reviews.data.Average(r => r.Rating);
+            }
+            else
+            {
+                itemDto.AvgRating = 0;
+            }
             
             
         }
@@ -111,6 +149,8 @@ public async Task<(Item? item, string? error)> Update(Guid id ,ItemUpdate itemUp
         var item = await _repositoryWrapper.Item.Get(x => x.Id == id);
         if (item == null) return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
         _mapper.Map(itemUpdate, item);
+        var category = await _repositoryWrapper.Category.Get(c => c.Id == itemUpdate.CategoryId);
+        item.Category = category;
         var result = await _repositoryWrapper.Item.Update(item);
         if (result == null) return (null, error: ErrorResponseException.GenerateErrorResponse("Error in updating item", "خطأ في تحديث العنصر", language));
         return (result, null);
@@ -335,7 +375,27 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
             soldItems.Add(itemDto);
         }
     }
+    
 
     return (soldItems, null);
 }
+    public async Task<(PriceRangeDto priceRangeDto, string? error)> GetPriceRange(string language)
+    {
+        var items = await _repositoryWrapper.Item.GetAll();
+        if (items.data == null || items.totalCount == 0)
+        {
+            return (null, ErrorResponseException.GenerateErrorResponse("No items found", "لم يتم العثور على عناصر", language));
+        }
+
+        var lowestPrice = items.data.Min(i => i.Price);
+        var highestPrice = items.data.Max(i => i.Price);
+        var pricerangedto = new PriceRangeDto
+        {
+            LowestPrice = lowestPrice,
+            HighestPrice = highestPrice
+        };
+
+        return (pricerangedto,null);
+    }
+    
 }

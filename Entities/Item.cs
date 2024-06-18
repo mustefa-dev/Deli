@@ -11,6 +11,7 @@ namespace Deli.Entities
         public double? Price { get; set; }
         public double? SalePrice { get; set; }
         public double? SalePercintage { get; set; }
+        public float? AvgRating { get; set; }
         public DateTime? SaleStartDate { get; set; }
         public DateTime? SaleEndDate { get; set; }
         public int? Quantity { get; set; }
@@ -20,6 +21,7 @@ namespace Deli.Entities
         public Category? Category { get; set; }
     
         public Guid? SaleId { get; set; }
+        public List<Review> Reviews { get; set; }
 
     }
 }

@@ -165,8 +165,17 @@ namespace Deli.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
+
+                    b.Property<int?>("NumOfItems")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -335,6 +344,9 @@ namespace Deli.Migrations
                     b.Property<Dictionary<string, string>>("AdditionalInfo")
                         .IsRequired()
                         .HasColumnType("hstore");
+
+                    b.Property<float?>("AvgRating")
+                        .HasColumnType("real");
 
                     b.Property<Guid?>("CategoryId")
                         .HasColumnType("uuid");
@@ -943,7 +955,7 @@ namespace Deli.Migrations
             modelBuilder.Entity("Deli.Entities.Review", b =>
                 {
                     b.HasOne("Deli.Entities.Item", "Item")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("ItemId");
 
                     b.HasOne("Deli.Entities.AppUser", "User")
@@ -984,6 +996,11 @@ namespace Deli.Migrations
             modelBuilder.Entity("Deli.Entities.Inventory", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Deli.Entities.Item", b =>
+                {
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("Deli.Entities.Order", b =>

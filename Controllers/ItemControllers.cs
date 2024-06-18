@@ -22,9 +22,9 @@ namespace Deli.Controllers
         }
         
         [HttpGet]
-        public async Task<ActionResult<List<ItemDto>>> GetAll([FromQuery] ItemFilter filter) => Ok(await _itemServices.GetAll(filter,Language) , filter.PageNumber , filter.PageSize);
+        public async Task<ActionResult<List<ItemDto>>> GetAll([FromQuery] ItemFilter filter) => Ok(await _itemServices.GetAll(Id,filter,Language) , filter.PageNumber , filter.PageSize);
         [HttpGet("{id}")]
-        public async Task<ActionResult<ItemDto>> GetById(Guid id) => Ok(await _itemServices.GetById(id,Language));
+        public async Task<ActionResult<ItemDto>> GetById(Guid id) => Ok(await _itemServices.GetById(Id,id,Language));
 
         
         [HttpPost]
@@ -81,6 +81,8 @@ namespace Deli.Controllers
         
         [HttpGet("GetAllSoldItems")]
         public async Task<ActionResult<List<ItemDto>>>GetAllSoldItems([FromQuery] OrderStatisticsFilter filter) => Ok(await _itemServices.GetAllSoldItems(filter,Language));
+        [HttpGet("GetPriceRange")]
+        public async Task<ActionResult> GetPriceRange() => Ok(await _itemServices.GetPriceRange(Language));
      
         
     }

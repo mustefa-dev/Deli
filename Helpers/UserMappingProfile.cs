@@ -13,7 +13,7 @@ public class UserMappingProfile : Profile
 {
     public UserMappingProfile()
     {
-        var baseUrl = "http://localhost:5051/";
+        var baseUrl = "http://139.84.174.215:3387/";
 
        
         CreateMap<AppUser, UserDto>();
@@ -31,22 +31,33 @@ public class UserMappingProfile : Profile
 CreateMap<NewsSubscribedUser, NewsSubscribedUserDto>();
 CreateMap<NewsSubscribedUserForm,NewsSubscribedUser>();
 CreateMap<NewsSubscribedUserUpdate,NewsSubscribedUser>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-CreateMap<WhoAreWe, WhoAreWeDto>();
+CreateMap<WhoAreWe, WhoAreWeDto>().ForMember(dest => dest.Image1,
+        opt => opt.MapFrom(src => Utils.Util.Url + src.Image1))
+    .ForMember(dest => dest.Image2
+        , opt => opt.MapFrom(src => Utils.Util.Url + src.Image2))
+    .ForMember(dest => dest.Image3
+        , opt => opt.MapFrom(src => Utils.Util.Url + src.Image3));
+    
 CreateMap<WhoAreWeForm,WhoAreWe>();
 CreateMap<WhoAreWeUpdate,WhoAreWe>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-CreateMap<DiscoverDeli, DiscoverDeliDto>();
+CreateMap<DiscoverDeli, DiscoverDeliDto>().ForMember(dest=>dest.Image,
+    opt=>opt.MapFrom(src=>Utils.Util.Url+src.Image));
 CreateMap<DiscoverDeliForm,DiscoverDeli>();
 CreateMap<DiscoverDeliUpdate,DiscoverDeli>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-CreateMap<QualityTools, QualityToolsDto>();
+CreateMap<QualityTools, QualityToolsDto>().ForMember(dest=>dest.Image,
+    opt=>opt.MapFrom(src=>Utils.Util.Url+src.Image));
 CreateMap<QualityToolsForm,QualityTools>();
 CreateMap<QualityToolsUpdate,QualityTools>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-CreateMap<MileStone, MileStoneDto>();
+CreateMap<MileStone, MileStoneDto>().ForMember(dest=>dest.Image,
+    opt=>opt.MapFrom(src=>Utils.Util.Url+src.Image));
 CreateMap<MileStoneForm,MileStone>();
 CreateMap<MileStoneUpdate,MileStone>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-CreateMap<OurMission, OurMissionDto>();
+CreateMap<OurMission, OurMissionDto>().ForMember(dest=>dest.Image,
+    opt=>opt.MapFrom(src=>Utils.Util.Url+src.Image));
 CreateMap<OurMissionForm,OurMission>();
 CreateMap<OurMissionUpdate,OurMission>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-CreateMap<DeliDifference, DeliDifferenceDto>();
+CreateMap<DeliDifference, DeliDifferenceDto>().ForMember(dest=>dest.Image,
+    opt=>opt.MapFrom(src=>Utils.Util.Url+src.Image));
 CreateMap<DeliDifferenceForm,DeliDifference>();
 CreateMap<DeliDifferenceUpdate,DeliDifference>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Review, ReviewDto>();
@@ -64,7 +75,8 @@ CreateMap<WishlistUpdate,Wishlist>().ForAllMembers(opts => opts.Condition((src, 
 CreateMap<FeedBack, FeedBackDto>();
 CreateMap<FeedBackForm,FeedBack>();
 CreateMap<FeedBackUpdate,FeedBack>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-CreateMap<News, NewsDto>();
+CreateMap<News, NewsDto>().ForMember(dest=>dest.Image,
+    opt=>opt.MapFrom(src=>Utils.Util.Url+src.Image));
 CreateMap<NewsForm,News>();
 CreateMap<NewsUpdate,News>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Appsettings, AppsettingsDto>();
@@ -97,7 +109,11 @@ CreateMap<OrderItemUpdate,OrderItem>().ForAllMembers(opts => opts.Condition((src
 CreateMap<Address, AddressDto>();
 CreateMap<AddressForm,Address>();
 CreateMap<AddressUpdate,Address>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-CreateMap<Category, CategoryDto>();
+CreateMap<Category, CategoryDto>().ForMember(dest=>dest.Image,
+    opt=>opt.MapFrom(src=>Utils.Util.Url+src.Image))
+    .ForMember(dest=>dest.NumOfItems,
+        opt=>opt.MapFrom(src=>src.Items.Count));
+    
 CreateMap<CategoryForm,Category>();
 CreateMap<CategoryUpdate,Category>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Item, ItemDto>()
@@ -105,7 +121,10 @@ CreateMap<Item, ItemDto>()
         opt => opt.MapFrom(src => src.imaages == null ? new string[0] : ImageListConfig(src.imaages.ToList()).ToArray()))
     .ForMember(dist => dist.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
     .ForMember(dist => dist.InventoryName, opt => opt.MapFrom(src => src.Inventory.Name))
-    .ForMember(dist => dist.GovernorateName, opt => opt.MapFrom(src => src.Inventory.Governorate.Name));
+    .ForMember(dist => dist.GovernorateName, opt => opt.MapFrom(src => src.Inventory.Governorate.Name))
+    .ForMember(dest=>dest.IsSale,
+        opt=>opt.MapFrom(src=>src.SalePrice!=null?true:false));
+    
 CreateMap<ItemForm,Item>();
 CreateMap<ItemUpdate,Item>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Inventory, InventoryDto>();
