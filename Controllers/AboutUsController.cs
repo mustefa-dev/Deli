@@ -17,13 +17,13 @@ namespace Deli.Controllers
         }
 
         [HttpGet("GetDeliDifference")]
-        public async Task<ActionResult<DeliDifferenceDto>> GetDeliDifference() => Ok(await _aboutUsServices.GetDeliDifference());
+        public async Task<ActionResult<DeliDifferenceDto>> GetDeliDifference() => Ok(await _aboutUsServices.GetDeliDifference(Language));
 
         [HttpPut("UpdateDeliDifference/{id}")]
         public async Task<ActionResult> UpdateDeliDifference(Guid id, DeliDifferenceUpdate deliDifferenceUpdate) => Ok(await _aboutUsServices.Update(id, deliDifferenceUpdate,Language));
 
         [HttpGet("GetOurMission")]
-        public async Task<ActionResult<OurMissionDto>> GetOurMission() => Ok(await _aboutUsServices.GetOurMission());
+        public async Task<ActionResult<OurMissionDto>> GetOurMission() => Ok(await _aboutUsServices.GetOurMission(Language));
 
         [HttpPut("UpdateOurMission/{id}")]
         public async Task<ActionResult> UpdateOurMission(Guid id, OurMissionUpdate ourMissionUpdate) => Ok(await _aboutUsServices.Update(id, ourMissionUpdate,Language));
@@ -43,7 +43,7 @@ namespace Deli.Controllers
         [HttpDelete("DeleteMileStone/{id}")]
         public async Task<ActionResult<MileStone>> DeleteMileStone(Guid id) => Ok(await _aboutUsServices.Delete(id,Language));
         [HttpGet("GetQualityTools")]
-        public async Task<ActionResult<QualityToolsDto>> GetQualityTools() => Ok(await _aboutUsServices.GetQualityTools());
+        public async Task<ActionResult<QualityToolsDto>> GetQualityTools() => Ok(await _aboutUsServices.GetQualityTools(Language));
 
         [HttpPut("UpdateQualityTools/{id}")]
         public async Task<ActionResult> UpdateQualityTools(Guid id, QualityToolsUpdate qualityToolsUpdate) => Ok(await _aboutUsServices.Update(id, qualityToolsUpdate,Language));

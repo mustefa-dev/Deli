@@ -48,17 +48,17 @@ public async Task<(Item? item, string? error)> Create(ItemForm itemForm , string
 {
     var item = _mapper.Map<Item>(itemForm);
     var category = await _repositoryWrapper.Category.Get(c => c.Id == itemForm.CategoryId);
-    if (category == null) return (null, ErrorResponseException.GenerateErrorResponse("Category not found", "لم يتم العثور على الفئة", language));
+    if (category == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Category not found", "لم يتم العثور على الفئة", language));
     var inventory = await _repositoryWrapper.Inventory.Get(i => i.Id == itemForm.InventoryId);
-    if (inventory == null) return (null, ErrorResponseException.GenerateErrorResponse("Inventory not found", "لم يتم العثور على المخزن", language));
+    if (inventory == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Inventory not found", "لم يتم العثور على المخزن", language));
     var result = await _repositoryWrapper.Item.Add(item);
-    if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in Creating a Item", "خطأ في انشاء العنصر", language));
+    if (result == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Error in Creating a Item", "خطأ في انشاء العنصر", language));
     return (result, null);
 }
 public async Task<(ItemDto? item, string? error)> GetById(Guid userId,Guid id, string language)
     {
         var item = await _repositoryWrapper.Item.GetById(id);
-        if (item == null) return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
+        if (item == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Item not found", "لم يتم العثور على العنصر", language));
         var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == item.Id && DateTime.Now >= s.StartDate && DateTime.Now <= s.EndDate);
         if (sale != null)
         {
@@ -88,6 +88,16 @@ public async Task<(ItemDto? item, string? error)> GetById(Guid userId,Guid id, s
         {
             itemDto.AvgRating = 0;
         }
+        itemDto.ReviewsCount = reviews.data.Count;
+        itemDto.Name = ErrorResponseException.GenerateLocalizedResponse(item.Name, item.ArName, language);
+        itemDto.MainDetails = ErrorResponseException.GenerateLocalizedResponse(item.MainDetails, item.ArMainDetails, language);
+        itemDto.Description = ErrorResponseException.GenerateLocalizedResponse(item.Description, item.ArDescription, language);
+        var category = await _repositoryWrapper.Category.Get(c => c.Id == item.CategoryId);
+        itemDto.CategoryName = ErrorResponseException.GenerateLocalizedResponse(category.Name, category.ArName, language);
+        var inventory = await _repositoryWrapper.Inventory.Get(i => i.Id == item.InventoryId);
+        itemDto.InventoryName = ErrorResponseException.GenerateLocalizedResponse(inventory.Name, inventory.ArName, language);
+        var governorate = await _repositoryWrapper.Governorate.Get(g => g.Id == inventory.GovernorateId);
+        itemDto.GovernorateName = ErrorResponseException.GenerateLocalizedResponse(governorate.Name, governorate.ArName, language);
 
     
         return (itemDto, null);
@@ -106,16 +116,28 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
             
            // (filter.StartPrice == null || x.SalePrice >= filter.StartPrice) &&   // to filter items based on start and end prices with sale
             //(filter.EndPrice == null || x.SalePrice <= filter.EndPrice)&&
-            (filter.AvgRating == null || x.AvgRating >= filter.AvgRating)&&
-            (filter.IsSale==null || x.SalePrice!=null)&&
                  (filter.Quantity == null || x.Quantity >= filter.Quantity),
             
             filter.PageNumber,
             filter.PageSize
         );
+        var result = new List<ItemDto>();
         foreach (var itemDto in item)
         {
+            var reviews = await _repositoryWrapper.Review.GetAll(r => r.ItemId == itemDto.Id);
+            if (reviews.data != null && reviews.data.Count > 0)
+            {
+                itemDto.AvgRating = (float)reviews.data.Average(r => r.Rating);
+            }
+            else
+            {
+                itemDto.AvgRating = 0;
+            }
             
+            if(itemDto.AvgRating<filter.AvgRating)
+            {
+                continue;
+            }
             var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == itemDto.Id && DateTime.Now >= s.StartDate && DateTime.Now <= s.EndDate);
             if (sale != null)
             {
@@ -131,34 +153,41 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
                 itemDto.SaleStartDate = null;
                 itemDto.SaleEndDate = null;
             }
+            if (filter.IsSale==true && itemDto.SalePrice==null)
+            {
+                continue;
+            }
             var wishlistedItem = await _repositoryWrapper.Wishlist.Get(l => l.UserId == userId && l.ItemsIds.Contains(itemDto.Id));
             if(userId==null) itemDto.IsWishlist = null;
             else itemDto.IsWishlist = wishlistedItem != null;
-            var reviews = await _repositoryWrapper.Review.GetAll(r => r.ItemId == itemDto.Id);
-            if (reviews.data != null && reviews.data.Count > 0)
-            {
-                itemDto.AvgRating = (float)reviews.data.Average(r => r.Rating);
-            }
-            else
-            {
-                itemDto.AvgRating = 0;
-            }
+          
+            itemDto.ReviewsCount = reviews.data.Count;
+            var originalItem = await _repositoryWrapper.Item.Get(x => x.Id == itemDto.Id);
+            var category = await _repositoryWrapper.Category.Get(c => c.Id == originalItem.CategoryId);
+            itemDto.CategoryName = ErrorResponseException.GenerateLocalizedResponse(category.Name, category.ArName, language);
+            var inventory = await _repositoryWrapper.Inventory.Get(i => i.Id == originalItem.InventoryId);
+            itemDto.InventoryName = ErrorResponseException.GenerateLocalizedResponse(inventory.Name, inventory.ArName, language);
+            var governorate = await _repositoryWrapper.Governorate.Get(g => g.Id == inventory.GovernorateId);
+            itemDto.GovernorateName = ErrorResponseException.GenerateLocalizedResponse(governorate.Name, governorate.ArName, language);
+            itemDto.Name = ErrorResponseException.GenerateLocalizedResponse(originalItem.Name, originalItem.ArName, language);
+            itemDto.MainDetails = ErrorResponseException.GenerateLocalizedResponse(originalItem.MainDetails, originalItem.ArMainDetails, language);
+            itemDto.Description = ErrorResponseException.GenerateLocalizedResponse(originalItem.Description, originalItem.ArDescription, language);
             
-            
+            result.Add(itemDto);
         }
-        return (item, totalCount, null);
+        return (result, totalCount, null);
         
     }
 
 public async Task<(ItemDto? item, string? error)> Update(Guid id ,ItemUpdate itemUpdate, string language)
     {
         var item = await _repositoryWrapper.Item.Get(x => x.Id == id);
-        if (item == null) return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
+        if (item == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Item not found", "لم يتم العثور على العنصر", language));
         _mapper.Map(itemUpdate, item);
         var category = await _repositoryWrapper.Category.Get(c => c.Id == itemUpdate.CategoryId);
         item.Category = category;
         var result = await _repositoryWrapper.Item.Update(item);
-        if (result == null) return (null, error: ErrorResponseException.GenerateErrorResponse("Error in updating item", "خطأ في تحديث العنصر", language));
+        if (result == null) return (null, error: ErrorResponseException.GenerateLocalizedResponse("Error in updating item", "خطأ في تحديث العنصر", language));
         return (_mapper.Map<ItemDto>(result), null);
    
     }
@@ -166,9 +195,9 @@ public async Task<(ItemDto? item, string? error)> Update(Guid id ,ItemUpdate ite
 public async Task<(Item? item, string? error)> Delete(Guid id, string language)
     {
         var item = await _repositoryWrapper.Item.Get(x => x.Id == id);
-        if (item == null) return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
+        if (item == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Item not found", "لم يتم العثور على العنصر", language));
         var result = await _repositoryWrapper.Item.SoftDelete(id);
-        if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in deleting item", "خطأ في حذف العنصر", language));
+        if (result == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Error in deleting item", "خطأ في حذف العنصر", language));
         return (result, null);
     }
     public async Task<(Wishlist? wishlist, string? error)> AddOrRemoveItemToWishlist(Guid itemId, Guid userId, string language)
@@ -176,7 +205,7 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
         var item= await _repositoryWrapper.Item.GetById(itemId);
         if (item == null)
         {
-            return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
+            return (null, ErrorResponseException.GenerateLocalizedResponse("Item not found", "لم يتم العثور على العنصر", language));
         }
         var wishlist = await _repositoryWrapper.Wishlist.Get(w => w.UserId == userId);
         if (wishlist == null)
@@ -206,7 +235,7 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
         var wishlist = await _repositoryWrapper.Wishlist.Get(w => w.UserId == userId);
         if (wishlist == null)
         {
-            return (null,0, ErrorResponseException.GenerateErrorResponse("Wishlist is empty", "القائمة المفضلة فارغة", language));
+            return (null,0, ErrorResponseException.GenerateLocalizedResponse("Wishlist is empty", "القائمة المفضلة فارغة", language));
         }
         var items = new List<ItemDto>();
         foreach (var itemId in wishlist.ItemsIds)
@@ -225,7 +254,7 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
         var item = await _repositoryWrapper.Item.GetById(itemId);
         if (item == null)
         {
-            return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
+            return (null, ErrorResponseException.GenerateLocalizedResponse("Item not found", "لم يتم العثور على العنصر", language));
         }
         var liked = await _repositoryWrapper.Liked.Get(l => l.UserId == userId);
         if (liked == null)
@@ -254,7 +283,7 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
         var liked = await _repositoryWrapper.Liked.Get(l => l.UserId == userId);
         if (liked == null)
         {
-            return (null, 0, ErrorResponseException.GenerateErrorResponse("Liked list is empty", "قائمة الإعجاب فارغة", language));
+            return (null, 0, ErrorResponseException.GenerateLocalizedResponse("Liked list is empty", "قائمة الإعجاب فارغة", language));
         }
         var items = new List<ItemDto>();
         foreach (var itemId in liked.ItemsIds)
@@ -272,7 +301,7 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
         var item = await _repositoryWrapper.Item.GetById(itemId);
         if (item == null)
         {
-            return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
+            return (null, ErrorResponseException.GenerateLocalizedResponse("Item not found", "لم يتم العثور على العنصر", language));
         }
         var saleExist = await _repositoryWrapper.Sale.Get(s => s.ItemId == itemId && 
                                                                ((s.StartDate <= startDate && s.EndDate >= startDate) || 
@@ -280,7 +309,7 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
                                                                 (s.StartDate >= startDate && s.EndDate <= endDate)));
         if (saleExist != null)
         {
-            return (null, ErrorResponseException.GenerateErrorResponse("Item already has a sale scheduled during this period", "العنصر لديه تخفيض مجدول خلال هذه الفترة", language));
+            return (null, ErrorResponseException.GenerateLocalizedResponse("Item already has a sale scheduled during this period", "العنصر لديه تخفيض مجدول خلال هذه الفترة", language));
         }
 
 
@@ -302,12 +331,12 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
         var item = await _repositoryWrapper.Item.GetById(itemid);
         if (item == null)
         {
-            return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
+            return (null, ErrorResponseException.GenerateLocalizedResponse("Item not found", "لم يتم العثور على العنصر", language));
         }
         var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == item.Id && DateTime.Now >= s.StartDate && DateTime.Now <= s.EndDate);
         if (sale == null)
         {
-            return (null, ErrorResponseException.GenerateErrorResponse("Sale either doesn't exist or it is not active", "لم يتم العثور على التخفيض او التخفيض غير نشط", language));
+            return (null, ErrorResponseException.GenerateLocalizedResponse("Sale either doesn't exist or it is not active", "لم يتم العثور على التخفيض او التخفيض غير نشط", language));
         }
 
    
@@ -329,21 +358,21 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
         var sale = await _repositoryWrapper.Sale.Get(s => s.Id == saleId);
         if (sale == null)
         {
-            return (null, ErrorResponseException.GenerateErrorResponse("Sale not found", "لم يتم العثور على التخفيض", language));
+            return (null, ErrorResponseException.GenerateLocalizedResponse("Sale not found", "لم يتم العثور على التخفيض", language));
         }
         if(sale.EndDate < DateTime.Now)
         {
-            return (null, ErrorResponseException.GenerateErrorResponse("Sale already ended", "انتهى التخفيض بالفعل", language));
+            return (null, ErrorResponseException.GenerateLocalizedResponse("Sale already ended", "انتهى التخفيض بالفعل", language));
         }
         if(sale.StartDate < DateTime.Now)
         {
-            return (null, ErrorResponseException.GenerateErrorResponse("Sale already started", "بدأ التخفيض بالفعل", language));
+            return (null, ErrorResponseException.GenerateLocalizedResponse("Sale already started", "بدأ التخفيض بالفعل", language));
         }
         
         var item = await _repositoryWrapper.Item.GetById(sale.ItemId.GetValueOrDefault());
         if (item == null)
         {
-            return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
+            return (null, ErrorResponseException.GenerateLocalizedResponse("Item not found", "لم يتم العثور على العنصر", language));
         }
         item.SaleId = null;
         item.SalePrice = null;
@@ -354,7 +383,7 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
         var result = await _repositoryWrapper.Sale.SoftDelete(saleId);
         if (result == null)
         {
-            return (null, ErrorResponseException.GenerateErrorResponse("Error in deleting sale", "خطأ في حذف التخفيض", language));
+            return (null, ErrorResponseException.GenerateLocalizedResponse("Error in deleting sale", "خطأ في حذف التخفيض", language));
         }
         return (result, null);
     }
@@ -367,7 +396,7 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
     var orderItems = await _repositoryWrapper.OrderItem.GetAll();
     if (orderItems.data == null || orderItems.data.Count == 0)
     {
-        return (null, ErrorResponseException.GenerateErrorResponse("No sold items found", "لم يتم العثور على عناصر مباعة", language));
+        return (null, ErrorResponseException.GenerateLocalizedResponse("No sold items found", "لم يتم العثور على عناصر مباعة", language));
     }
 
     var soldItems = new List<ItemDto>();
@@ -391,7 +420,7 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
         var items = await _repositoryWrapper.Item.GetAll();
         if (items.data == null || items.totalCount == 0)
         {
-            return (null, ErrorResponseException.GenerateErrorResponse("No items found", "لم يتم العثور على عناصر", language));
+            return (null, ErrorResponseException.GenerateLocalizedResponse("No items found", "لم يتم العثور على عناصر", language));
         }
 
         var lowestPrice = items.data.Min(i => i.Price);

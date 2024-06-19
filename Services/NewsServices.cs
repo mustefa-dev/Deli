@@ -37,13 +37,13 @@ public class NewsServices : INewsServices
     {
         var news = _mapper.Map<News>(newsForm);
         var response = await _repositoryWrapper.News.Add(news);
-        return response == null ? (null, ErrorResponseException.GenerateErrorResponse("Error in Creating a News", "خطأ في انشاء الخبر", language)) : (response, null);
+        return response == null ? (null, ErrorResponseException.GenerateLocalizedResponse("Error in Creating a News", "خطأ في انشاء الخبر", language)) : (response, null);
     }
 
     public async Task<(News? news, string? error)> GetById(Guid id, string language)
     {
         var news = await _repositoryWrapper.News.GetById(id);
-        if (news == null) return (null, ErrorResponseException.GenerateErrorResponse("News not found", "لم يتم العثور على الخبر", language));
+        if (news == null) return (null, ErrorResponseException.GenerateLocalizedResponse("News not found", "لم يتم العثور على الخبر", language));
         return (news, null);
     }
     public async Task<(List<NewsDto> newss, int? totalCount, string? error)> GetAll(NewsFilter filter, string language)
@@ -53,14 +53,21 @@ public class NewsServices : INewsServices
             (x.ArTitle.Contains(filter.ArTitle) || filter.ArTitle==null)
             //&& (x.isMain == filter.isMain || filter.isMain == null)
             ,
-            filter.PageNumber, filter.PageSize);        
+            filter.PageNumber, filter.PageSize);
+        foreach (var ne in news)
+        {
+            var original = await _repositoryWrapper.News.GetById(ne.Id);
+            ne.Title = ErrorResponseException.GenerateLocalizedResponse(original.Title, original.ArTitle, language);
+            ne.Description = ErrorResponseException.GenerateLocalizedResponse(original.Description, original.ArDescription, language);
+            
+        }
         return (news, totalCount, null);
     }
 
     public async Task<(News? news, string? error)> Update(Guid id, NewsUpdate newsUpdate, string language)
     {
         var     news = await _repositoryWrapper.News.GetById(id);
-        if (news == null) return (null, ErrorResponseException.GenerateErrorResponse("News not found", "لم يتم العثور على الخبر", language));
+        if (news == null) return (null, ErrorResponseException.GenerateLocalizedResponse("News not found", "لم يتم العثور على الخبر", language));
         news = _mapper.Map(newsUpdate, news);
         news = await _repositoryWrapper.News.Update(news, id);
         return (news, null);
@@ -69,7 +76,7 @@ public class NewsServices : INewsServices
     public async Task<(News? news, string? error)> Delete(Guid id, string language)
     {
         var news = await _repositoryWrapper.News.GetById(id);
-        if (news == null) return (null, ErrorResponseException.GenerateErrorResponse("News not found", "لم يتم العثور على الخبر", language));
+        if (news == null) return (null, ErrorResponseException.GenerateLocalizedResponse("News not found", "لم يتم العثور على الخبر", language));
         await _repositoryWrapper.News.SoftDelete(id);
         return (news, null);
     }

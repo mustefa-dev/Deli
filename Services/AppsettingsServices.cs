@@ -57,7 +57,7 @@ public async Task<AppsettingsDto> GetMyAppSetting()
 public async Task<(AppsettingsDto? appsetting, string? error)> Update(Guid id, AppsettingsUpdate appsettingUpdate, string language)
 {
     var appsetting = await _repositoryWrapper.Appsettings.GetById(id);
-    if (appsetting == null) return (null, ErrorResponseException.GenerateErrorResponse("AppSetting not found", "لم يتم العثور على الإعدادات", language));
+    if (appsetting == null) return (null, ErrorResponseException.GenerateLocalizedResponse("AppSetting not found", "لم يتم العثور على الإعدادات", language));
     _mapper.Map(appsettingUpdate, appsetting);
     appsetting = await _repositoryWrapper.Appsettings.Update(appsetting, id);
     return (_mapper.Map<AppsettingsDto>(appsetting), null);
