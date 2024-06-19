@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Deli")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+99b9342fb4c62f5e3728a9b396d68695053e6ace")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c3d24662b7a4a9aa78743f5126b0b2230902c82d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Deli")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Deli")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

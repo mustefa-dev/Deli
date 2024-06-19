@@ -418,7 +418,6 @@ public async Task<(string? done, string? error)> Rating(Guid id, Guid userId, Ra
             return (null, "Error in Creating an Order");
         }
 
-        // Clear the cart after the order has been created
         cart.ItemOrders.Clear();
         await _repositoryWrapper.Cart.Update(_mapper.Map<Cart>(cart));
 

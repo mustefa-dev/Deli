@@ -31,6 +31,9 @@ public class UserMappingProfile : Profile
 
 
         // here to add
+CreateMap<Package, PackageDto>();
+CreateMap<PackageForm,Package>();
+CreateMap<PackageUpdate,Package>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         CreateMap<ItemOrder, ItemOrderDto>()
             .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src => src.ItemId))
             .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
