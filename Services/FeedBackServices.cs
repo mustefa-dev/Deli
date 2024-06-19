@@ -50,7 +50,7 @@ public async Task<(FeedBack? feedback, string? error)> Create(FeedBackForm feedb
 public async Task<(FeedBack? feedback, string? error)> GetById(Guid id, string language)
     {
         var feedback = await _repositoryWrapper.FeedBack.GetById(id);
-        if (feedback == null) return (null, ErrorResponseException.GenerateErrorResponse("Feedback not found", "لم يتم العثور على الرسالة", language));
+        if (feedback == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Feedback not found", "لم يتم العثور على الرسالة", language));
         return (feedback, null);
     }
 public async Task<(List<FeedBackDto> feedbacks, int? totalCount, string? error)> GetAll(FeedBackFilter filter, string language)
@@ -68,7 +68,7 @@ public async Task<(List<FeedBackDto> feedbacks, int? totalCount, string? error)>
 public async Task<(FeedBack? feedback, string? error)> Update(Guid id ,FeedBackUpdate feedbackUpdate, string language)
     {
         var feedback = await _repositoryWrapper.FeedBack.GetById(id);
-        if (feedback == null) return (null, ErrorResponseException.GenerateErrorResponse("Feedback not found", "لم يتم العثور على الرسالة", language));
+        if (feedback == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Feedback not found", "لم يتم العثور على الرسالة", language));
         feedback = _mapper.Map(feedbackUpdate, feedback);
         feedback = await _repositoryWrapper.FeedBack.Update(feedback, id);
         return (feedback, null);
@@ -78,7 +78,7 @@ public async Task<(FeedBack? feedback, string? error)> Update(Guid id ,FeedBackU
 public async Task<(FeedBack? feedback, string? error)> Delete(Guid id, string language)
     {
         var feedback = await _repositoryWrapper.FeedBack.GetById(id);
-        if (feedback == null) return (null, ErrorResponseException.GenerateErrorResponse("Feedback not found", "لم يتم العثور على الرسالة", language));
+        if (feedback == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Feedback not found", "لم يتم العثور على الرسالة", language));
         await _repositoryWrapper.FeedBack.SoftDelete(id);
         return (feedback, null);
     }

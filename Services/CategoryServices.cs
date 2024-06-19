@@ -36,30 +36,34 @@ public async Task<(Category? category, string? error)> Create(CategoryForm categ
 {
     var category = _mapper.Map<Category>(categoryForm);
     var result = await _repositoryWrapper.Category.Add(category);
-    if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in creating Category", "خطأ في إنشاء الفئة", language));
+    if (result == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Error in creating Category", "خطأ في إنشاء الفئة", language));
     return (result, null);
 }
 
 public async Task<(List<CategoryDto> categorys, int? totalCount, string? error)> GetAll(CategoryFilter filter, string language)
     {
-        var (category,totalCount) = await _repositoryWrapper.Category.GetAll<CategoryDto>(
-            x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name))&&
-                 (string.IsNullOrEmpty(filter.ArName) || x.ArName.Contains(filter.ArName))&&
+        var (categorys,totalCount) = await _repositoryWrapper.Category.GetAll<CategoryDto>(
+            x => (filter.Name == null || (x.Name.Contains(filter.Name))|| x.ArName.Contains(filter.Name)) &&
                     (filter.CategoryId == null || x.Id == filter.CategoryId),
             filter.PageNumber,
             filter.PageSize
         );
-        if (category == null) return (null, null, ErrorResponseException.GenerateErrorResponse("Error in getting Categorys", "خطأ في الحصول على الفئات", language));
-        return (category, totalCount, null);
+        if (categorys == null) return (null, null, ErrorResponseException.GenerateLocalizedResponse("Error in getting Categorys", "خطأ في الحصول على الفئات", language));
+        foreach (var  category in  categorys)
+        {
+            var originalcategory = await _repositoryWrapper.Category.Get(x => x.Id == category.Id);
+            category.Name=ErrorResponseException.GenerateLocalizedResponse(originalcategory.Name, originalcategory.ArName, language);
+        }
+        return (categorys, totalCount, null);
     }
 
 public async Task<(Category? category, string? error)> Update(Guid id ,CategoryUpdate categoryUpdate, string language)
     {
         var category = await _repositoryWrapper.Category.Get(x => x.Id == id);
-        if (category == null) return (null, ErrorResponseException.GenerateErrorResponse("Category not found", "لم يتم العثور على الفئة", language));
+        if (category == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Category not found", "لم يتم العثور على الفئة", language));
         _mapper.Map(categoryUpdate, category);
         var result = await _repositoryWrapper.Category.Update(category);
-        if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in updating category", "خطأ في تحديث الفئة", language));
+        if (result == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Error in updating category", "خطأ في تحديث الفئة", language));
         return (result, null);
         
         
@@ -68,9 +72,9 @@ public async Task<(Category? category, string? error)> Update(Guid id ,CategoryU
 public async Task<(Category? category, string? error)> Delete(Guid id, string language)
     {
         var category = await _repositoryWrapper.Category.Get(x => x.Id == id);
-        if (category == null) return (null, ErrorResponseException.GenerateErrorResponse("Category not found", "لم يتم العثور على الفئة", language));
+        if (category == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Category not found", "لم يتم العثور على الفئة", language));
         var result = await _repositoryWrapper.Category.SoftDelete(id);
-        if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in deleting category", "خطأ في حذف الفئة", language));
+        if (result == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Error in deleting category", "خطأ في حذف الفئة", language));
         return (result, null);
         
     }

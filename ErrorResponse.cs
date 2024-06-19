@@ -11,11 +11,12 @@ public class ErrorResponseException : Exception
         MessageArabic = messageArabic;
     }
 
-    public static string GenerateErrorResponse(string englishMessage, string arabicMessage, string language)
+    public static string GenerateLocalizedResponse(string englishMessage, string arabicMessage, string language)
     {
         var message = language == "ar" ? arabicMessage : englishMessage;
         return message;
     }
+    
 
     private object ToObject(string language)
     {

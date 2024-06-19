@@ -36,37 +36,44 @@ public async Task<(Inventory? inventory, string? error)> Create(InventoryForm in
 {
     var inventory = _mapper.Map<Inventory>(inventoryForm);
     var result = await _repositoryWrapper.Inventory.Add(inventory);
-    if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in Creating a Inventory", "خطأ في انشاء المخزن", language));
+    if (result == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Error in Creating a Inventory", "خطأ في انشاء المخزن", language));
     return (result, null);
 }
 
 public async Task<(List<InventoryDto> inventorys, int? totalCount, string? error)> GetAll(InventoryFilter filter, string language)
     {
-        var (inventory,totalCount) = await _repositoryWrapper.Inventory.GetAll<InventoryDto>(
+        var (inventorys,totalCount) = await _repositoryWrapper.Inventory.GetAll<InventoryDto>(
             x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name))&&
                  (string.IsNullOrEmpty(filter.ArName) || x.ArName.Contains(filter.ArName)),
             filter.PageNumber,
             filter.PageSize
         );
-        return (inventory, totalCount, null);
+        foreach (var inventory in inventorys)
+        {
+            var originalInventory = await _repositoryWrapper.Inventory.Get(x => x.Id == inventory.Id);
+            var governorate = await _repositoryWrapper.Governorate.Get(x => x.Id == originalInventory.GovernorateId);
+            inventory.Name = ErrorResponseException.GenerateLocalizedResponse(originalInventory.Name, originalInventory.ArName, language);
+            inventory.GovernorateName = ErrorResponseException.GenerateLocalizedResponse(governorate.Name, governorate.ArName, language);
+        }
+        return (inventorys, totalCount, null);
     }
 
 public async Task<(Inventory? inventory, string? error)> Update(Guid id ,InventoryUpdate inventoryUpdate, string language)
     {
         var inventory = await _repositoryWrapper.Inventory.Get(x => x.Id == id);
-        if (inventory == null) return (null, ErrorResponseException.GenerateErrorResponse("Inventory not found", "لم يتم العثور على المخزن", language));
+        if (inventory == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Inventory not found", "لم يتم العثور على المخزن", language));
         _mapper.Map(inventoryUpdate, inventory);
         var result = await _repositoryWrapper.Inventory.Update(inventory);
-        if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in updating inventory", "خطأ في تحديث المخزن", language));
+        if (result == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Error in updating inventory", "خطأ في تحديث المخزن", language));
         return (result, null);
     }
 
 public async Task<(Inventory? inventory, string? error)> Delete(Guid id, string language)
     {
         var inventory = await _repositoryWrapper.Inventory.Get(x => x.Id == id);
-        if (inventory == null) return (null, ErrorResponseException.GenerateErrorResponse("Inventory not found", "لم يتم العثور على المخزن", language));
+        if (inventory == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Inventory not found", "لم يتم العثور على المخزن", language));
         var result = await _repositoryWrapper.Inventory.SoftDelete(id);
-        if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in deleting inventory", "خطأ في حذف المخزن", language));
+        if (result == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Error in deleting inventory", "خطأ في حذف المخزن", language));
         return (result, null);
     }
 

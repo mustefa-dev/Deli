@@ -7,9 +7,9 @@ namespace Deli.Services;
 
 public interface IHomepageServices
 {
-    Task<DiscoverDeliDto> GetDiscoverDeli();
+    Task<DiscoverDeliDto> GetDiscoverDeli(string language);
     Task<(DiscoverDeliDto? discoverDeli, string? error)> Update(Guid id, DiscoverDeliUpdate discoverDeliUpdate, string language);
-    Task<WhoAreWeDto> GetMyWhoAreWe();
+    Task<WhoAreWeDto> GetMyWhoAreWe(string language);
     Task<(WhoAreWeDto? whoAreWe, string? error)> Update(Guid id, WhoAreWeUpdate whoAreWeUpdate, string language);
 }
 public class HomePageServices : IHomepageServices
@@ -23,7 +23,7 @@ public class HomePageServices : IHomepageServices
         _mapper = mapper;
     }
     
-    public async Task<DiscoverDeliDto> GetDiscoverDeli()
+    public async Task<DiscoverDeliDto> GetDiscoverDeli(string language)
     {
         // Try to retrieve the DiscoverDeli from the database
         var discoverDeli1 = await _repositoryWrapper.DiscoverDeli.GetAll();
@@ -39,7 +39,16 @@ public class HomePageServices : IHomepageServices
 
             discoverDeli = await _repositoryWrapper.DiscoverDeli.Add(defaultDiscoverDeli);
         }
-
+        var discoverdelidto = _mapper.Map<DiscoverDeliDto>(discoverDeli);
+        discoverdelidto.Title=ErrorResponseException.GenerateLocalizedResponse(discoverDeli.Title,discoverDeli.ArTitle,language);
+        discoverdelidto.Description=ErrorResponseException.GenerateLocalizedResponse(discoverDeli.Description,discoverDeli.ArDescription,language);
+        discoverdelidto.MiniTitle1=ErrorResponseException.GenerateLocalizedResponse(discoverDeli.MiniTitle1,discoverDeli.ArMiniTitle1,language);
+        discoverdelidto.MiniDescription1=ErrorResponseException.GenerateLocalizedResponse(discoverDeli.MiniDescription1,discoverDeli.ArMiniDescription1,language);
+        discoverdelidto.MiniTitle2=ErrorResponseException.GenerateLocalizedResponse(discoverDeli.MiniTitle2,discoverDeli.ArMiniTitle2,language);
+        discoverdelidto.MiniDescription2=ErrorResponseException.GenerateLocalizedResponse(discoverDeli.MiniDescription2,discoverDeli.ArMiniDescription2,language);
+        discoverdelidto.MiniTitle3=ErrorResponseException.GenerateLocalizedResponse(discoverDeli.MiniTitle3,discoverDeli.ArMiniTitle3,language);
+        discoverdelidto.MiniDescription3=ErrorResponseException.GenerateLocalizedResponse(discoverDeli.MiniDescription3,discoverDeli.ArMiniDescription3,language);
+        
         // Map it to DiscoverDeliDto and return
         return _mapper.Map<DiscoverDeliDto>(discoverDeli);
     }
@@ -47,13 +56,13 @@ public class HomePageServices : IHomepageServices
     public async Task<(DiscoverDeliDto? discoverDeli, string? error)> Update(Guid id, DiscoverDeliUpdate discoverDeliUpdate, string language)
     {
         var discoverDeli = await _repositoryWrapper.DiscoverDeli.GetById(id);
-        if (discoverDeli == null) return (null, ErrorResponseException.GenerateErrorResponse("DiscoverDeli not found", "لم يتم العثور على المعلومات", language));
+        if (discoverDeli == null) return (null, ErrorResponseException.GenerateLocalizedResponse("DiscoverDeli not found", "لم يتم العثور على المعلومات", language));
         _mapper.Map(discoverDeliUpdate, discoverDeli);
         discoverDeli = await _repositoryWrapper.DiscoverDeli.Update(discoverDeli, id);
         return (_mapper.Map<DiscoverDeliDto>(discoverDeli), null);
     }
     
-    public async Task<WhoAreWeDto> GetMyWhoAreWe()
+    public async Task<WhoAreWeDto> GetMyWhoAreWe(string language)
     {
         // Try to retrieve the WhoAreWe from the database
         var whoAreWe1 = await _repositoryWrapper.WhoAreWe.GetAll();
@@ -70,14 +79,16 @@ public class HomePageServices : IHomepageServices
             whoAreWe = await _repositoryWrapper.WhoAreWe.Add(defaultWhoAreWe);
         }
 
-        // Map it to WhoAreWeDto and return
-        return _mapper.Map<WhoAreWeDto>(whoAreWe);
+        var whoarewedto = _mapper.Map<WhoAreWeDto>(whoAreWe);
+        whoarewedto.Title=ErrorResponseException.GenerateLocalizedResponse(whoAreWe.Title,whoAreWe.ArTitle,language);
+        whoarewedto.Description=ErrorResponseException.GenerateLocalizedResponse(whoAreWe.Description,whoAreWe.ArDescription,language);
+        return whoarewedto;
     }
 
     public async Task<(WhoAreWeDto? whoAreWe, string? error)> Update(Guid id, WhoAreWeUpdate whoAreWeUpdate, string language)
     {
         var whoAreWe = await _repositoryWrapper.WhoAreWe.GetById(id);
-        if (whoAreWe == null) return (null, ErrorResponseException.GenerateErrorResponse("WhoAreWe not found", "لم يتم العثور على المعلومات", language));
+        if (whoAreWe == null) return (null, ErrorResponseException.GenerateLocalizedResponse("WhoAreWe not found", "لم يتم العثور على المعلومات", language));
         _mapper.Map(whoAreWeUpdate, whoAreWe);
         whoAreWe = await _repositoryWrapper.WhoAreWe.Update(whoAreWe, id);
         return (_mapper.Map<WhoAreWeDto>(whoAreWe), null);
