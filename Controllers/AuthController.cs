@@ -59,7 +59,16 @@ public class UsersController : BaseController{
     public async Task<ActionResult> SendEmailToSubscribedToNewsUsers(string subject, string body) =>
         Ok(await _userService.SendEmailToAllSubscribedUsers(subject, body, Language)); 
     
-    
+    [HttpPost("login-facebook")]
+    public async Task<IActionResult> LoginWithFacebook(FacebookLoginDto facebookLoginDto)
+    {
+        var (user, error) = await _userService.LoginWithFacebook(facebookLoginDto.FacebookId, facebookLoginDto.AccessToken, "en");
+        if (error != null)
+        {
+            return BadRequest(error);
+        }
+        return Ok(user);
+    }
     
     [HttpPost("OTPverification")]
     public async Task<ActionResult> OTPverification(string email, string otp) =>

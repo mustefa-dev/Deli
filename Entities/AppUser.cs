@@ -22,6 +22,8 @@ namespace Deli.Entities
         public List<Review> Reviews { get; set; }
         
 
+        public string? FacebookId { get; set; }
+        public string? FacebookAccessToken { get; set; }
 
     
     }
