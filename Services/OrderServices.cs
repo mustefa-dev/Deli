@@ -51,6 +51,7 @@ public class OrderServices : IOrderServices
         var order = _mapper.Map<Order>(orderForm);
         order.UserId = userId;
         order.DateOfAccepted = null;
+        order.OrderNumber = RandomNumberGeneratorNumber.GenerateUnique6DigitNumber(_repositoryWrapper);
 
         var user = await _repositoryWrapper.User.Get(x => x.Id == userId);
         if (user == null)
@@ -76,7 +77,6 @@ public class OrderServices : IOrderServices
             orderItem.OrderId = addedOrder.Id;
             orderItem.ItemPrice = item.Price;
             totalPrice += orderItem.Quantity * (decimal)(item.Price ?? 0.0);
-            deliveryPrice = user.Addresses.FirstOrDefault(x => x.Id == user.GovernorateId)?.Governorate?.DeliveryPrice ?? 0;
             await _repositoryWrapper.OrderItem.Add(orderItem);
         }
 
@@ -97,6 +97,7 @@ public class OrderServices : IOrderServices
                 (filter.OrderDate == null || x.OrderDate == filter.OrderDate) &&
                 (filter.OrderStatus == null || x.OrderStatus == filter.OrderStatus) &&
                 (filter.Note == null || x.Note.Contains(filter.Note)) &&
+                (filter.OrderNumber == null || x.Note.Contains(filter.OrderNumber)) &&
                 (filter.UserId == filter.UserId) &&
                 (filter.Rating == null || x.Rating == filter.Rating) &&
                 (filter.DateOfAccepted == null || x.DateOfAccepted == filter.DateOfAccepted) &&
@@ -333,12 +334,10 @@ public async Task<(string? done, string? error)> Rating(Guid id, Guid userId, Ra
     // Step 2: Organize the Data
     var salesTransactions = allOrderItems.GroupBy(orderItem => orderItem.ItemId).ToDictionary(group => group.Key, group => group.ToList());
 
-    // Step 3: Calculate Key Metrics
     decimal totalSales = 0;
     decimal totalProfit = 0;
     int totalItemsSold = 0;
 
-    // Initialize variables to store best selling items for each category, inventory, and government
     ItemDto bestSellingItemByCategory = null;
     ItemDto bestSellingItemByInventory = null;
     ItemDto bestSellingItemByGovernorate = null;
@@ -348,21 +347,18 @@ public async Task<(string? done, string? error)> Rating(Guid id, Guid userId, Ra
         int itemSales = salesTransactions.TryGetValue(item.Id, out var transactions) ? transactions.Sum(t => t.Quantity) : 0;
         totalItemsSold += itemSales;
 
-        // Update best selling item for the item's category
         if (item.Category != null && (bestSellingItemByCategory == null || itemSales >= bestSellingItemByCategory.Quantity))
         {
             bestSellingItemByCategory = _mapper.Map<ItemDto>(item);
             bestSellingItemByCategory.CategoryName = item.Category.Name;
         }
 
-        // Update best selling item for the item's inventory
         if (item.Inventory != null && (bestSellingItemByInventory == null || itemSales >= bestSellingItemByInventory.Quantity))
         {
             bestSellingItemByInventory = _mapper.Map<ItemDto>(item);
             bestSellingItemByInventory.InventoryName = item.Inventory.Name;
         }
 
-        // Update best selling item for the item's government
         if (item.Inventory != null && item.Inventory.Governorate != null && (bestSellingItemByGovernorate == null || itemSales >= bestSellingItemByGovernorate.Quantity))
         {
             bestSellingItemByGovernorate = _mapper.Map<ItemDto>(item);
@@ -379,7 +375,6 @@ public async Task<(string? done, string? error)> Rating(Guid id, Guid userId, Ra
         }
     }
 
-    // Step 4: Structure the Report
     var report = new FinancialReport
     {
         TotalSales = totalSales,

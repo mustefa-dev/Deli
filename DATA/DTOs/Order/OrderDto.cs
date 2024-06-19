@@ -25,6 +25,8 @@ namespace Deli.DATA.DTOs
         public string? GovernorateName{ get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
+        public long OrderNumber { get; set; }
+
         
 
     }

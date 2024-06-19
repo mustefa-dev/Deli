@@ -18,6 +18,6 @@ namespace Deli.DATA.DTOs
         public DateTime? DateOfCanceled { get; set; }
         public DateTime? DateOfDelivered { get; set; }
         public Guid? AddressId { get; set; }
-        
+        public string? OrderNumber { get; set; }
     }
 }
