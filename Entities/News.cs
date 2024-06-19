@@ -5,10 +5,13 @@ namespace Deli.Entities
 {
     public class News : BaseEntity<Guid>
     {
-        [Required]
+     
         public string Title { get; set; }
+        public string ArTitle { get; set; }
+        
         public string Description { get; set; }
-        [Required]
+        public string ArDescription { get; set; }
+   
         public string Image { get; set; }
         public List<string> Images {get; set;}
         [Required]

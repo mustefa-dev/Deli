@@ -49,7 +49,9 @@ public class NewsServices : INewsServices
     public async Task<(List<NewsDto> newss, int? totalCount, string? error)> GetAll(NewsFilter filter, string language)
     {
         var (news, totalCount) = await _repositoryWrapper.News.GetAll<NewsDto>(
-            x => (x.Title.Contains(filter.Title) || filter.Title==null) //&& (x.isMain == filter.isMain || filter.isMain == null)
+            x => (x.Title.Contains(filter.Title) || filter.Title==null) &&
+            (x.ArTitle.Contains(filter.ArTitle) || filter.ArTitle==null)
+            //&& (x.isMain == filter.isMain || filter.isMain == null)
             ,
             filter.PageNumber, filter.PageSize);        
         return (news, totalCount, null);

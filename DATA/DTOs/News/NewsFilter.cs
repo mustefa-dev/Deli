@@ -6,5 +6,6 @@ namespace Deli.DATA.DTOs
     public class NewsFilter : BaseFilter 
     {
         public string? Title { get; set; }
+        public string? ArTitle { get; set; }
     }
 }

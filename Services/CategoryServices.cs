@@ -43,8 +43,9 @@ public async Task<(Category? category, string? error)> Create(CategoryForm categ
 public async Task<(List<CategoryDto> categorys, int? totalCount, string? error)> GetAll(CategoryFilter filter, string language)
     {
         var (category,totalCount) = await _repositoryWrapper.Category.GetAll<CategoryDto>(
-            x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name)&&
-                    filter.CategoryId == null || x.Id == filter.CategoryId),
+            x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name))&&
+                 (string.IsNullOrEmpty(filter.ArName) || x.ArName.Contains(filter.ArName))&&
+                    (filter.CategoryId == null || x.Id == filter.CategoryId),
             filter.PageNumber,
             filter.PageSize
         );

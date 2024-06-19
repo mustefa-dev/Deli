@@ -4,8 +4,7 @@ namespace Deli.DATA.DTOs
     public class ItemFilter : BaseFilter 
     {
         public string? Name { get; set; }
-        public  string? MainDetails { get; set; }
-        public string? Description { get; set; }
+        public string? ArName { get; set; }
         public string? RefNumber { get; set; }
         public double? StartPrice { get; set; }=0;
         public float? AvgRating { get; set; }
