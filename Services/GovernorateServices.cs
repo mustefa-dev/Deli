@@ -42,7 +42,8 @@ public class GovernorateServices : IGovernorateServices
     {
         var (governorate, totalCount) = await _repositoryWrapper.Governorate.GetAll<GovernorateDto>(
             x =>
-                (filter.Name == null || x.Name.Contains(filter.Name)),
+                (filter.Name == null || x.Name.Contains(filter.Name))&&
+                (filter.ArName == null || x.ArName.Contains(filter.ArName)),
             filter.PageNumber, filter.PageSize
         );
         var responseDto = _mapper.Map<List<GovernorateDto>>(governorate);

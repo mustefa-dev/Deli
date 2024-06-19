@@ -43,7 +43,8 @@ public async Task<(Inventory? inventory, string? error)> Create(InventoryForm in
 public async Task<(List<InventoryDto> inventorys, int? totalCount, string? error)> GetAll(InventoryFilter filter, string language)
     {
         var (inventory,totalCount) = await _repositoryWrapper.Inventory.GetAll<InventoryDto>(
-            x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name)),
+            x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name))&&
+                 (string.IsNullOrEmpty(filter.ArName) || x.ArName.Contains(filter.ArName)),
             filter.PageNumber,
             filter.PageSize
         );

@@ -15,7 +15,7 @@ public interface IItemServices
 Task<(Item? item, string? error)> Create(ItemForm itemForm, string language);
 Task<(ItemDto? item, string? error)> GetById(Guid userId,Guid id, string language);
 Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(Guid userId,ItemFilter filter, string language);
-Task<(Item? item, string? error)> Update(Guid id , ItemUpdate itemUpdate, string language);
+Task<(ItemDto? item, string? error)> Update(Guid id , ItemUpdate itemUpdate, string language);
 Task<(Item? item, string? error)> Delete(Guid id, string language);
 Task<(Wishlist? wishlist, string? error)> AddOrRemoveItemToWishlist(Guid itemId,Guid userId, string language);
 Task<(ICollection<ItemDto>? items,int? count, string? error)> GetMyWishlist(Guid userId, string language);
@@ -93,8 +93,9 @@ public async Task<(ItemDto? item, string? error)> GetById(Guid userId,Guid id, s
 public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(Guid userId,ItemFilter filter, string language)
     {
         var (item,totalCount) = await _repositoryWrapper.Item.GetAll<ItemDto>(
-            x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name)&&
-                    filter.RefNumber == null || x.RefNumber == filter.RefNumber )&&
+            x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name))&&
+                   (string.IsNullOrEmpty(filter.ArName) || x.ArName.Contains(filter.ArName))&&
+                    (filter.RefNumber == null || x.RefNumber == filter.RefNumber )&&
            
                  (filter.EndPrice ==null ||x.Price >= filter.StartPrice && x.Price<=filter.EndPrice) &&
                  
@@ -103,7 +104,9 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
            // (filter.StartPrice == null || x.SalePrice >= filter.StartPrice) &&   // to filter items based on start and end prices with sale
             //(filter.EndPrice == null || x.SalePrice <= filter.EndPrice)&&
             (filter.AvgRating == null || x.AvgRating >= filter.AvgRating)&&
-            (filter.IsSale==null || x.SalePrice!=null),
+            (filter.IsSale==null || x.SalePrice!=null)&&
+                 (filter.Quantity == null || x.Quantity >= filter.Quantity),
+            
             filter.PageNumber,
             filter.PageSize
         );
@@ -144,7 +147,7 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
         
     }
 
-public async Task<(Item? item, string? error)> Update(Guid id ,ItemUpdate itemUpdate, string language)
+public async Task<(ItemDto? item, string? error)> Update(Guid id ,ItemUpdate itemUpdate, string language)
     {
         var item = await _repositoryWrapper.Item.Get(x => x.Id == id);
         if (item == null) return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "لم يتم العثور على العنصر", language));
@@ -153,7 +156,8 @@ public async Task<(Item? item, string? error)> Update(Guid id ,ItemUpdate itemUp
         item.Category = category;
         var result = await _repositoryWrapper.Item.Update(item);
         if (result == null) return (null, error: ErrorResponseException.GenerateErrorResponse("Error in updating item", "خطأ في تحديث العنصر", language));
-        return (result, null);
+        return (_mapper.Map<ItemDto>(result), null);
+   
     }
 
 public async Task<(Item? item, string? error)> Delete(Guid id, string language)

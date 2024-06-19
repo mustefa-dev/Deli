@@ -44,6 +44,7 @@ public async Task<(List<CategoryDto> categorys, int? totalCount, string? error)>
     {
         var (category,totalCount) = await _repositoryWrapper.Category.GetAll<CategoryDto>(
             x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name))&&
+                 (string.IsNullOrEmpty(filter.ArName) || x.ArName.Contains(filter.ArName))&&
                     (filter.CategoryId == null || x.Id == filter.CategoryId),
             filter.PageNumber,
             filter.PageSize

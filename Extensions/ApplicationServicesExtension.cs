@@ -17,6 +17,12 @@ public static class ApplicationServicesExtension
         
         services.AddDbContext<DataContext>(
             options => options.UseNpgsql(config.GetConnectionString("server")));
+        
+        services.AddControllers()
+            .AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
         services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();

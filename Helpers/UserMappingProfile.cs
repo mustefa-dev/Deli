@@ -127,7 +127,10 @@ CreateMap<Item, ItemDto>()
     
 CreateMap<ItemForm,Item>();
 CreateMap<ItemUpdate,Item>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-CreateMap<Inventory, InventoryDto>();
+CreateMap<Inventory, InventoryDto>().ForMember(dest=>dest.GovernorateName,
+    opt=>opt.MapFrom(src=>src.Governorate.Name))
+    .ForMember(dest=>dest.ArGovernorateName,
+        opt=>opt.MapFrom(src=>src.Governorate.ArName));
 CreateMap<InventoryForm,Inventory>();
 CreateMap<InventoryUpdate,Inventory>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Governorate, GovernorateDto>();
