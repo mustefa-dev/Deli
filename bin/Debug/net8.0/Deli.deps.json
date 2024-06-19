@@ -15,7 +15,7 @@
           "Facebook": "7.0.10-beta",
           "Facebook.ApiClient": "2.0.2",
           "HtmlAgilityPack": "1.11.61",
-          "Microsoft.AspNetCore.Authentication.Facebook": "8.0.6",
+          "Microsoft.AspNetCore.Authentication.Facebook": "7.0.20",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.0",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "7.0.0",
           "Microsoft.AspNetCore.OpenApi": "7.0.5",
@@ -198,11 +198,11 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Authentication.Facebook/8.0.6": {
+      "Microsoft.AspNetCore.Authentication.Facebook/7.0.20": {
         "runtime": {
-          "lib/net8.0/Microsoft.AspNetCore.Authentication.Facebook.dll": {
-            "assemblyVersion": "8.0.6.0",
-            "fileVersion": "8.0.624.26909"
+          "lib/net7.0/Microsoft.AspNetCore.Authentication.Facebook.dll": {
+            "assemblyVersion": "7.0.20.0",
+            "fileVersion": "7.0.2024.26907"
           }
         }
       },
@@ -1417,12 +1417,12 @@
       "path": "jsonsubtypes/1.8.0",
       "hashPath": "jsonsubtypes.1.8.0.nupkg.sha512"
     },
-    "Microsoft.AspNetCore.Authentication.Facebook/8.0.6": {
+    "Microsoft.AspNetCore.Authentication.Facebook/7.0.20": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-82DoyiTJrOPW2Uw0yfvvpdGnOJigP9/AHCrlmvGG2KYJO54+OKJp/Ykp5Waquy9s97wNCYtrA0sGAgPoFBcnzQ==",
-      "path": "microsoft.aspnetcore.authentication.facebook/8.0.6",
-      "hashPath": "microsoft.aspnetcore.authentication.facebook.8.0.6.nupkg.sha512"
+      "sha512": "sha512-10IAZPxLtCiLZcJgYPr14wQJ4510jRSlbjLt2X4YhsmRLkng+XIRakzQosqhqMz6AKO/e5LuPbf6UUW2P6scAw==",
+      "path": "microsoft.aspnetcore.authentication.facebook/7.0.20",
+      "hashPath": "microsoft.aspnetcore.authentication.facebook.7.0.20.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.0": {
       "type": "package",

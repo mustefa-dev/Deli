@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Deli.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240618180301_init")]
-    partial class init
+    [Migration("20240619074354_CartOrder")]
+    partial class CartOrder
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,6 +87,12 @@ namespace Deli.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
+                    b.Property<string>("FacebookAccessToken")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FacebookId")
+                        .HasColumnType("text");
+
                     b.Property<string>("FullName")
                         .HasColumnType("text");
 
@@ -156,11 +162,42 @@ namespace Deli.Migrations
                     b.ToTable("Appsettingss");
                 });
 
+            modelBuilder.Entity("Deli.Entities.Cart", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Carts");
+                });
+
             modelBuilder.Entity("Deli.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArName")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
@@ -191,6 +228,12 @@ namespace Deli.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArTitle")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
 
@@ -216,6 +259,30 @@ namespace Deli.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniDescription1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniDescription2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniDescription3")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniTitle1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniTitle2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniTitle3")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArTitle")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
@@ -296,6 +363,9 @@ namespace Deli.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ArName")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
 
@@ -318,6 +388,9 @@ namespace Deli.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("ArName")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
@@ -347,6 +420,16 @@ namespace Deli.Migrations
                     b.Property<Dictionary<string, string>>("AdditionalInfo")
                         .IsRequired()
                         .HasColumnType("hstore");
+
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMainDetails")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArName")
+                        .HasColumnType("text");
 
                     b.Property<float?>("AvgRating")
                         .HasColumnType("real");
@@ -410,6 +493,36 @@ namespace Deli.Migrations
                     b.ToTable("Items");
                 });
 
+            modelBuilder.Entity("Deli.Entities.ItemOrder", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CartId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("ItemOrders");
+                });
+
             modelBuilder.Entity("Deli.Entities.Liked", b =>
                 {
                     b.Property<Guid>("Id")
@@ -467,6 +580,9 @@ namespace Deli.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
 
@@ -492,6 +608,14 @@ namespace Deli.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("ArDescription")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
@@ -614,6 +738,21 @@ namespace Deli.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("GovernorateId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("GovernorateName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
                     b.Property<decimal?>("Latitude")
                         .HasColumnType("numeric");
 
@@ -626,14 +765,23 @@ namespace Deli.Migrations
                     b.Property<DateTime?>("OrderDate")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<long>("OrderNumber")
+                        .HasColumnType("bigint");
+
                     b.Property<int?>("OrderStatus")
                         .HasColumnType("integer");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
 
                     b.Property<Guid?>("ProviderId")
                         .HasColumnType("uuid");
 
                     b.Property<double?>("Rating")
                         .HasColumnType("double precision");
+
+                    b.Property<string>("StreetAddress")
+                        .HasColumnType("text");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("numeric");
@@ -689,6 +837,30 @@ namespace Deli.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniDescription1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniDescription2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniDescription3")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniTitle1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniTitle2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniTitle3")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArTitle")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
 
@@ -732,6 +904,12 @@ namespace Deli.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArTitle")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
@@ -832,6 +1010,12 @@ namespace Deli.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArTitle")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
 
@@ -897,6 +1081,15 @@ namespace Deli.Migrations
                     b.Navigation("Governorate");
                 });
 
+            modelBuilder.Entity("Deli.Entities.Cart", b =>
+                {
+                    b.HasOne("Deli.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Deli.Entities.Inventory", b =>
                 {
                     b.HasOne("Deli.Entities.Governorate", "Governorate")
@@ -919,6 +1112,25 @@ namespace Deli.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Inventory");
+                });
+
+            modelBuilder.Entity("Deli.Entities.ItemOrder", b =>
+                {
+                    b.HasOne("Deli.Entities.Cart", "Cart")
+                        .WithMany("CartProducts")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Deli.Entities.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("Deli.Entities.Order", b =>
@@ -984,6 +1196,11 @@ namespace Deli.Migrations
                     b.Navigation("Addresses");
 
                     b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("Deli.Entities.Cart", b =>
+                {
+                    b.Navigation("CartProducts");
                 });
 
             modelBuilder.Entity("Deli.Entities.Category", b =>

@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Deli.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240618194820_facebook")]
-    partial class facebook
+    [Migration("20240619065509_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -168,6 +168,12 @@ namespace Deli.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArName")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
 
@@ -197,6 +203,12 @@ namespace Deli.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArTitle")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
 
@@ -222,6 +234,30 @@ namespace Deli.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniDescription1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniDescription2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniDescription3")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniTitle1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniTitle2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniTitle3")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArTitle")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
@@ -302,6 +338,9 @@ namespace Deli.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ArName")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
 
@@ -324,6 +363,9 @@ namespace Deli.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("ArName")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
@@ -353,6 +395,16 @@ namespace Deli.Migrations
                     b.Property<Dictionary<string, string>>("AdditionalInfo")
                         .IsRequired()
                         .HasColumnType("hstore");
+
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMainDetails")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArName")
+                        .HasColumnType("text");
 
                     b.Property<float?>("AvgRating")
                         .HasColumnType("real");
@@ -473,6 +525,9 @@ namespace Deli.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
 
@@ -498,6 +553,14 @@ namespace Deli.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("ArDescription")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
@@ -620,6 +683,21 @@ namespace Deli.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("GovernorateId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("GovernorateName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
                     b.Property<decimal?>("Latitude")
                         .HasColumnType("numeric");
 
@@ -632,14 +710,23 @@ namespace Deli.Migrations
                     b.Property<DateTime?>("OrderDate")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<long>("OrderNumber")
+                        .HasColumnType("bigint");
+
                     b.Property<int?>("OrderStatus")
                         .HasColumnType("integer");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
 
                     b.Property<Guid?>("ProviderId")
                         .HasColumnType("uuid");
 
                     b.Property<double?>("Rating")
                         .HasColumnType("double precision");
+
+                    b.Property<string>("StreetAddress")
+                        .HasColumnType("text");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("numeric");
@@ -695,6 +782,30 @@ namespace Deli.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniDescription1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniDescription2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniDescription3")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniTitle1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniTitle2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArMiniTitle3")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArTitle")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
 
@@ -738,6 +849,12 @@ namespace Deli.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArTitle")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");
@@ -837,6 +954,12 @@ namespace Deli.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("ArDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArTitle")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CreationDate")
                         .HasColumnType("timestamp without time zone");

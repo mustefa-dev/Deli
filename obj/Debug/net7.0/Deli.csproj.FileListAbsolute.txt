@@ -248,3 +248,11 @@ C:/Users/Lenovo/RiderProjects/DeliAPI/obj/Debug/net7.0/ref/Deli.dll
 /home/falah/RiderProjects/Deli_Api/obj/Debug/net7.0/Deli.pdb
 /home/falah/RiderProjects/Deli_Api/obj/Debug/net7.0/Deli.genruntimeconfig.cache
 /home/falah/RiderProjects/Deli_Api/obj/Debug/net7.0/ref/Deli.dll
+/home/falah/RiderProjects/Deli_Api/bin/Debug/net7.0/DotNetOpenAuth.AspNet.dll
+/home/falah/RiderProjects/Deli_Api/bin/Debug/net7.0/DotNetOpenAuth.Core.dll
+/home/falah/RiderProjects/Deli_Api/bin/Debug/net7.0/DotNetOpenAuth.OAuth.Consumer.dll
+/home/falah/RiderProjects/Deli_Api/bin/Debug/net7.0/DotNetOpenAuth.OAuth.dll
+/home/falah/RiderProjects/Deli_Api/bin/Debug/net7.0/DotNetOpenAuth.OpenId.dll
+/home/falah/RiderProjects/Deli_Api/bin/Debug/net7.0/DotNetOpenAuth.OpenId.RelyingParty.dll
+/home/falah/RiderProjects/Deli_Api/bin/Debug/net7.0/Microsoft.AspNetCore.Authentication.Facebook.dll
+/home/falah/RiderProjects/Deli_Api/bin/Debug/net7.0/System.Net.Http.WebRequest.dll

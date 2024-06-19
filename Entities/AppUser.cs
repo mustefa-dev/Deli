@@ -18,14 +18,13 @@ namespace Deli.Entities
         public ICollection<Address>? Addresses { get; set; }
         public Guid? AddressId { get; set; }
         public Guid? GovernorateId { get; set; }
+        public Governorate Governorate { get; set; }
 
         public List<Review> Reviews { get; set; }
         
 
         public string? FacebookId { get; set; }
         public string? FacebookAccessToken { get; set; }
-
-    
     }
     public enum UserRole
     {

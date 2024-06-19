@@ -40,7 +40,9 @@ namespace Deli.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
+                    ArName = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
+                    ArDescription = table.Column<string>(type: "text", nullable: true),
                     Image = table.Column<string>(type: "text", nullable: true),
                     NumOfItems = table.Column<int>(type: "integer", nullable: true),
                     Deleted = table.Column<bool>(type: "boolean", nullable: false),
@@ -57,7 +59,9 @@ namespace Deli.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: true),
+                    ArTitle = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
+                    ArDescription = table.Column<string>(type: "text", nullable: true),
                     Image = table.Column<string>(type: "text", nullable: true),
                     Deleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
@@ -73,15 +77,23 @@ namespace Deli.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: true),
+                    ArTitle = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
+                    ArDescription = table.Column<string>(type: "text", nullable: true),
                     Image = table.Column<string>(type: "text", nullable: true),
                     RedirectButton = table.Column<string>(type: "text", nullable: true),
                     MiniTitle1 = table.Column<string>(type: "text", nullable: true),
+                    ArMiniTitle1 = table.Column<string>(type: "text", nullable: true),
                     MiniDescription1 = table.Column<string>(type: "text", nullable: true),
+                    ArMiniDescription1 = table.Column<string>(type: "text", nullable: true),
                     MiniTitle2 = table.Column<string>(type: "text", nullable: true),
+                    ArMiniTitle2 = table.Column<string>(type: "text", nullable: true),
                     MiniDescription2 = table.Column<string>(type: "text", nullable: true),
+                    ArMiniDescription2 = table.Column<string>(type: "text", nullable: true),
                     MiniTitle3 = table.Column<string>(type: "text", nullable: true),
+                    ArMiniTitle3 = table.Column<string>(type: "text", nullable: true),
                     MiniDescription3 = table.Column<string>(type: "text", nullable: true),
+                    ArMiniDescription3 = table.Column<string>(type: "text", nullable: true),
                     Deleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
@@ -114,6 +126,7 @@ namespace Deli.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
+                    ArName = table.Column<string>(type: "text", nullable: true),
                     DeliveryPrice = table.Column<int>(type: "integer", nullable: false),
                     Deleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
@@ -161,6 +174,7 @@ namespace Deli.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Year = table.Column<int>(type: "integer", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
+                    ArDescription = table.Column<string>(type: "text", nullable: true),
                     Image = table.Column<string>(type: "text", nullable: true),
                     Deleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
@@ -176,7 +190,9 @@ namespace Deli.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
+                    ArTitle = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
+                    ArDescription = table.Column<string>(type: "text", nullable: false),
                     Image = table.Column<string>(type: "text", nullable: false),
                     Images = table.Column<List<string>>(type: "text[]", nullable: false),
                     isMain = table.Column<bool>(type: "boolean", nullable: false),
@@ -231,14 +247,22 @@ namespace Deli.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: true),
+                    ArTitle = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
+                    ArDescription = table.Column<string>(type: "text", nullable: true),
                     Image = table.Column<string>(type: "text", nullable: true),
                     MiniTitle1 = table.Column<string>(type: "text", nullable: true),
+                    ArMiniTitle1 = table.Column<string>(type: "text", nullable: true),
                     MiniDescription1 = table.Column<string>(type: "text", nullable: true),
+                    ArMiniDescription1 = table.Column<string>(type: "text", nullable: true),
                     MiniTitle2 = table.Column<string>(type: "text", nullable: true),
+                    ArMiniTitle2 = table.Column<string>(type: "text", nullable: true),
                     MiniDescription2 = table.Column<string>(type: "text", nullable: true),
+                    ArMiniDescription2 = table.Column<string>(type: "text", nullable: true),
                     MiniTitle3 = table.Column<string>(type: "text", nullable: true),
+                    ArMiniTitle3 = table.Column<string>(type: "text", nullable: true),
                     MiniDescription3 = table.Column<string>(type: "text", nullable: true),
+                    ArMiniDescription3 = table.Column<string>(type: "text", nullable: true),
                     Deleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
@@ -253,7 +277,9 @@ namespace Deli.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: true),
+                    ArTitle = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
+                    ArDescription = table.Column<string>(type: "text", nullable: true),
                     Image = table.Column<string>(type: "text", nullable: true),
                     RedirectButton = table.Column<string>(type: "text", nullable: true),
                     Deleted = table.Column<bool>(type: "boolean", nullable: false),
@@ -280,6 +306,8 @@ namespace Deli.Migrations
                     IsActive = table.Column<bool>(type: "boolean", nullable: true),
                     AddressId = table.Column<Guid>(type: "uuid", nullable: true),
                     GovernorateId = table.Column<Guid>(type: "uuid", nullable: true),
+                    FacebookId = table.Column<string>(type: "text", nullable: true),
+                    FacebookAccessToken = table.Column<string>(type: "text", nullable: true),
                     Deleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
@@ -294,7 +322,9 @@ namespace Deli.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: true),
+                    ArTitle = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
+                    ArDescription = table.Column<string>(type: "text", nullable: true),
                     RedirectButton = table.Column<string>(type: "text", nullable: true),
                     Image1 = table.Column<string>(type: "text", nullable: true),
                     Image2 = table.Column<string>(type: "text", nullable: true),
@@ -328,6 +358,7 @@ namespace Deli.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
+                    ArName = table.Column<string>(type: "text", nullable: true),
                     GovernorateId = table.Column<Guid>(type: "uuid", nullable: true),
                     Deleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
@@ -378,8 +409,11 @@ namespace Deli.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
+                    ArName = table.Column<string>(type: "text", nullable: true),
                     MainDetails = table.Column<string>(type: "text", nullable: false),
+                    ArMainDetails = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
+                    ArDescription = table.Column<string>(type: "text", nullable: true),
                     RefNumber = table.Column<string>(type: "text", nullable: true),
                     AdditionalInfo = table.Column<Dictionary<string, string>>(type: "hstore", nullable: false),
                     imaages = table.Column<string[]>(type: "text[]", nullable: false),
@@ -429,6 +463,14 @@ namespace Deli.Migrations
                     DateOfDelivered = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Rating = table.Column<double>(type: "double precision", nullable: true),
                     TotalPrice = table.Column<decimal>(type: "numeric", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
+                    StreetAddress = table.Column<string>(type: "text", nullable: true),
+                    GovernorateId = table.Column<Guid>(type: "uuid", nullable: true),
+                    GovernorateName = table.Column<string>(type: "text", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    OrderNumber = table.Column<long>(type: "bigint", nullable: false),
                     Deleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },

@@ -1,5 +1,7 @@
 using AutoMapper;
 using Deli.DATA.DTOs;
+using Deli.DATA.DTOs.cart;
+using Deli.DATA.DTOs.Cart;
 using Deli.DATA.DTOs.Item;
 using Deli.DATA.DTOs.User;
 using Deli.Entities;
@@ -17,6 +19,7 @@ public class UserMappingProfile : Profile
 
        
         CreateMap<AppUser, UserDto>();
+        CreateMap<UserDto, AppUser>();
         CreateMap<UpdateUserForm, AppUser>();
         CreateMap<AppUser, TokenDTO>();
 
@@ -28,6 +31,30 @@ public class UserMappingProfile : Profile
 
 
         // here to add
+        CreateMap<ItemOrder, ItemOrderDto>()
+            .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src => src.ItemId))
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+            .ForMember(dest => dest.Item, opt => opt.MapFrom(src => src.Item));
+        CreateMap<ItemOrder, CartOrderDto>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Item.Name))
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Item.Price.HasValue ? (int?)src.Item.Price.Value : null))
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+            .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src => src.ItemId))
+            .ForMember(dest => dest.ItemPrice, opt => opt.MapFrom(src => src.Item.Price.HasValue ? src.Item.Price.Value.ToString() : "0"))
+            .ForMember(dest => dest.ItemName, opt => opt.MapFrom(src => src.Item.Name))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            
+            .ForMember(dest => dest.Image, opt => opt.MapFrom(src => baseUrl + src.Item.imaages.FirstOrDefault()));
+        CreateMap<ItemOrderForm,ItemOrder>();
+CreateMap<ItemOrderUpdate,ItemOrder>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<Cart, CartDto>()
+    .ForMember(dest => dest.CartOrderDto, opt => opt.MapFrom(src => src.ItemOrders))
+    .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
+    .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+    .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User));
+CreateMap<CartDto, Cart>();
+CreateMap<CartForm,Cart>();
+CreateMap<CartUpdate,Cart>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<NewsSubscribedUser, NewsSubscribedUserDto>();
 CreateMap<NewsSubscribedUserForm,NewsSubscribedUser>();
 CreateMap<NewsSubscribedUserUpdate,NewsSubscribedUser>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
@@ -90,8 +117,7 @@ CreateMap<Order, OrderDto>()
     .ForMember(dest => dest.OrderItemDto, opt => opt.MapFrom(src => src.OrderItem))
     .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.User.FullName ))
     .ForMember(dest => dest.ClientEmail, opt => opt.MapFrom(src => src.User.Email))
-    .ForMember(dest => dest.TotalPrice, 
-        opt => opt.MapFrom(src => src.OrderItem.Sum(o=>o.ItemPrice*o.Quantity)))
+    .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => Convert.ToDecimal(src.TotalPrice) + src.User.Governorate.DeliveryPrice))
     .ForMember(dest => dest.orderstatus, opt => opt.MapFrom(src => src.OrderStatus.ToString())
     );
         
@@ -119,11 +145,13 @@ CreateMap<CategoryUpdate,Category>().ForAllMembers(opts => opts.Condition((src, 
 CreateMap<Item, ItemDto>()
     .ForMember(dist => dist.imaages,
         opt => opt.MapFrom(src => src.imaages == null ? new string[0] : ImageListConfig(src.imaages.ToList()).ToArray()))
-    .ForMember(dist => dist.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
-    .ForMember(dist => dist.InventoryName, opt => opt.MapFrom(src => src.Inventory.Name))
-    .ForMember(dist => dist.GovernorateName, opt => opt.MapFrom(src => src.Inventory.Governorate.Name))
+    .ForMember(dist => dist.CategoryName, opt => opt.MapFrom(src => src.Category!.Name))
+    .ForMember(dist => dist.InventoryName, opt => opt.MapFrom(src => src.Inventory!.Name))
+    .ForMember(dist => dist.GovernorateName, opt => opt.MapFrom(src => src.Inventory!.Governorate!.Name))
     .ForMember(dest=>dest.IsSale,
-        opt=>opt.MapFrom(src=>src.SalePrice!=null?true:false));
+        opt=>opt.MapFrom(src=>src.SalePrice!=null?true:false))
+    .ForMember(dest=>dest.SalePrice,
+        opt=>opt.MapFrom(src=>src.SalePrice!=null?src.SalePrice:src.Price));
     
 CreateMap<ItemForm,Item>();
 CreateMap<ItemUpdate,Item>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
@@ -133,8 +161,8 @@ CreateMap<Inventory, InventoryDto>().ForMember(dest=>dest.GovernorateName,
         opt=>opt.MapFrom(src=>src.Governorate.ArName));
 CreateMap<InventoryForm,Inventory>();
 CreateMap<InventoryUpdate,Inventory>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-CreateMap<Governorate, GovernorateDto>();
-CreateMap<GovernorateForm,Governorate>();
+CreateMap<Governorate, GovernorateDto>()
+    .ForMember(dest => dest.DeliveryPrice, opt => opt.Ignore());CreateMap<GovernorateForm,Governorate>();
 CreateMap<GovernorateUpdate,Governorate>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Message, MessageDto>();
 CreateMap<MessageForm,Message>();

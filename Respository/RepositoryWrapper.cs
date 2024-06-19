@@ -12,6 +12,26 @@ public class RepositoryWrapper : IRepositoryWrapper
 
 
     // here to add
+private IItemOrderRepository _ItemOrder;
+
+public IItemOrderRepository ItemOrder {
+    get {
+        if(_ItemOrder == null) {
+            _ItemOrder = new ItemOrderRepository(_context, _mapper);
+        }
+        return _ItemOrder;
+    }
+}
+private ICartRepository _Cart;
+
+public ICartRepository Cart {
+    get {
+        if(_Cart == null) {
+            _Cart = new CartRepository(_context, _mapper);
+        }
+        return _Cart;
+    }
+}
 private INewsSubscribedUserRepository _NewsSubscribedUser;
 
 public INewsSubscribedUserRepository NewsSubscribedUser {

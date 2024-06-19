@@ -48,6 +48,9 @@ public async Task<(Item? item, string? error)> Create(ItemForm itemForm , string
 {
     var item = _mapper.Map<Item>(itemForm);
     var category = await _repositoryWrapper.Category.Get(c => c.Id == itemForm.CategoryId);
+    if (category == null) return (null, ErrorResponseException.GenerateErrorResponse("Category not found", "لم يتم العثور على الفئة", language));
+    var inventory = await _repositoryWrapper.Inventory.Get(i => i.Id == itemForm.InventoryId);
+    if (inventory == null) return (null, ErrorResponseException.GenerateErrorResponse("Inventory not found", "لم يتم العثور على المخزن", language));
     var result = await _repositoryWrapper.Item.Add(item);
     if (result == null) return (null, ErrorResponseException.GenerateErrorResponse("Error in Creating a Item", "خطأ في انشاء العنصر", language));
     return (result, null);

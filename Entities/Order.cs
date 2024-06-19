@@ -32,6 +32,15 @@ namespace Deli.Entities
         public List<OrderItem>? OrderItem { get; set; }
 
         public decimal TotalPrice { get; set; }
+        
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? StreetAddress { get; set; }
+        public Guid? GovernorateId { get; set; }
+        public string? GovernorateName{ get; set; }
+        public string? Email { get; set; }
+        public string? PhoneNumber { get; set; }
+        public long OrderNumber { get; set; }
     }
     public enum OrderStatus
     {

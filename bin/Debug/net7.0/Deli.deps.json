@@ -11,9 +11,11 @@
           "AspNet.Security.OAuth.LinkedIn": "7.0.0",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
           "BCrypt.Net": "0.1.0",
+          "DotNetOpenAuth.AspNet": "4.3.4.13329",
           "Facebook": "7.0.10-beta",
           "Facebook.ApiClient": "2.0.2",
           "HtmlAgilityPack": "1.11.61",
+          "Microsoft.AspNetCore.Authentication.Facebook": "7.0.20",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.0",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "7.0.0",
           "Microsoft.AspNetCore.OpenApi": "7.0.5",
@@ -81,6 +83,73 @@
           }
         }
       },
+      "DotNetOpenAuth.AspNet/4.3.4.13329": {
+        "dependencies": {
+          "DotNetOpenAuth.OAuth.Consumer": "4.3.4.13329",
+          "DotNetOpenAuth.OpenId.RelyingParty": "4.3.4.13329"
+        },
+        "runtime": {
+          "lib/net45-full/DotNetOpenAuth.AspNet.dll": {
+            "assemblyVersion": "4.3.0.0",
+            "fileVersion": "4.3.4.13329"
+          }
+        }
+      },
+      "DotNetOpenAuth.Core/4.3.4.13329": {
+        "dependencies": {
+          "Microsoft.Net.Http": "2.0.20505"
+        },
+        "runtime": {
+          "lib/net45-full/DotNetOpenAuth.Core.dll": {
+            "assemblyVersion": "4.3.0.0",
+            "fileVersion": "4.3.4.13329"
+          }
+        }
+      },
+      "DotNetOpenAuth.OAuth.Consumer/4.3.4.13329": {
+        "dependencies": {
+          "DotNetOpenAuth.OAuth.Core": "4.3.4.13329"
+        },
+        "runtime": {
+          "lib/net45-full/DotNetOpenAuth.OAuth.Consumer.dll": {
+            "assemblyVersion": "4.3.0.0",
+            "fileVersion": "4.3.4.13329"
+          }
+        }
+      },
+      "DotNetOpenAuth.OAuth.Core/4.3.4.13329": {
+        "dependencies": {
+          "DotNetOpenAuth.Core": "4.3.4.13329"
+        },
+        "runtime": {
+          "lib/net45-full/DotNetOpenAuth.OAuth.dll": {
+            "assemblyVersion": "4.3.0.0",
+            "fileVersion": "4.3.4.13329"
+          }
+        }
+      },
+      "DotNetOpenAuth.OpenId.Core/4.3.4.13329": {
+        "dependencies": {
+          "DotNetOpenAuth.Core": "4.3.4.13329"
+        },
+        "runtime": {
+          "lib/net45-full/DotNetOpenAuth.OpenId.dll": {
+            "assemblyVersion": "4.3.0.0",
+            "fileVersion": "4.3.4.13329"
+          }
+        }
+      },
+      "DotNetOpenAuth.OpenId.RelyingParty/4.3.4.13329": {
+        "dependencies": {
+          "DotNetOpenAuth.OpenId.Core": "4.3.4.13329"
+        },
+        "runtime": {
+          "lib/net45-full/DotNetOpenAuth.OpenId.RelyingParty.dll": {
+            "assemblyVersion": "4.3.0.0",
+            "fileVersion": "4.3.4.13329"
+          }
+        }
+      },
       "Facebook/7.0.10-beta": {
         "runtime": {
           "lib/net45/Facebook.dll": {
@@ -126,6 +195,14 @@
           "lib/netstandard2.0/JsonSubTypes.dll": {
             "assemblyVersion": "1.8.0.0",
             "fileVersion": "1.8.0.0"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Authentication.Facebook/7.0.20": {
+        "runtime": {
+          "lib/net7.0/Microsoft.AspNetCore.Authentication.Facebook.dll": {
+            "assemblyVersion": "7.0.20.0",
+            "fileVersion": "7.0.2024.26907"
           }
         }
       },
@@ -351,6 +428,14 @@
           "lib/netstandard2.0/Microsoft.IdentityModel.Tokens.dll": {
             "assemblyVersion": "6.15.1.0",
             "fileVersion": "6.15.1.30119"
+          }
+        }
+      },
+      "Microsoft.Net.Http/2.0.20505": {
+        "runtime": {
+          "lib/net40/System.Net.Http.WebRequest.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "1.0.0.0"
           }
         }
       },
@@ -1255,6 +1340,48 @@
       "path": "bcrypt.net/0.1.0",
       "hashPath": "bcrypt.net.0.1.0.nupkg.sha512"
     },
+    "DotNetOpenAuth.AspNet/4.3.4.13329": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Gqjn6EA7NPw6qsszshyDoyX5AECrrkDjW9Fs64yWIjUfnIJwj9C/34ic5lqeclqhs3efstrubCE1kH2YAl6hXA==",
+      "path": "dotnetopenauth.aspnet/4.3.4.13329",
+      "hashPath": "dotnetopenauth.aspnet.4.3.4.13329.nupkg.sha512"
+    },
+    "DotNetOpenAuth.Core/4.3.4.13329": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-sgTuUWHv5tn1weh8jLqXytGQKWpebhk+D4e/RTNNH21eqCEs/ch+x7YxQxzp2u70DO1Hvcjb6dTDj2rO3grgxA==",
+      "path": "dotnetopenauth.core/4.3.4.13329",
+      "hashPath": "dotnetopenauth.core.4.3.4.13329.nupkg.sha512"
+    },
+    "DotNetOpenAuth.OAuth.Consumer/4.3.4.13329": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-J+2v9yoOn4yIFBstU95/5f0iKs/WrSyYzlnv6dlOkSTqMX/Bm0pIg462U0whr0dnRd3U8JKP6yUNKTfvCrscQA==",
+      "path": "dotnetopenauth.oauth.consumer/4.3.4.13329",
+      "hashPath": "dotnetopenauth.oauth.consumer.4.3.4.13329.nupkg.sha512"
+    },
+    "DotNetOpenAuth.OAuth.Core/4.3.4.13329": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lvdJweyGX+orYVDX8LfQ/p2Lr5D8brkCPmTP4t5QlgeztV629oJCtKvqZxaB7ir6nO3jKPfiyrSJVgAW0e1d4g==",
+      "path": "dotnetopenauth.oauth.core/4.3.4.13329",
+      "hashPath": "dotnetopenauth.oauth.core.4.3.4.13329.nupkg.sha512"
+    },
+    "DotNetOpenAuth.OpenId.Core/4.3.4.13329": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-r8XKTJ6c+YvOOQcTLMgjWsfAkNxgxp8QVsP6pRXrg1Onp5TpzNZ9ULVzKkyRRipmC0fEGitydRnjKRDD2QxLtg==",
+      "path": "dotnetopenauth.openid.core/4.3.4.13329",
+      "hashPath": "dotnetopenauth.openid.core.4.3.4.13329.nupkg.sha512"
+    },
+    "DotNetOpenAuth.OpenId.RelyingParty/4.3.4.13329": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2uME8eTovsaE+/EiDDkr82O7y7yl0LMyoQHuHCdOVizUHrUZewkF/vi7pn1F9pGqs8zeBQqI9y1AZ6XQ3s2REA==",
+      "path": "dotnetopenauth.openid.relyingparty/4.3.4.13329",
+      "hashPath": "dotnetopenauth.openid.relyingparty.4.3.4.13329.nupkg.sha512"
+    },
     "Facebook/7.0.10-beta": {
       "type": "package",
       "serviceable": true,
@@ -1289,6 +1416,13 @@
       "sha512": "sha512-pBChxyl9mt0F1s1giHlN6yQ9WWb5FljluCNhMnSb7sspPfPRPTrc0a0psdu2/FVb5nZu5bQN50OMMaSp8jm8xQ==",
       "path": "jsonsubtypes/1.8.0",
       "hashPath": "jsonsubtypes.1.8.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authentication.Facebook/7.0.20": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-10IAZPxLtCiLZcJgYPr14wQJ4510jRSlbjLt2X4YhsmRLkng+XIRakzQosqhqMz6AKO/e5LuPbf6UUW2P6scAw==",
+      "path": "microsoft.aspnetcore.authentication.facebook/7.0.20",
+      "hashPath": "microsoft.aspnetcore.authentication.facebook.7.0.20.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.0": {
       "type": "package",
@@ -1492,6 +1626,13 @@
       "sha512": "sha512-0bd0ocKuNai0/GdhboIW37R6z8I0vFqlmiPeG055SJxPPJ7dfBo2tjJ3bPV9vjFCRDuusj24dldOsg4hWui6iw==",
       "path": "microsoft.identitymodel.tokens/6.15.1",
       "hashPath": "microsoft.identitymodel.tokens.6.15.1.nupkg.sha512"
+    },
+    "Microsoft.Net.Http/2.0.20505": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XRsKQP2XEd/DGLerVsU+T2pKQGTFc9ctWsIVbRblL/y+jT/BUo28aJ5mWN40oAeUwwbpXshAc8uO/LRscWav9A==",
+      "path": "microsoft.net.http/2.0.20505",
+      "hashPath": "microsoft.net.http.2.0.20505.nupkg.sha512"
     },
     "Microsoft.NETCore.Platforms/1.1.1": {
       "type": "package",

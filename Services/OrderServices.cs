@@ -1,9 +1,11 @@
 using AutoMapper;
 using Deli.DATA.DTOs;
+using Deli.DATA.DTOs.Cart;
 using Deli.DATA.DTOs.Item;
 using Deli.Entities;
 using Deli.Helpers.OneSignal;
 using Deli.Interface;
+using Deli.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace Deli.Services;
@@ -25,6 +27,7 @@ public interface IOrderServices
     Task<(List<OrderDto>order ,int? totalCount, string? error)> GetMyOrders(Guid userId, string language);
     Task<OrderStatisticsDto> GetOrderStatistics(OrderStatisticsFilter filter, string language);
     Task<FinancialReport> CreateFinancialReport();
+    Task<(Order? order, string? error)> CreateOrderFromCart(Guid userId, string language);
 
 }
 
@@ -51,54 +54,40 @@ public class OrderServices : IOrderServices
 
         var user = await _repositoryWrapper.User.Get(x => x.Id == userId);
         if (user == null)
-            return (null,ErrorResponseException.GenerateErrorResponse("User not found", "المستخدم غير موجود", language));
+            return (null, ErrorResponseException.GenerateErrorResponse("User not found", "المستخدم غير موجود", language));
         order.OrderStatus = OrderStatus.Pending;
         order.AddressId = user.AddressId;
+        order.OrderNumber = RandomNumberGeneratorNumber.GenerateUnique6DigitNumber(_repositoryWrapper);
 
         var addedOrder = await _repositoryWrapper.Order.Add(order);
         if (addedOrder == null)
-            return (null,ErrorResponseException.GenerateErrorResponse("Error in Creating a Order", "خطأ في انشاء الطلب", language));
+            return (null, ErrorResponseException.GenerateErrorResponse("Error in Creating a Order", "خطأ في انشاء الطلب", language));
 
         decimal totalPrice = 0;
+        int deliveryPrice = 0;
 
         foreach (var orderItemForm in orderForm.ItemId)
         {
             var item = await _repositoryWrapper.Item.Get(x => x.Id == orderItemForm.ItemId);
-            var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == item.Id && orderForm.OrderDate >= s.StartDate && orderForm.OrderDate <= s.EndDate);
-            if (sale != null)
-            {
-                item.Price = sale.SalePrice;
-            }
             if (item == null)
-                return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "العنصر غير موجود", language));
+                return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "المنتج غير موجود", language));
 
-            var orderItem = new OrderItem
-            {
-                OrderId = addedOrder.Id,
-                ItemId = orderItemForm.ItemId,
-                Quantity = orderItemForm.Quantity 
-            }; 
-            orderItem.ItemPrice =  (double)(item.Price ?? 0.0);
-
+            var orderItem = _mapper.Map<OrderItem>(orderItemForm);
+            orderItem.OrderId = addedOrder.Id;
+            orderItem.ItemPrice = item.Price;
             totalPrice += orderItem.Quantity * (decimal)(item.Price ?? 0.0);
+            deliveryPrice = user.Addresses.FirstOrDefault(x => x.Id == user.GovernorateId)?.Governorate?.DeliveryPrice ?? 0;
             await _repositoryWrapper.OrderItem.Add(orderItem);
         }
 
-        order.TotalPrice = totalPrice;
+        order.TotalPrice = totalPrice + deliveryPrice;
 
-        var orderItems = await _repositoryWrapper.OrderItem.GetAll(x => x.OrderId == addedOrder.Id);
-        foreach (var orderItem in orderItems.data)
-        {
-            var item = await _repositoryWrapper.Item.Get(x => x.Id == orderItem.ItemId);
-            if (item == null)
-                return (null, ErrorResponseException.GenerateErrorResponse("Item not found", "العنصر غير موجود", language));
-            item.Quantity -= orderItem.Quantity;
-            await _repositoryWrapper.Item.Update(item);
-        }
+        var updatedOrder = await _repositoryWrapper.Order.Update(order);
+        if (updatedOrder == null)
+            return (null, ErrorResponseException.GenerateErrorResponse("Error in updating order", "خطأ في تحديث الطلب", language));
 
         return (order, null);
     }
-
 
     public async Task<(List<OrderDto> orders, int? totalCount, string? error)> GetAll(OrderFilter filter, string language)
     {
@@ -403,6 +392,41 @@ public async Task<(string? done, string? error)> Rating(Guid id, Guid userId, Ra
 
     return report;
 }
- 
+    public async Task<(Order? order, string? error)> CreateOrderFromCart(Guid userId, string language)
+    {
+        var (carts, totalCount) = await _repositoryWrapper.Cart.GetAll<CartDto>(x => x.UserId == userId);
+        var cart = carts.FirstOrDefault();
+        if (cart == null)
+        {
+            return (null, "Cart Not Found");
+        }
 
+        var orderItems = cart.ItemOrders.Select(io => new OrderItem
+        {
+            ItemId = io.ItemId,
+            Quantity = io.Quantity,
+            ItemPrice = io.Item.Price 
+        }).ToList();
+
+        var order = new Order
+        {
+            UserId = userId,
+            OrderStatus = OrderStatus.Pending,
+            OrderDate = DateTime.UtcNow,
+            OrderItem = orderItems,
+            TotalPrice = new decimal(orderItems.Sum(oi => oi.ItemPrice.Value * oi.Quantity)) 
+        };
+
+        var addedOrder = await _repositoryWrapper.Order.Add(order);
+        if (addedOrder == null)
+        {
+            return (null, "Error in Creating an Order");
+        }
+
+        // Clear the cart after the order has been created
+        cart.ItemOrders.Clear();
+        await _repositoryWrapper.Cart.Update(_mapper.Map<Cart>(cart));
+
+        return (addedOrder, null);
+    }
 }

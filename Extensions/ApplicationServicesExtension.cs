@@ -28,6 +28,8 @@ public static class ApplicationServicesExtension
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         services.AddScoped<IUserService, UserService>();
         // here to add
+services.AddScoped<IItemOrderServices, ItemOrderServices>();
+services.AddScoped<ICartService,CartService>();
         services.Configure<FacebookAuthSettings>(config.GetSection("FacebookAuthSettings"));
     
         services.AddScoped<IAboutUsServices, AboutUsServiceses>();

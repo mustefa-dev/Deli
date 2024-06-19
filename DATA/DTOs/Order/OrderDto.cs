@@ -16,8 +16,16 @@ namespace Deli.DATA.DTOs
         public DateTime? DateOfAccepted { get; set; }
         public DateTime? DateOfCanceled { get; set; }
         public DateTime? DateOfDelivered { get; set; }
-        public double TotalPrice { get; set; }
-        public string orderstatus { get; set; }
+        public decimal TotalPrice { get; set; }
+            public string orderstatus { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? StreetAddress { get; set; }
+        public Guid? GovernorateId { get; set; }
+        public string? GovernorateName{ get; set; }
+        public string? Email { get; set; }
+        public string? PhoneNumber { get; set; }
+        
 
     }
 }
