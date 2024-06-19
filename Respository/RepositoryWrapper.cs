@@ -12,6 +12,16 @@ public class RepositoryWrapper : IRepositoryWrapper
 
 
     // here to add
+private IPackageRepository _Package;
+
+public IPackageRepository Package {
+    get {
+        if(_Package == null) {
+            _Package = new PackageRepository(_context, _mapper);
+        }
+        return _Package;
+    }
+}
 private IItemOrderRepository _ItemOrder;
 
 public IItemOrderRepository ItemOrder {
