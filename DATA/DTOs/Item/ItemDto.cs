@@ -9,6 +9,7 @@ namespace Deli.DATA.DTOs.Item
         public string? RefNumber { get; set; }
         public Dictionary<string, string> AdditionalInfo{ get; set; }
         public float? AvgRating { get; set; }
+        public int? ReviewsCount { get; set; }
         public string[] imaages { get; set; }
         public double? Price { get; set; }
         public bool? IsWishlist { get; set; }

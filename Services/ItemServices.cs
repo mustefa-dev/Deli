@@ -88,6 +88,7 @@ public async Task<(ItemDto? item, string? error)> GetById(Guid userId,Guid id, s
         {
             itemDto.AvgRating = 0;
         }
+        itemDto.ReviewsCount = reviews.data.Count;
         itemDto.Name = ErrorResponseException.GenerateLocalizedResponse(item.Name, item.ArName, language);
         itemDto.MainDetails = ErrorResponseException.GenerateLocalizedResponse(item.MainDetails, item.ArMainDetails, language);
         itemDto.Description = ErrorResponseException.GenerateLocalizedResponse(item.Description, item.ArDescription, language);
@@ -115,16 +116,28 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
             
            // (filter.StartPrice == null || x.SalePrice >= filter.StartPrice) &&   // to filter items based on start and end prices with sale
             //(filter.EndPrice == null || x.SalePrice <= filter.EndPrice)&&
-            (filter.AvgRating == null || x.AvgRating >= filter.AvgRating)&&
-            (filter.IsSale==null || x.SalePrice!=null)&&
                  (filter.Quantity == null || x.Quantity >= filter.Quantity),
             
             filter.PageNumber,
             filter.PageSize
         );
+        var result = new List<ItemDto>();
         foreach (var itemDto in item)
         {
+            var reviews = await _repositoryWrapper.Review.GetAll(r => r.ItemId == itemDto.Id);
+            if (reviews.data != null && reviews.data.Count > 0)
+            {
+                itemDto.AvgRating = (float)reviews.data.Average(r => r.Rating);
+            }
+            else
+            {
+                itemDto.AvgRating = 0;
+            }
             
+            if(itemDto.AvgRating<filter.AvgRating)
+            {
+                continue;
+            }
             var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == itemDto.Id && DateTime.Now >= s.StartDate && DateTime.Now <= s.EndDate);
             if (sale != null)
             {
@@ -140,18 +153,15 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
                 itemDto.SaleStartDate = null;
                 itemDto.SaleEndDate = null;
             }
+            if (filter.IsSale==true && itemDto.SalePrice==null)
+            {
+                continue;
+            }
             var wishlistedItem = await _repositoryWrapper.Wishlist.Get(l => l.UserId == userId && l.ItemsIds.Contains(itemDto.Id));
             if(userId==null) itemDto.IsWishlist = null;
             else itemDto.IsWishlist = wishlistedItem != null;
-            var reviews = await _repositoryWrapper.Review.GetAll(r => r.ItemId == itemDto.Id);
-            if (reviews.data != null && reviews.data.Count > 0)
-            {
-                itemDto.AvgRating = (float)reviews.data.Average(r => r.Rating);
-            }
-            else
-            {
-                itemDto.AvgRating = 0;
-            }
+          
+            itemDto.ReviewsCount = reviews.data.Count;
             var originalItem = await _repositoryWrapper.Item.Get(x => x.Id == itemDto.Id);
             var category = await _repositoryWrapper.Category.Get(c => c.Id == originalItem.CategoryId);
             itemDto.CategoryName = ErrorResponseException.GenerateLocalizedResponse(category.Name, category.ArName, language);
@@ -163,9 +173,9 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
             itemDto.MainDetails = ErrorResponseException.GenerateLocalizedResponse(originalItem.MainDetails, originalItem.ArMainDetails, language);
             itemDto.Description = ErrorResponseException.GenerateLocalizedResponse(originalItem.Description, originalItem.ArDescription, language);
             
-            
+            result.Add(itemDto);
         }
-        return (item, totalCount, null);
+        return (result, totalCount, null);
         
     }
 
