@@ -13,6 +13,26 @@ public class RepositoryWrapper : IRepositoryWrapper
 
     
     // here to add
+private IItemTagRepository _ItemTag;
+
+public IItemTagRepository ItemTag {
+    get {
+        if(_ItemTag == null) {
+            _ItemTag = new ItemTagRepository(_context, _mapper);
+        }
+        return _ItemTag;
+    }
+}
+private ITagRepository _Tag;
+
+public ITagRepository Tag {
+    get {
+        if(_Tag == null) {
+            _Tag = new TagRepository(_context, _mapper);
+        }
+        return _Tag;
+    }
+}
 private IPackageRepository _Package;
 
 public IPackageRepository Package {

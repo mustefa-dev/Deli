@@ -13,6 +13,8 @@ namespace Deli.DATA.DTOs
         public int? Quantity { get; set; }
         public Guid? InventoryId { get; set; }
         public Guid? CategoryId { get; set; }
+        public string? TagName { get; set; }
+
 
     }
 }

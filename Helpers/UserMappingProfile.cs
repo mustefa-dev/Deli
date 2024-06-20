@@ -31,6 +31,12 @@ public class UserMappingProfile : Profile
 
 
         // here to add
+CreateMap<ItemTag, ItemTagDto>();
+CreateMap<ItemTagForm,ItemTag>();
+CreateMap<ItemTagUpdate,ItemTag>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<Tag, TagDto>();
+CreateMap<TagForm,Tag>();
+CreateMap<TagUpdate,Tag>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Package, PackageDto>().ForMember(dest => dest.Image, opt => opt.MapFrom(src => Utils.Util.Url + src.Image));
 CreateMap<PackageForm,Package>();
 CreateMap<PackageUpdate,Package>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
@@ -129,9 +135,12 @@ CreateMap<OrderForm,Order>();
 CreateMap<OrderUpdate,Order>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<OrderItem, OrderItemDto>()
     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Item.Name))
+    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Item.Name))
     .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Item.imaages.FirstOrDefault()))
     .ForMember(dist => dist.Image,
-        opt => opt.MapFrom(src => src.Item.imaages == null ? "" : Utils.Util.Url + src.Item.imaages.FirstOrDefault()));     
+        opt => opt.MapFrom(src => src.Item.imaages == null ? "" : Utils.Util.Url + src.Item.imaages.FirstOrDefault()));
+    
+    
 CreateMap<OrderItemForm,OrderItem>();
 CreateMap<OrderItemUpdate,OrderItem>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
@@ -151,6 +160,7 @@ CreateMap<Item, ItemDto>()
             src.imaages == null ? new string[0] : ImageListConfig(src.imaages.ToList()).ToArray()))
     .ForMember(dist => dist.CategoryName, opt => opt.MapFrom(src => src.Category!.Name))
     .ForMember(dist => dist.InventoryName, opt => opt.MapFrom(src => src.Inventory!.Name))
+    .ForMember(dist => dist.Tags, opt => opt.MapFrom(src => src.ItemTags.Select(tag => tag.Tag.Name).ToList()))
     .ForMember(dist => dist.GovernorateName, opt => opt.MapFrom(src => src.Inventory!.Governorate!.Name));
     
 CreateMap<ItemForm,Item>();

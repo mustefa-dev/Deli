@@ -26,5 +26,7 @@ namespace Deli.DATA.DTOs.Item
         public string? CategoryName { get; set; }
         public string? InventoryName { get; set; }
         public string? GovernorateName { get; set; }
+        public List<string> Tags { get; set; }
+
     }
 }
