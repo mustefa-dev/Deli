@@ -59,7 +59,8 @@ public async Task<(ItemDto? item, string? error)> GetById(Guid userId,Guid id, s
     {
         var item = await _repositoryWrapper.Item.GetById(id);
         if (item == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Item not found", "لم يتم العثور على العنصر", language));
-        var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == item.Id && DateTime.Now >= s.StartDate && DateTime.Now <= s.EndDate);
+        var date=DateTime.Now;
+        var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == item.Id && date >= s.StartDate && date <= s.EndDate);
         if (sale != null)
         {
             item.SalePrice = sale.SalePrice;
@@ -76,6 +77,8 @@ public async Task<(ItemDto? item, string? error)> GetById(Guid userId,Guid id, s
         }
        
         var itemDto = _mapper.Map<ItemDto>(item);
+        if(itemDto.SalePrice!=null) itemDto.IsSale=true;
+        else itemDto.IsSale=false;
         var wishlistedItem = await _repositoryWrapper.Wishlist.Get(l => l.UserId == userId && l.ItemsIds.Contains(itemDto.Id));
         if(userId==null) itemDto.IsWishlist = null;
         else itemDto.IsWishlist = wishlistedItem != null;
@@ -111,21 +114,14 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
                     (filter.RefNumber == null || x.RefNumber == filter.RefNumber )&&
                    (filter.CategoryId == null || x.CategoryId == filter.CategoryId) &&
                    (filter.InventoryId == null || x.InventoryId == filter.InventoryId) &&
-           
-                 (filter.EndPrice ==null ||x.Price >= filter.StartPrice && x.Price<=filter.EndPrice) &&
-                 
-                
-            
-           // (filter.StartPrice == null || x.SalePrice >= filter.StartPrice) &&   // to filter items based on start and end prices with sale
-            //(filter.EndPrice == null || x.SalePrice <= filter.EndPrice)&&
                  (filter.Quantity == null || x.Quantity >= filter.Quantity),
-            
             filter.PageNumber,
             filter.PageSize
         );
         var result = new List<ItemDto>();
         foreach (var itemDto in item)
         {
+            var tempPrice = itemDto.Price;
             var reviews = await _repositoryWrapper.Review.GetAll(r => r.ItemId == itemDto.Id);
             if (reviews.data != null && reviews.data.Count > 0)
             {
@@ -140,13 +136,17 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
             {
                 continue;
             }
-            var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == itemDto.Id && DateTime.Now >= s.StartDate && DateTime.Now <= s.EndDate);
+            var date = DateTime.Now;
+            var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == itemDto.Id && date >= s.StartDate && date<= s.EndDate);
             if (sale != null)
             {
                 itemDto.SalePrice = sale.SalePrice;
+                tempPrice= sale.SalePrice;
                 itemDto.SalePercintage = sale.SalePercintage;
                 itemDto.SaleStartDate = sale.StartDate;
                 itemDto.SaleEndDate = sale.EndDate;
+                itemDto.IsSale = true;
+                
             }
             else
             {
@@ -154,11 +154,17 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
                 itemDto.SalePercintage = null;
                 itemDto.SaleStartDate = null;
                 itemDto.SaleEndDate = null;
+                itemDto.IsSale = false;
             }
             if (filter.IsSale==true && itemDto.SalePrice==null)
             {
                 continue;
             }
+            if(filter.EndPrice!=null && (tempPrice>filter.EndPrice || tempPrice<filter.StartPrice))
+            {
+                continue;
+            }
+            
             var wishlistedItem = await _repositoryWrapper.Wishlist.Get(l => l.UserId == userId && l.ItemsIds.Contains(itemDto.Id));
             if(userId==null) itemDto.IsWishlist = null;
             else itemDto.IsWishlist = wishlistedItem != null;
@@ -336,16 +342,12 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
         {
             return (null, ErrorResponseException.GenerateLocalizedResponse("Item not found", "لم يتم العثور على العنصر", language));
         }
-        var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == item.Id && DateTime.Now >= s.StartDate && DateTime.Now <= s.EndDate);
+        var date = DateTime.Now;
+        var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == item.Id && date >= s.StartDate && date <= s.EndDate );
         if (sale == null)
         {
             return (null, ErrorResponseException.GenerateLocalizedResponse("Sale either doesn't exist or it is not active", "لم يتم العثور على التخفيض او التخفيض غير نشط", language));
         }
-
-   
-      
-    
-      
         item.SaleId = null;
         item.SalePrice = null;
         item.SaleStartDate = null;
@@ -363,11 +365,12 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
         {
             return (null, ErrorResponseException.GenerateLocalizedResponse("Sale not found", "لم يتم العثور على التخفيض", language));
         }
-        if(sale.EndDate < DateTime.Now)
+        var date = DateTime.Now;
+        if(sale.EndDate <date)
         {
             return (null, ErrorResponseException.GenerateLocalizedResponse("Sale already ended", "انتهى التخفيض بالفعل", language));
         }
-        if(sale.StartDate < DateTime.Now)
+        if(sale.StartDate < date)
         {
             return (null, ErrorResponseException.GenerateLocalizedResponse("Sale already started", "بدأ التخفيض بالفعل", language));
         }

@@ -58,8 +58,8 @@ namespace Deli.Controllers
         [Authorize]
         public async Task<ActionResult<Item>> AddSaleToItem([FromBody] SaleForm saleForm) => Ok(await _itemServices.AddSaleToItem(saleForm.ItemId , saleForm.SalePrice , saleForm.StartDate , saleForm.EndDate,Language));
       
-        [HttpPut("EndCurrentSale{id}")]
-        public async Task<ActionResult<Item>> EndSale(Guid id) => Ok(await _itemServices.EndSale(id,Language));
+        [HttpPut("EndCurrentSale{itemid}")]
+        public async Task<ActionResult<Item>> EndSale(Guid itemid) => Ok(await _itemServices.EndSale(itemid,Language));
         [HttpDelete("DeleteScheduledSale{id}")]
         public async Task<ActionResult<Item>> DeleteScheduledSale(Guid id) => Ok(await _itemServices.DeleteScheduledSale(id,Language));
         
