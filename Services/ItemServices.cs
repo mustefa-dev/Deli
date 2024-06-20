@@ -101,6 +101,14 @@ public async Task<(ItemDto? item, string? error)> GetById(Guid userId,Guid id, s
         itemDto.InventoryName = ErrorResponseException.GenerateLocalizedResponse(inventory.Name, inventory.ArName, language);
         var governorate = await _repositoryWrapper.Governorate.Get(g => g.Id == inventory.GovernorateId);
         itemDto.GovernorateName = ErrorResponseException.GenerateLocalizedResponse(governorate.Name, governorate.ArName, language);
+        itemDto.IsAddedToCart= await _repositoryWrapper.Cart.Get(c => c.UserId == userId && c.ItemOrders.Any(i => i.ItemId == itemDto.Id)) != null;
+        if (itemDto.IsAddedToCart == true)
+        {
+            var cart = await _repositoryWrapper.Cart.Get(c => c.UserId == userId);
+                
+            var itemOrder = await _repositoryWrapper.ItemOrder.Get(i => i.CartId == cart.Id && i.ItemId == itemDto.Id);
+            itemDto.QuantityAddedToCart = itemOrder.Quantity;
+        }
 
     
         return (itemDto, null);
