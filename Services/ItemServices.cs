@@ -1,4 +1,5 @@
 
+using System.Text.RegularExpressions;
 using AutoMapper;
 using Deli.Repository;
 using Deli.Services;
@@ -47,6 +48,25 @@ public ItemServices(
 public async Task<(Item? item, string? error)> Create(ItemForm itemForm , string language)
 {
     var item = _mapper.Map<Item>(itemForm);
+    var hashtags = Regex.Matches(itemForm.Description, @"(?<=#)\w+")
+        .Select(m => m.Value)
+        .Distinct()
+        .ToList();
+    foreach (var hashtag in hashtags)
+    {
+        var tag = await _repositoryWrapper.Tag.Get(t => t.Name == hashtag);
+
+        if (tag == null)
+        {
+            var newTag = new Tag { Name = hashtag };
+            await _repositoryWrapper.Tag.Add(newTag);
+            tag = newTag;
+        }
+
+        var itemTag = new ItemTag { ItemId = item.Id, TagId = tag.Id };
+        item.ItemTags.Add(itemTag);
+    }
+
     var category = await _repositoryWrapper.Category.Get(c => c.Id == itemForm.CategoryId);
     if (category == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Category not found", "لم يتم العثور على الفئة", language));
     var inventory = await _repositoryWrapper.Inventory.Get(i => i.Id == itemForm.InventoryId);
@@ -105,6 +125,7 @@ public async Task<(ItemDto? item, string? error)> GetById(Guid userId,Guid id, s
         if (itemDto.IsAddedToCart == true)
         {
             var cart = await _repositoryWrapper.Cart.Get(c => c.UserId == userId);
+                
             var itemOrder = await _repositoryWrapper.ItemOrder.Get(i => i.CartId == cart.Id && i.ItemId == itemDto.Id);
             itemDto.QuantityAddedToCart = itemOrder.Quantity;
         }
@@ -118,6 +139,7 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
     var (item, totalCount) = await _repositoryWrapper.Item.GetAll<ItemDto>(
         x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name)) &&
              (string.IsNullOrEmpty(filter.ArName) || x.ArName.Contains(filter.ArName)) &&
+             (string.IsNullOrEmpty(filter.TagName) || x.ItemTags.Any(t => t.Tag.Name == filter.TagName)) &&
              (filter.RefNumber == null || x.RefNumber == filter.RefNumber) &&
              (filter.CategoryId == null || x.CategoryId == filter.CategoryId) &&
              (filter.InventoryId == null || x.InventoryId == filter.InventoryId) &&
@@ -140,7 +162,6 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
             if(itemDto.AvgRating<filter.AvgRating)
             {
                 continue;
-                totalCount--;
             }
             var date = DateTime.Now;
             var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == itemDto.Id && date >= s.StartDate && date<= s.EndDate);
@@ -165,12 +186,11 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
             if (filter.IsSale==true && itemDto.SalePrice==null)
             {
                 continue;
-                totalCount--;
+         
             }
             if(filter.EndPrice!=null && (tempPrice>filter.EndPrice || tempPrice<filter.StartPrice))
             {
                 continue;
-                totalCount--;
             }
             
             var wishlistedItem = await _repositoryWrapper.Wishlist.Get(l => l.UserId == userId && l.ItemsIds.Contains(itemDto.Id));
