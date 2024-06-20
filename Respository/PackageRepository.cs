@@ -10,6 +10,7 @@ namespace Deli.Repository
     {
         public PackageRepository(DataContext context, IMapper mapper) : base(context, mapper)
         {
+            
         }
     }
 }
