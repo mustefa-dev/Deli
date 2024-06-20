@@ -5,6 +5,8 @@ public interface IRepositoryWrapper
     IUserRepository User { get; }
 
     // here to add
+IItemTagRepository ItemTag{get;}
+ITagRepository Tag{get;}
 IPackageRepository Package{get;}
 IItemOrderRepository ItemOrder{get;}
 ICartRepository Cart{get;}

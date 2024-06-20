@@ -26,6 +26,8 @@ namespace Deli.Entities
     
         public Guid? SaleId { get; set; }
         public List<Review> Reviews { get; set; }
+        public List<ItemTag> ItemTags { get; set; } = new List<ItemTag>();
+
 
     }
 }

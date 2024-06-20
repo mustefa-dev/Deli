@@ -28,6 +28,8 @@ public static class ApplicationServicesExtension
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         services.AddScoped<IUserService, UserService>();
         // here to add
+services.AddScoped<IItemTagServices, ItemTagServices>();
+services.AddScoped<ITagServices, TagServices>();
 services.AddScoped<IPackageServices, PackageServices>();
 services.AddScoped<IItemOrderServices, ItemOrderServices>();
 services.AddScoped<ICartService,CartService>();
