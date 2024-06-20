@@ -17,7 +17,7 @@ namespace Deli.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<CartDto>> Get() => Ok(await _service.GetMyCart(Id));
+        public async Task<ActionResult<CartDto>> Get() => Ok(await _service.GetMyCart(Id,Language));
         
         [HttpPost]
         public async Task<ActionResult> AddToCart(CartForm cartForm) => Ok(await _service.AddToCart(Id, cartForm));

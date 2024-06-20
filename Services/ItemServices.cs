@@ -105,7 +105,6 @@ public async Task<(ItemDto? item, string? error)> GetById(Guid userId,Guid id, s
         if (itemDto.IsAddedToCart == true)
         {
             var cart = await _repositoryWrapper.Cart.Get(c => c.UserId == userId);
-                
             var itemOrder = await _repositoryWrapper.ItemOrder.Get(i => i.CartId == cart.Id && i.ItemId == itemDto.Id);
             itemDto.QuantityAddedToCart = itemOrder.Quantity;
         }
@@ -115,17 +114,15 @@ public async Task<(ItemDto? item, string? error)> GetById(Guid userId,Guid id, s
         
     }
 public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(Guid userId,ItemFilter filter, string language)
-    {
-        var (item,totalCount) = await _repositoryWrapper.Item.GetAll<ItemDto>(
-            x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name))&&
-                   (string.IsNullOrEmpty(filter.ArName) || x.ArName.Contains(filter.ArName))&&
-                    (filter.RefNumber == null || x.RefNumber == filter.RefNumber )&&
-                   (filter.CategoryId == null || x.CategoryId == filter.CategoryId) &&
-                   (filter.InventoryId == null || x.InventoryId == filter.InventoryId) &&
-                 (filter.Quantity == null || x.Quantity >= filter.Quantity),
-            filter.PageNumber,
-            filter.PageSize
-        );
+{
+    var (item, totalCount) = await _repositoryWrapper.Item.GetAll<ItemDto>(
+        x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name)) &&
+             (string.IsNullOrEmpty(filter.ArName) || x.ArName.Contains(filter.ArName)) &&
+             (filter.RefNumber == null || x.RefNumber == filter.RefNumber) &&
+             (filter.CategoryId == null || x.CategoryId == filter.CategoryId) &&
+             (filter.InventoryId == null || x.InventoryId == filter.InventoryId) &&
+             (filter.Quantity == null || x.Quantity >= filter.Quantity));
+        
         var result = new List<ItemDto>();
         foreach (var itemDto in item)
         {
@@ -143,6 +140,7 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
             if(itemDto.AvgRating<filter.AvgRating)
             {
                 continue;
+                totalCount--;
             }
             var date = DateTime.Now;
             var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == itemDto.Id && date >= s.StartDate && date<= s.EndDate);
@@ -167,10 +165,12 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
             if (filter.IsSale==true && itemDto.SalePrice==null)
             {
                 continue;
+                totalCount--;
             }
             if(filter.EndPrice!=null && (tempPrice>filter.EndPrice || tempPrice<filter.StartPrice))
             {
                 continue;
+                totalCount--;
             }
             
             var wishlistedItem = await _repositoryWrapper.Wishlist.Get(l => l.UserId == userId && l.ItemsIds.Contains(itemDto.Id));
@@ -198,9 +198,12 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
             }
             
             result.Add(itemDto);
+           
+          
         }
-        totalCount= result.Count;
-        return (result, totalCount, null);
+        var query= result.AsQueryable();
+        var (data,totalcount)=  _repositoryWrapper.Item.ExecuteItemDtoQuery(query, filter.PageNumber,filter.PageSize);
+        return (data, totalcount, null);
         
     }
 

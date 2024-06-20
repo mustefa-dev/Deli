@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices.JavaScript;
 using AutoMapper;
 using Deli.DATA.DTOs;
 using Deli.DATA.DTOs.Cart;
@@ -11,7 +12,7 @@ namespace Deli.Services
 {
     public interface ICartService
     {
-        Task<(CartDto? data,String? error)> GetMyCart(Guid userId);
+        Task<(CartDto? data,String? error)> GetMyCart(Guid userId,string language);
         Task<(string? message, string? error)> AddToCart(Guid userId, CartForm cartForm);
         
         Task<(string? message, string? error)> DeleteFromCart(Guid userId, Guid cartId, int quantity);
@@ -26,7 +27,7 @@ namespace Deli.Services
             _repositoryWrapper = repositoryWrapper;
             _mapper = mapper;
         }
-        public async Task<(CartDto? data, string? error)> GetMyCart(Guid userId)
+        public async Task<(CartDto? data, string? error)> GetMyCart(Guid userId, string language)
         {
             var (carts,totalCount) = await _repositoryWrapper.Cart.GetAll<CartDto>(
                 x => x.UserId == userId
@@ -42,6 +43,15 @@ namespace Deli.Services
             });
 
             var cartDtos = _mapper.Map<List<CartDto>>(carts);
+            foreach (var  cartdto in cartDtos)
+            {
+                foreach (var cartorderdto in cartdto.CartOrderDto)
+                {
+                    var item = await _repositoryWrapper.Item.Get(i => i.Id == cartorderdto.ItemId);
+                    cartorderdto.ItemName= ErrorResponseException.GenerateLocalizedResponse(item.Name,item.ArName,language);
+                    
+                };
+            }
             return (cartDtos.FirstOrDefault(), null);
         }
         public async Task<(string? message, string? error)> AddToCart(Guid userId, CartForm cartForm)
