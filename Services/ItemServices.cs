@@ -180,6 +180,14 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
             itemDto.Name = ErrorResponseException.GenerateLocalizedResponse(originalItem.Name, originalItem.ArName, language);
             itemDto.MainDetails = ErrorResponseException.GenerateLocalizedResponse(originalItem.MainDetails, originalItem.ArMainDetails, language);
             itemDto.Description = ErrorResponseException.GenerateLocalizedResponse(originalItem.Description, originalItem.ArDescription, language);
+            itemDto.IsAddedToCart= await _repositoryWrapper.Cart.Get(c => c.UserId == userId && c.ItemOrders.Any(i => i.ItemId == itemDto.Id)) != null;
+            if (itemDto.IsAddedToCart == true)
+            {
+                var cart = await _repositoryWrapper.Cart.Get(c => c.UserId == userId);
+                
+                var itemOrder = await _repositoryWrapper.ItemOrder.Get(i => i.CartId == cart.Id && i.ItemId == itemDto.Id);
+                itemDto.QuantityAddedToCart = itemOrder.Quantity;
+            }
             
             result.Add(itemDto);
         }

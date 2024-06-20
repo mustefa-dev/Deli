@@ -147,14 +147,11 @@ CreateMap<CategoryForm,Category>();
 CreateMap<CategoryUpdate,Category>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Item, ItemDto>()
     .ForMember(dist => dist.imaages,
-        opt => opt.MapFrom(src => src.imaages == null ? new string[0] : ImageListConfig(src.imaages.ToList()).ToArray()))
+        opt => opt.MapFrom(src =>
+            src.imaages == null ? new string[0] : ImageListConfig(src.imaages.ToList()).ToArray()))
     .ForMember(dist => dist.CategoryName, opt => opt.MapFrom(src => src.Category!.Name))
     .ForMember(dist => dist.InventoryName, opt => opt.MapFrom(src => src.Inventory!.Name))
-    .ForMember(dist => dist.GovernorateName, opt => opt.MapFrom(src => src.Inventory!.Governorate!.Name))
-    .ForMember(dest=>dest.IsSale,
-        opt=>opt.MapFrom(src=>src.SalePrice!=null?true:false))
-    .ForMember(dest=>dest.SalePrice,
-        opt=>opt.MapFrom(src=>src.SalePrice!=null?src.SalePrice:src.Price));
+    .ForMember(dist => dist.GovernorateName, opt => opt.MapFrom(src => src.Inventory!.Governorate!.Name));
     
 CreateMap<ItemForm,Item>();
 CreateMap<ItemUpdate,Item>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));

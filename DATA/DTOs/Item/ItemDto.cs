@@ -16,6 +16,8 @@ namespace Deli.DATA.DTOs.Item
         public double? SalePrice { get; set; }
         public double? SalePercintage { get; set; }
         public bool? IsSale { get; set; }
+        public bool? IsAddedToCart { get; set; }
+        public int? QuantityAddedToCart { get; set; }=0;
         public DateTime? SaleStartDate { get; set; }
         public DateTime? SaleEndDate { get; set; }
         public int? Quantity { get; set; }
