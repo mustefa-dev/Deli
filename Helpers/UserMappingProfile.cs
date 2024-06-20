@@ -17,8 +17,9 @@ public class UserMappingProfile : Profile
     {
         var baseUrl = "http://139.84.174.215:3387/";
 
-       
-        CreateMap<AppUser, UserDto>();
+
+        CreateMap<AppUser, UserDto>().ForMember(dest => dest.Image,
+            opt => opt.MapFrom(src => Utils.Util.Url + src.Image));
         CreateMap<UserDto, AppUser>();
         CreateMap<UpdateUserForm, AppUser>();
         CreateMap<AppUser, TokenDTO>();
@@ -96,7 +97,10 @@ CreateMap<DeliDifference, DeliDifferenceDto>().ForMember(dest=>dest.Image,
     opt=>opt.MapFrom(src=>Utils.Util.Url+src.Image));
 CreateMap<DeliDifferenceForm,DeliDifference>();
 CreateMap<DeliDifferenceUpdate,DeliDifference>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-CreateMap<Review, ReviewDto>();
+CreateMap<Review, ReviewDto>().ForMember(dest=>dest.UserImage,
+    opt=>opt.MapFrom(src=>Utils.Util.Url+src.User.Image))
+    .ForMember(dest=>dest.UserName,
+        opt=>opt.MapFrom(src=>src.User.FullName));
 CreateMap<ReviewForm,Review>();
 CreateMap<ReviewUpdate,Review>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Sale, SaleDto>();
