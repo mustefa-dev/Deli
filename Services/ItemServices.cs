@@ -109,6 +109,8 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
             x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name))&&
                    (string.IsNullOrEmpty(filter.ArName) || x.ArName.Contains(filter.ArName))&&
                     (filter.RefNumber == null || x.RefNumber == filter.RefNumber )&&
+                   (filter.CategoryId == null || x.CategoryId == filter.CategoryId) &&
+                   (filter.InventoryId == null || x.InventoryId == filter.InventoryId) &&
            
                  (filter.EndPrice ==null ||x.Price >= filter.StartPrice && x.Price<=filter.EndPrice) &&
                  
