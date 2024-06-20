@@ -55,7 +55,20 @@ public class PackageServices : IPackageServices
         foreach (var  package in packages.data)
         {    var originalpackage=await _repositoryWrapper.Package.GetById(package.Id);
             package.Name=ErrorResponseException.GenerateLocalizedResponse(originalpackage.Name, originalpackage.ArName, language);
+            foreach (var itemdto in package.Items)
+            {
+                var originalitem=await _repositoryWrapper.Item.GetById(itemdto.Id);
+                itemdto.Name=ErrorResponseException.GenerateLocalizedResponse(originalitem.Name, originalitem.ArName, language);
+                itemdto.Description=ErrorResponseException.GenerateLocalizedResponse(originalitem.Description, originalitem.ArDescription, language);
+                itemdto.MainDetails=ErrorResponseException.GenerateLocalizedResponse(originalitem.MainDetails, originalitem.ArMainDetails, language);
+                
+            }
+            
+                
+            
         }
+
+        
        
         return (packages.data, packages.totalCount, null);
     }
@@ -65,6 +78,14 @@ public class PackageServices : IPackageServices
         var   package = await _repositoryWrapper.Package.GetById(id);
         if (package == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Package Not Found", "الحزمة غير موجودة", language));
         var packageDto = _mapper.Map<PackageDto>(package);
+        foreach (var itemdto in packageDto.Items)
+        {
+            var originalitem=await _repositoryWrapper.Item.GetById(itemdto.Id);
+            itemdto.Name=ErrorResponseException.GenerateLocalizedResponse(originalitem.Name, originalitem.ArName, language);
+            itemdto.Description=ErrorResponseException.GenerateLocalizedResponse(originalitem.Description, originalitem.ArDescription, language);
+            itemdto.MainDetails=ErrorResponseException.GenerateLocalizedResponse(originalitem.MainDetails, originalitem.ArMainDetails, language);
+                
+        }
         packageDto.Name=ErrorResponseException.GenerateLocalizedResponse(package.Name, package.ArName, language);
         return (packageDto, null);
     }

@@ -7,6 +7,7 @@ namespace Deli.DATA.DTOs
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Image { get; set; }
         public List<ItemDto> Items { get; set; }
         public decimal DiscountPercentage { get; set; }
 

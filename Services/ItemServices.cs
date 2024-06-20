@@ -177,6 +177,7 @@ public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(
             
             result.Add(itemDto);
         }
+        totalCount= result.Count;
         return (result, totalCount, null);
         
     }
