@@ -53,6 +53,7 @@ public async Task<(List<CategoryDto> categorys, int? totalCount, string? error)>
         {
             var originalcategory = await _repositoryWrapper.Category.Get(x => x.Id == category.Id);
             category.Name=ErrorResponseException.GenerateLocalizedResponse(originalcategory.Name, originalcategory.ArName, language);
+            category.Description=ErrorResponseException.GenerateLocalizedResponse(originalcategory.Description, originalcategory.ArDescription, language);
         }
         return (categorys, totalCount, null);
     }

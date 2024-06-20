@@ -11,12 +11,12 @@ namespace Deli.Services;
 
 public interface IPackageServices
 {
-Task<(Package? package, string? error)> Create(PackageForm packageForm );
-Task<(List<PackageDto> packages, int? totalCount, string? error)> GetAll(PackageFilter filter);
+Task<(Package? package, string? error)> Create(PackageForm packageForm , string language );
+Task<(List<PackageDto> packages, int? totalCount, string? error)> GetAll(PackageFilter filter, string language );
 //getbyid
-Task<(Package? package, string? error)> GetById(Guid id);
-Task<(Package? package, string? error)> Update(Guid id , PackageUpdate packageUpdate);
-Task<(Package? package, string? error)> Delete(Guid id);
+Task<(PackageDto? package, string? error)> GetById(Guid id, string language) ;
+Task<(Package? package, string? error)> Update(Guid id , PackageUpdate packageUpdate, string language );
+Task<(Package? package, string? error)> Delete(Guid id, string language );
 }
 
 public class PackageServices : IPackageServices
@@ -30,7 +30,7 @@ public class PackageServices : IPackageServices
         _repositoryWrapper = repositoryWrapper;
     }
 
-    public async Task<(Package? package, string? error)> Create(PackageForm packageForm)
+    public async Task<(Package? package, string? error)> Create(PackageForm packageForm , string language )
     {
         var package = _mapper.Map<Package>(packageForm);
 
@@ -44,41 +44,48 @@ public class PackageServices : IPackageServices
         }
 
         var createdPackage = await _repositoryWrapper.Package.Add(package);
-        if (createdPackage == null) return (null, "Error in Creating a Package");
+        if (createdPackage == null) return (null,ErrorResponseException.GenerateLocalizedResponse("Error in Creating the Package", "خطأ في اضافة الحزمة", language));
 
         return (createdPackage, null);
     }
 
-    public async Task<(List<PackageDto> packages, int? totalCount, string? error)> GetAll(PackageFilter filter)
+    public async Task<(List<PackageDto> packages, int? totalCount, string? error)> GetAll(PackageFilter filter, string language )
     {
         var packages = await _repositoryWrapper.Package.GetAll<PackageDto>(filter.PageNumber, filter.PageSize);
+        foreach (var  package in packages.data)
+        {    var originalpackage=await _repositoryWrapper.Package.GetById(package.Id);
+            package.Name=ErrorResponseException.GenerateLocalizedResponse(originalpackage.Name, originalpackage.ArName, language);
+        }
+       
         return (packages.data, packages.totalCount, null);
     }
 
-    public async Task<(Package? package, string? error)> GetById(Guid id)
+    public async Task<(PackageDto? package, string? error)> GetById(Guid id, string language )
     {
         var   package = await _repositoryWrapper.Package.GetById(id);
-        if (package == null) return (null, "Package Not Found");
-        return (package, null);
+        if (package == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Package Not Found", "الحزمة غير موجودة", language));
+        var packageDto = _mapper.Map<PackageDto>(package);
+        packageDto.Name=ErrorResponseException.GenerateLocalizedResponse(package.Name, package.ArName, language);
+        return (packageDto, null);
     }
 
-    public async Task<(Package? package, string? error)> Update(Guid id, PackageUpdate packageUpdate)
+    public async Task<(Package? package, string? error)> Update(Guid id, PackageUpdate packageUpdate, string language )
     {
         var package = await _repositoryWrapper.Package.GetById(id);
-        if (package == null) return (null, "Package Not Found");
+        if (package == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Package Not Found", "الحزمة غير موجودة", language));
         _mapper.Map(packageUpdate, package);
         var updatedPackage = await _repositoryWrapper.Package.Update(package);
-        if (updatedPackage == null) return (null, "Error in Updating the Package");
+        if (updatedPackage == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Error in Updating the Package", "خطأ في تحديث الحزمة", language));
         return (updatedPackage, null);
     }
 
-    public async Task<(Package? package, string? error)> Delete(Guid id)
+    public async Task<(Package? package, string? error)> Delete(Guid id, string language )
     {
         var package = await _repositoryWrapper.Package.GetById(id);
-        if (package == null) return (null, "Package Not Found");
+        if (package == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Package Not Found", "الحزمة غير موجودة", language));
         
         var deletedPackage = await _repositoryWrapper.Package.SoftDelete(id);
-        if (deletedPackage == null) return (null, "Error in Deleting the Package");
+        if (deletedPackage == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Error in Deleting the Package", "خطأ في حذف الحزمة", language));
         
         return (deletedPackage, null);
     }
