@@ -46,11 +46,8 @@ CreateMap<PackageUpdate,Package>().ForAllMembers(opts => opts.Condition((src, de
             .ForMember(dest => dest.Item, opt => opt.MapFrom(src => src.Item));
         CreateMap<ItemOrder, CartOrderDto>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Item.Name))
-            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Item.Price.HasValue ? (int?)src.Item.Price.Value : null))
             .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
             .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src => src.ItemId))
-            .ForMember(dest => dest.ItemPrice, opt => opt.MapFrom(src => src.Item.Price.HasValue ? src.Item.Price.Value.ToString() : "0"))
-            .ForMember(dest => dest.ItemName, opt => opt.MapFrom(src => src.Item.Name))
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             
             .ForMember(dest => dest.Image, opt => opt.MapFrom(src => baseUrl + src.Item.imaages.FirstOrDefault()));

@@ -70,6 +70,12 @@ public class OrderServices : IOrderServices
         foreach (var orderItemForm in orderForm.ItemId)
         {
             var item = await _repositoryWrapper.Item.Get(x => x.Id == orderItemForm.ItemId);
+            var date = orderForm.OrderDate;
+            var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == item.Id && date >= s.StartDate && date<= s.EndDate);
+            if (sale != null)
+            {
+                item.Price = sale.SalePrice;
+            }
             if (item == null)
                 return (null, ErrorResponseException.GenerateLocalizedResponse("Item not found", "المنتج غير موجود", language));
 

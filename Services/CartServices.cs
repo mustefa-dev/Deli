@@ -37,22 +37,29 @@ namespace Deli.Services
                 return (null, "لم يتم العثور على السلة");
             }
             //total price
-            carts.ForEach(x =>
-            {
-                x.TotalPrice = (decimal)x.CartOrderDto.Sum(x => x.Price * x.Quantity);
-            });
+            var cart = carts.FirstOrDefault();
+            cart.TotalPrice = 0;
+            
+                    foreach (var cartorderdto in cart.CartOrderDto)
+                    {
+                        var item = await _repositoryWrapper.Item.Get(i => i.Id == cartorderdto.ItemId);
+                        var date = DateTime.Now;
+                        var sale = await _repositoryWrapper.Sale.Get(s =>
+                            s.ItemId == item.Id && date >= s.StartDate && date <= s.EndDate);
+                        if (sale != null)
+                        {
+                            item.Price = sale.SalePrice;
+                            cartorderdto.Price = sale.SalePrice;
+                        }
+                        cartorderdto.Name = ErrorResponseException.GenerateLocalizedResponse(item.Name, item.ArName, language);
 
-            var cartDtos = _mapper.Map<List<CartDto>>(carts);
-            foreach (var  cartdto in cartDtos)
-            {
-                foreach (var cartorderdto in cartdto.CartOrderDto)
-                {
-                    var item = await _repositoryWrapper.Item.Get(i => i.Id == cartorderdto.ItemId);
-                    cartorderdto.ItemName= ErrorResponseException.GenerateLocalizedResponse(item.Name,item.ArName,language);
-                    
-                };
-            }
-            return (cartDtos.FirstOrDefault(), null);
+                        cart.TotalPrice =+ (decimal)(item.Price * cartorderdto.Quantity);
+                    }
+                
+            
+
+         
+            return (cart, null);
         }
         public async Task<(string? message, string? error)> AddToCart(Guid userId, CartForm cartForm)
         {
@@ -70,6 +77,7 @@ namespace Deli.Services
             foreach (var cartOrder in cartForm.OrderCarForm)
             {
                 var product = await _repositoryWrapper.Item.Get(x => x.Id == cartOrder.ItemId);
+              
                 if (product == null)
                 {
                     return (null, "Product Not Found");
@@ -80,7 +88,7 @@ namespace Deli.Services
                 {
                     return (null, "Requested quantity is not available");
                 }
-
+              
                 var cartProductEntity = await _repositoryWrapper.ItemOrder.Get(x =>
                     x.CartId == cart.Id && x.ItemId == cartOrder.ItemId);
         
@@ -91,6 +99,7 @@ namespace Deli.Services
                         CartId = cart.Id,
                         ItemId = cartOrder.ItemId,
                         Quantity = cartOrder.Quantity,
+                        
                     };
                     await _repositoryWrapper.ItemOrder.Add(newCartProduct);
                 }
@@ -100,6 +109,7 @@ namespace Deli.Services
                 }
         
             }
+            
     
             var result = await _repositoryWrapper.Cart.Update(cart);
             if (result == null)
