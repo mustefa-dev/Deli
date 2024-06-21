@@ -46,6 +46,7 @@ CreateMap<PackageUpdate,Package>().ForAllMembers(opts => opts.Condition((src, de
             .ForMember(dest => dest.Item, opt => opt.MapFrom(src => src.Item));
         CreateMap<ItemOrder, CartOrderDto>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Item.Name))
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Item.Price))
             .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
             .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src => src.ItemId))
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

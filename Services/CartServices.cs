@@ -52,8 +52,8 @@ namespace Deli.Services
                             cartorderdto.Price = sale.SalePrice;
                         }
                         cartorderdto.Name = ErrorResponseException.GenerateLocalizedResponse(item.Name, item.ArName, language);
-
-                        cart.TotalPrice =+ (decimal)(item.Price * cartorderdto.Quantity);
+                        if(cartorderdto.Quantity!=0)
+                        cart.TotalPrice = cart.TotalPrice+ (decimal)(item.Price * cartorderdto.Quantity);
                     }
                 
             

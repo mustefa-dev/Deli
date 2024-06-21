@@ -1,5 +1,6 @@
 using AutoMapper;
 using Deli.DATA.DTOs;
+using Deli.DATA.DTOs.cart;
 using Deli.DATA.DTOs.Cart;
 using Deli.DATA.DTOs.Item;
 using Deli.Entities;
@@ -66,8 +67,15 @@ public class OrderServices : IOrderServices
 
         decimal totalPrice = 0;
         int deliveryPrice = 0;
+        var carts= await _repositoryWrapper.Cart.GetAll<CartDto>(x => x.UserId == userId);
+        if (carts.data == null || !carts.data.Any())
+        {
+            return (null, "Cart Not Found");
+        }
+        var cart= carts.data.FirstOrDefault();
+        
 
-        foreach (var orderItemForm in orderForm.ItemId)
+        foreach (var orderItemForm in cart.CartOrderDto)
         {
             var item = await _repositoryWrapper.Item.Get(x => x.Id == orderItemForm.ItemId);
             var date = orderForm.OrderDate;
@@ -79,7 +87,9 @@ public class OrderServices : IOrderServices
             if (item == null)
                 return (null, ErrorResponseException.GenerateLocalizedResponse("Item not found", "المنتج غير موجود", language));
 
-            var orderItem = _mapper.Map<OrderItem>(orderItemForm);
+            var orderItem = new OrderItem();
+            orderItem.ItemId = item.Id;
+            orderItem.Quantity = orderItemForm.Quantity;
             orderItem.OrderId = addedOrder.Id;
             orderItem.ItemPrice = item.Price;
             totalPrice += orderItem.Quantity * (decimal)(item.Price ?? 0.0);
@@ -91,6 +101,7 @@ public class OrderServices : IOrderServices
         var updatedOrder = await _repositoryWrapper.Order.Update(order);
         if (updatedOrder == null)
             return (null, ErrorResponseException.GenerateLocalizedResponse("Error in updating order", "خطأ في تحديث الطلب", language));
+        await _repositoryWrapper.Cart.SoftDelete(cart.Id);
 
         return (order, null);
     }
@@ -104,7 +115,7 @@ public class OrderServices : IOrderServices
                 (filter.OrderStatus == null || x.OrderStatus == filter.OrderStatus) &&
                 (filter.Note == null || x.Note.Contains(filter.Note)) &&
                 (filter.OrderNumber == null || x.Note.Contains(filter.OrderNumber)) &&
-                (filter.UserId == filter.UserId) &&
+                (filter.UserId == x.UserId.ToString()) &&
                 (filter.Rating == null || x.Rating == filter.Rating) &&
                 (filter.DateOfAccepted == null || x.DateOfAccepted == filter.DateOfAccepted) &&
                 (filter.DateOfCanceled == null || x.DateOfCanceled == filter.DateOfCanceled) &&
@@ -112,15 +123,39 @@ public class OrderServices : IOrderServices
                 (filter.AddressId == null || x.AddressId == filter.AddressId)
             ),
             filter.PageNumber, filter.PageSize);
+        foreach (var order in orders.data)
+        {
+            foreach (var orderitemdto in order.OrderItemDto)
+            {
+                var orderitem = await _repositoryWrapper.OrderItem.Get(x => x.Id == orderitemdto.Id);
+                var item= await _repositoryWrapper.Item.Get(x => x.Id == orderitem.ItemId);
+                orderitemdto.Name = ErrorResponseException.GenerateLocalizedResponse(item.Name, item.ArName, language);
+            }
+        }
+        
+            
+        
+        
         return (orders.data, orders.totalCount, null);
     }
 
     public async Task<(OrderDto? order, string? error)> GetById(Guid id, string language)
     {
-        var order = await _repositoryWrapper.Order.GetAll<OrderDto>(x => x.Id == id);
-        if (order.data == null)
+        var orders = await _repositoryWrapper.Order.GetAll<OrderDto>(x => x.Id == id);
+        if (orders.data == null)
             return (null, ErrorResponseException.GenerateLocalizedResponse("Order not found", "الطلب غير موجود", language));
-        return (order.data.FirstOrDefault(), null);
+        foreach (var order in orders.data)
+        {
+            foreach (var orderitemdto in order.OrderItemDto)
+            {
+                var orderitem = await _repositoryWrapper.OrderItem.Get(x => x.Id == orderitemdto.Id);
+                var item= await _repositoryWrapper.Item.Get(x => x.Id == orderitem.ItemId);
+                orderitemdto.Name = ErrorResponseException.GenerateLocalizedResponse(item.Name, item.ArName, language);
+            }
+        }
+
+        
+        return (orders.data.FirstOrDefault(), null);
     }
 
     public async Task<(Order? order, string? error)> Update(Guid id, OrderUpdate orderUpdate, string language)
