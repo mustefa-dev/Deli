@@ -7,6 +7,7 @@ using Deli.DATA.DTOs;
 using Deli.DATA.DTOs.Item;
 using Deli.Entities;
 using Deli.Interface;
+using Deli.Utils;
 
 namespace Deli.Services;
 
@@ -28,6 +29,7 @@ Task<(Sale? sale, string? error)> DeleteScheduledSale(Guid saleId, string langua
 
 Task<(List<ItemDto> items, string? error)> GetAllSoldItems(OrderStatisticsFilter filter, string language);
 Task<(PriceRangeDto priceRangeDto, string? error)> GetPriceRange(string language);
+Task<Respons<ItemDto>> ItemsYouMayLike(BaseFilter filter, string language);
 }
 
 public class ItemServices : IItemServices
@@ -477,6 +479,26 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
         };
 
         return (pricerangedto,null);
+    }
+    public async Task<Respons<ItemDto>> ItemsYouMayLike(BaseFilter filter, string language)
+    {
+        var allItems = await _repositoryWrapper.Item.GetAll();
+        var random = new Random();
+        var suggestedItems = allItems.data.OrderBy(x => random.Next()).ToList();
+        
+        var pagedItems = suggestedItems.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToList();
+        
+        var itemDtos = _mapper.Map<List<ItemDto>>(pagedItems);
+        
+        var response = new Respons<ItemDto>
+        {
+            Data = itemDtos,
+            PagesCount = (int)Math.Ceiling((double)allItems.data.Count / filter.PageSize),
+            CurrentPage = filter.PageNumber,
+            TotalCount = allItems.data.Count
+        };
+
+        return response;
     }
     
 }

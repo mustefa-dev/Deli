@@ -84,6 +84,7 @@ namespace Deli.Controllers
         [HttpGet("GetPriceRange")]
         public async Task<ActionResult> GetPriceRange() => Ok(await _itemServices.GetPriceRange(Language));
      
-        
+        [HttpGet("ItemsYouMayLike")]
+        public async Task<ActionResult<List<ItemDto>>> ItemsYouMayLike([FromQuery]BaseFilter filter) => Ok(await _itemServices.ItemsYouMayLike(filter,Language));
     }
 }
