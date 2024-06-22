@@ -5,6 +5,7 @@ using Deli.Services;
 using Deli.DATA.DTOs;
 using Deli.Entities;
 using Deli.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace Deli.Services;
 
@@ -55,6 +56,7 @@ public class PackageServices : IPackageServices
         foreach (var  package in packages.data)
         {    var originalpackage=await _repositoryWrapper.Package.GetById(package.Id);
             package.Name=ErrorResponseException.GenerateLocalizedResponse(originalpackage.Name, originalpackage.ArName, language);
+            package.Description=ErrorResponseException.GenerateLocalizedResponse(originalpackage.Description, originalpackage.ArDescription, language);
             foreach (var itemdto in package.Items)
             {
                 var originalitem=await _repositoryWrapper.Item.GetById(itemdto.Id);
@@ -75,7 +77,7 @@ public class PackageServices : IPackageServices
 
     public async Task<(PackageDto? package, string? error)> GetById(Guid id, string language )
     {
-        var   package = await _repositoryWrapper.Package.GetById(id);
+        var   package = await _repositoryWrapper.Package.Get(i=>i.Id==id, i=>i.Include(x=>x.Items));
         if (package == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Package Not Found", "الحزمة غير موجودة", language));
         var packageDto = _mapper.Map<PackageDto>(package);
         foreach (var itemdto in packageDto.Items)
@@ -87,6 +89,7 @@ public class PackageServices : IPackageServices
                 
         }
         packageDto.Name=ErrorResponseException.GenerateLocalizedResponse(package.Name, package.ArName, language);
+        packageDto.Description=ErrorResponseException.GenerateLocalizedResponse(package.Description, package.ArDescription, language);
         return (packageDto, null);
     }
 
