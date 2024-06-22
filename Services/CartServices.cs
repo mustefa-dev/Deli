@@ -13,9 +13,9 @@ namespace Deli.Services
     public interface ICartService
     {
         Task<(CartDto? data,String? error)> GetMyCart(Guid userId,string language);
-        Task<(string? message, string? error)> AddToCart(Guid userId, CartForm cartForm);
-        
-        Task<(string? message, string? error)> DeleteFromCart(Guid userId, Guid cartId, int quantity);
+        Task<(string? message, string? error)> AddToCart(Guid userId, CartForm cartForm, string language);
+
+        Task<(string? message, string? error)> DeleteFromCart(Guid userId, Guid cartId, int quantity, string language);
     }
     
     public class CartService : ICartService
@@ -34,7 +34,7 @@ namespace Deli.Services
             );
             if (carts == null || !carts.Any())
             {
-                return (null, "لم يتم العثور على السلة");
+                return (null, ErrorResponseException.GenerateLocalizedResponse("Cart not found", "لم يتم العثور على السلة", language));
             }
             //total price
             var cart = carts.FirstOrDefault();
@@ -61,7 +61,7 @@ namespace Deli.Services
          
             return (cart, null);
         }
-        public async Task<(string? message, string? error)> AddToCart(Guid userId, CartForm cartForm)
+        public async Task<(string? message, string? error)> AddToCart(Guid userId, CartForm cartForm,string language)
         {
             var cart = await _repositoryWrapper.Cart.Get(x => x.UserId == userId, i => i.Include(x => x.ItemOrders));
             if (cart == null)
@@ -80,13 +80,13 @@ namespace Deli.Services
               
                 if (product == null)
                 {
-                    return (null, "Product Not Found");
+                    return (null,ErrorResponseException.GenerateLocalizedResponse("Product not found", "لم يتم العثور على المنتج", language));
                 }
 
                 // Check if the quantity is available
                 if (product.Quantity < cartOrder.Quantity)
                 {
-                    return (null, "Requested quantity is not available");
+                    return (null, ErrorResponseException.GenerateLocalizedResponse("Quantity not available", "الكمية غير متوفرة", language));
                 }
               
                 var cartProductEntity = await _repositoryWrapper.ItemOrder.Get(x =>
@@ -105,7 +105,7 @@ namespace Deli.Services
                 }
                 else 
                 {
-                    return (null, "المنتج موجود بالفعل في السلة");
+                    return (null, ErrorResponseException.GenerateLocalizedResponse("Product already exists in the cart", "المنتج موجود بالفعل في السلة", language));
                 }
         
             }
@@ -114,23 +114,23 @@ namespace Deli.Services
             var result = await _repositoryWrapper.Cart.Update(cart);
             if (result == null)
             {
-                return (null, "لا يمكن اضافة المنتجات الى السلة");
+                return (null, ErrorResponseException.GenerateLocalizedResponse("Error in adding products to cart", "خطأ في اضافة المنتجات الى السلة", language));
             }
     
-            return ("تم اضافة المنتجات الى السلة", null);
+            return (ErrorResponseException.GenerateLocalizedResponse("Items added to cart","تمت اضافة المنتجات الى السلة",language), null);
         }
-        public async Task<(string? message, string? error)> DeleteFromCart(Guid userId, Guid cartId, int quantity)
+        public async Task<(string? message, string? error)> DeleteFromCart(Guid userId, Guid cartId, int quantity,string language)
         {
             var cart = await _repositoryWrapper.Cart.Get(x => x.UserId == userId, i => i.Include(x => x.ItemOrders));
             if (cart == null)
             {
-                return (null, "لم يتم العثور على السلة");
+                return (null, ErrorResponseException.GenerateLocalizedResponse("Cart not found", "لم يتم العثور على السلة", language));
             }
             
             var cartProduct = cart.ItemOrders.FirstOrDefault(x => x.ItemId == cartId);
             if (cartProduct == null)
             {
-                return (null, "لم يتم العثور على المنتج في السلة");
+                return (null, ErrorResponseException.GenerateLocalizedResponse("Product not found in the cart", "لم يتم العثور على المنتج في السلة", language));
             }
             
             if (cartProduct.Quantity > quantity)
@@ -143,7 +143,7 @@ namespace Deli.Services
                 await _repositoryWrapper.ItemOrder.Delete(cartProduct.Id);
             }
             
-            return ("تم حذف المنتج من السلة", null);
+            return (ErrorResponseException.GenerateLocalizedResponse("Product is removed from the cart","تم حف المنتج من السلة",language), null);
         }
     }
 }

@@ -20,9 +20,9 @@ namespace Deli.Controllers
         public async Task<ActionResult<CartDto>> Get() => Ok(await _service.GetMyCart(Id,Language));
         
         [HttpPost]
-        public async Task<ActionResult> AddToCart(CartForm cartForm) => Ok(await _service.AddToCart(Id, cartForm));
+        public async Task<ActionResult> AddToCart(CartForm cartForm) => Ok(await _service.AddToCart(Id, cartForm,Language));
         
         [HttpDelete]
-        public async Task<ActionResult> DeleteFromCart([FromQuery] Guid ProductId, int Quantity) => Ok(await _service.DeleteFromCart(Id, ProductId, Quantity));
+        public async Task<ActionResult> DeleteFromCart([FromQuery] Guid ProductId, int Quantity) => Ok(await _service.DeleteFromCart(Id, ProductId, Quantity,Language));
     }
 }

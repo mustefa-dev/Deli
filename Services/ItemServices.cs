@@ -480,16 +480,55 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
 
         return (pricerangedto,null);
     }
+
     public async Task<Respons<ItemDto>> ItemsYouMayLike(BaseFilter filter, string language)
     {
         var allItems = await _repositoryWrapper.Item.GetAll();
         var random = new Random();
         var suggestedItems = allItems.data.OrderBy(x => random.Next()).ToList();
-        
+
         var pagedItems = suggestedItems.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToList();
-        
+
         var itemDtos = _mapper.Map<List<ItemDto>>(pagedItems);
-        
+        foreach (var itemDto in itemDtos)
+        {
+            var date = DateTime.Now;
+            var sale = await _repositoryWrapper.Sale.Get(s =>
+                s.ItemId == itemDto.Id && date >= s.StartDate && date <= s.EndDate);
+            if (sale != null)
+            {
+                itemDto.SalePrice = sale.SalePrice;
+                itemDto.SalePercintage = sale.SalePercintage;
+                itemDto.SaleStartDate = sale.StartDate;
+                itemDto.SaleEndDate = sale.EndDate;
+                itemDto.IsSale = true;
+            }
+            else
+            {
+                itemDto.SalePrice = null;
+                itemDto.SalePercintage = null;
+                itemDto.SaleStartDate = null;
+                itemDto.SaleEndDate = null;
+                itemDto.IsSale = false;
+            }
+
+            var Item = await _repositoryWrapper.Item.Get(i => i.Id == itemDto.Id);
+            itemDto.Name = ErrorResponseException.GenerateLocalizedResponse(Item.Name, Item.ArName, language);
+            itemDto.MainDetails =
+                ErrorResponseException.GenerateLocalizedResponse(Item.MainDetails, Item.ArMainDetails, language);
+            itemDto.Description =
+                ErrorResponseException.GenerateLocalizedResponse(Item.Description, Item.ArDescription, language);
+            var category = await _repositoryWrapper.Category.Get(c => c.Id == Item.CategoryId);
+            itemDto.CategoryName =
+                ErrorResponseException.GenerateLocalizedResponse(category.Name, category.ArName, language);
+            var inventory = await _repositoryWrapper.Inventory.Get(i => i.Id == itemDto.InventoryId);
+            itemDto.InventoryName =
+                ErrorResponseException.GenerateLocalizedResponse(inventory.Name, inventory.ArName, language);
+            var governorate = await _repositoryWrapper.Governorate.Get(g => g.Id == inventory.GovernorateId);
+            itemDto.GovernorateName =
+                ErrorResponseException.GenerateLocalizedResponse(governorate.Name, governorate.ArName, language);
+        }
+
         var response = new Respons<ItemDto>
         {
             Data = itemDtos,
@@ -500,5 +539,5 @@ public async Task<(Item? item, string? error)> Delete(Guid id, string language)
 
         return response;
     }
-    
+
 }
