@@ -115,7 +115,7 @@ public class OrderServices : IOrderServices
                 (filter.OrderStatus == null || x.OrderStatus == filter.OrderStatus) &&
                 (filter.Note == null || x.Note.Contains(filter.Note)) &&
                 (filter.OrderNumber == null || x.Note.Contains(filter.OrderNumber)) &&
-                (filter.UserId == x.UserId.ToString()) &&
+                (filter.UserId==null ||filter.UserId == x.UserId.ToString()) &&
                 (filter.Rating == null || x.Rating == filter.Rating) &&
                 (filter.DateOfAccepted == null || x.DateOfAccepted == filter.DateOfAccepted) &&
                 (filter.DateOfCanceled == null || x.DateOfCanceled == filter.DateOfCanceled) &&
@@ -131,6 +131,9 @@ public class OrderServices : IOrderServices
                 var item= await _repositoryWrapper.Item.Get(x => x.Id == orderitem.ItemId);
                 orderitemdto.Name = ErrorResponseException.GenerateLocalizedResponse(item.Name, item.ArName, language);
             }
+            var governorate = await _repositoryWrapper.Governorate.Get(x => x.Id == order.GovernorateId);
+            if(governorate!=null)
+            order.GovernorateName = ErrorResponseException.GenerateLocalizedResponse(governorate.Name, governorate.ArName, language);
         }
         
             
@@ -153,9 +156,11 @@ public class OrderServices : IOrderServices
                 orderitemdto.Name = ErrorResponseException.GenerateLocalizedResponse(item.Name, item.ArName, language);
             }
         }
-
+     var resault = orders.data.FirstOrDefault();
+     var governorate = await _repositoryWrapper.Governorate.Get(x => x.Id == resault.GovernorateId);
+     resault.GovernorateName = ErrorResponseException.GenerateLocalizedResponse(governorate.Name, governorate.ArName, language);
         
-        return (orders.data.FirstOrDefault(), null);
+        return (resault, null);
     }
 
     public async Task<(Order? order, string? error)> Update(Guid id, OrderUpdate orderUpdate, string language)

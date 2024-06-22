@@ -12,7 +12,7 @@ namespace Deli.DATA.DTOs
         public string? LastName { get; set; }
         public string? StreetAddress { get; set; }
         public Guid? GovernorateId { get; set; }
-        public string? GovernorateName{ get; set; }
+        //public string? GovernorateName{ get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
 
