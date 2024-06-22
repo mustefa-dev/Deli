@@ -138,11 +138,11 @@ public async Task<(ItemDto? item, string? error)> GetById(Guid userId,Guid id, s
     }
 public async Task<(List<ItemDto> items, int? totalCount, string? error)> GetAll(Guid userId,ItemFilter filter, string language)
 {
+    filter.Name = filter.Name?.ToLower();
     var (item, totalCount) = await _repositoryWrapper.Item.GetAll<ItemDto>(
-        x => (string.IsNullOrEmpty(filter.Name) || x.Name.Contains(filter.Name)) &&
-             (string.IsNullOrEmpty(filter.ArName) || x.ArName.Contains(filter.ArName)) &&
-             (string.IsNullOrEmpty(filter.TagName) || x.ItemTags.Any(t => t.Tag.Name == filter.TagName)) &&
-             (filter.RefNumber == null || x.RefNumber == filter.RefNumber) &&
+        x => (string.IsNullOrEmpty(filter.Name) ||  (x.Name.ToLower().Contains(filter.Name) || x.ArName.ToLower().Contains(filter.Name)
+                 || x.ItemTags.Any(t => t.Tag.Name.ToLower().Contains(filter.Name)) || x.RefNumber.ToLower().Contains(filter.Name))) && 
+             
              (filter.CategoryId == null || x.CategoryId == filter.CategoryId) &&
              (filter.InventoryId == null || x.InventoryId == filter.InventoryId) &&
              (filter.Quantity == null || x.Quantity >= filter.Quantity));
