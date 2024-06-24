@@ -16,6 +16,7 @@ namespace Deli.Services
         Task<(string? message, string? error)> AddToCart(Guid userId, CartForm cartForm, string language);
 
         Task<(string? message, string? error)> DeleteFromCart(Guid userId, Guid cartId, int quantity, string language);
+        Task<(string? message, string? error)> UpdateQuantity(Guid userId, Guid itemId, int quantity, string language);
     }
     
     public class CartService : ICartService
@@ -144,6 +145,25 @@ namespace Deli.Services
             }
             
             return (ErrorResponseException.GenerateLocalizedResponse("Product is removed from the cart","تم حف المنتج من السلة",language), null);
+        }
+        public async Task<(string? message, string? error)> UpdateQuantity(Guid userId, Guid itemId, int quantity,string language)
+        {
+            var cart = await _repositoryWrapper.Cart.Get(x => x.UserId == userId, i => i.Include(x => x.ItemOrders));
+            if (cart == null)
+            {
+                return (null, ErrorResponseException.GenerateLocalizedResponse("Cart not found", "لم يتم العثور على السلة", language));
+            }
+            
+            var cartProduct = cart.ItemOrders.FirstOrDefault(x => x.ItemId == itemId);
+            if (cartProduct == null)
+            {
+                return (null, ErrorResponseException.GenerateLocalizedResponse("Product not found in the cart", "لم يتم العثور على المنتج في السلة", language));
+            }
+            
+            cartProduct.Quantity = quantity;
+            await _repositoryWrapper.ItemOrder.Update(cartProduct);
+            
+            return (ErrorResponseException.GenerateLocalizedResponse("Quantity updated successfully","تم تحديث الكمية بنجاح",language), null);
         }
     }
 }

@@ -21,6 +21,8 @@ namespace Deli.Controllers
         
         [HttpPost]
         public async Task<ActionResult> AddToCart(CartForm cartForm) => Ok(await _service.AddToCart(Id, cartForm,Language));
+        [HttpPut("UpdateCart/{ItemId}")]
+        public async Task<ActionResult> UpdateCart(Guid ItemId,int quantity) => Ok(await _service.UpdateQuantity(Id, ItemId,quantity,Language));
         
         [HttpDelete]
         public async Task<ActionResult> DeleteFromCart([FromQuery] Guid ProductId, int Quantity) => Ok(await _service.DeleteFromCart(Id, ProductId, Quantity,Language));
