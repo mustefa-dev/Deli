@@ -60,6 +60,8 @@ public class OrderServices : IOrderServices
         var user = await _repositoryWrapper.User.Get(x => x.Id == userId);
         if (user == null)
             return (null, ErrorResponseException.GenerateLocalizedResponse("User not found", "المستخدم غير موجود", language));
+        if(user.IsLocked==true)
+            return (null, ErrorResponseException.GenerateLocalizedResponse("User is locked", "الحساب متوقف", language));
         order.OrderStatus = OrderStatus.Pending;
         order.AddressId = user.AddressId;
         order.OrderNumber = GenerateOrderNumber();
