@@ -12,6 +12,6 @@ namespace Deli.DATA.DTOs.Cart
         public string UserId { get; set; }
         public string UserNAme { get; set; }
         public UserDto User { get; set; }
-        public List<ItemOrderDto> ItemOrders { get; set; } // Add this line
+        //public List<ItemOrderDto> ItemOrders { get; set; } // Add this line
     }
 }

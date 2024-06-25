@@ -55,6 +55,7 @@ public class PackageServices : IPackageServices
         var packages = await _repositoryWrapper.Package.GetAll<PackageDto>(filter.PageNumber, filter.PageSize);
         foreach (var  package in packages.data)
         {    var originalpackage=await _repositoryWrapper.Package.GetById(package.Id);
+            
             package.Name=ErrorResponseException.GenerateLocalizedResponse(originalpackage.Name, originalpackage.ArName, language);
             package.Description=ErrorResponseException.GenerateLocalizedResponse(originalpackage.Description, originalpackage.ArDescription, language);
             foreach (var itemdto in package.Items)

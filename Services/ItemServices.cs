@@ -565,7 +565,7 @@ public class ItemServices : IItemServices
         var soldItems = new List<ItemDto>();
         foreach (var orderItem in orderItems.data)
         {
-            var item = await _repositoryWrapper.Item.GetById(orderItem.ItemId);
+            var item = await _repositoryWrapper.Item.Get(i=>i.Id==orderItem.ItemId);
             if (item != null &&
                 (filter.InventoryId == null || item.InventoryId == filter.InventoryId) &&
                 (filter.CategoryId == null || item.CategoryId == filter.CategoryId))

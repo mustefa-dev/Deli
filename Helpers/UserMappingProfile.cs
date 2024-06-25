@@ -39,7 +39,11 @@ CreateMap<ItemTagUpdate,ItemTag>().ForAllMembers(opts => opts.Condition((src, de
 CreateMap<Tag, TagDto>();
 CreateMap<TagForm,Tag>();
 CreateMap<TagUpdate,Tag>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-CreateMap<Package, PackageDto>().ForMember(dest => dest.Image, opt => opt.MapFrom(src => Utils.Util.Url + src.Image));
+CreateMap<Package, PackageDto>().ForMember(dest=>dest.Price,
+        opt=>opt.MapFrom(src=>src.Price))
+    .ForMember(dest => dest.Image, opt => opt.MapFrom(src => Utils.Util.Url + src.Image))
+    .ForMember(dest=>dest.DiscountPercentage,
+        opt=>opt.MapFrom(src=>src.Price!=null?src.Price/src.Items.Sum(item=>item.Price)*100:0));
 CreateMap<PackageForm,Package>();
 CreateMap<PackageUpdate,Package>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         CreateMap<ItemOrder, ItemOrderDto>()
@@ -47,13 +51,12 @@ CreateMap<PackageUpdate,Package>().ForAllMembers(opts => opts.Condition((src, de
             .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
             .ForMember(dest => dest.Item, opt => opt.MapFrom(src => src.Item));
         CreateMap<ItemOrder, CartOrderDto>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Item.Name))
-            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Item.Price))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>src.IsPackage==true?src.Package.Name:src.Item.Name))
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.IsPackage==true?(double)src.Package.Price:src.Item.Price))
             .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
-            .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src => src.ItemId))
+            .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src =>src.IsPackage==true?src.PackageId:src.ItemId))
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-            
-            .ForMember(dest => dest.Image, opt => opt.MapFrom(src => baseUrl + src.Item.imaages.FirstOrDefault()));
+            .ForMember(dest => dest.Image, opt => opt.MapFrom(src =>baseUrl+(src.IsPackage==true?src.Package.Image:src.Item.imaages.FirstOrDefault())));;
         CreateMap<ItemOrderForm,ItemOrder>();
 CreateMap<ItemOrderUpdate,ItemOrder>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Cart, CartDto>()
@@ -137,11 +140,14 @@ CreateMap<Order, OrderDto>()
 CreateMap<OrderForm,Order>();
 CreateMap<OrderUpdate,Order>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<OrderItem, OrderItemDto>()
-    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Item.Name))
-    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Item.Name))
-    .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Item.imaages.FirstOrDefault()))
+    .ForMember(dest=>dest.Id,opt=>opt.MapFrom(src=>src.Id))
+    .ForMember(dest=>dest.ItemId,
+        opt=>opt.MapFrom(src=>src.IsPackage==true?src.PackageId:src.ItemId))
+    .ForMember(dest=>dest.Name,opt=>opt.MapFrom(src=>src.IsPackage==true?src.Package.Name:src.Item.Name))
+    .ForMember(dest=>dest.ItemPrice,
+        opt=>opt.MapFrom(src=>src.IsPackage==true?src.Package.Price:src.Item.Price))
     .ForMember(dist => dist.Image,
-        opt => opt.MapFrom(src => src.Item.imaages == null ? "" : Utils.Util.Url + src.Item.imaages.FirstOrDefault()));
+        opt => opt.MapFrom(src => baseUrl + (src.IsPackage==true?src.Package.Image:src.Item.imaages.FirstOrDefault())));
     
     
 CreateMap<OrderItemForm,OrderItem>();

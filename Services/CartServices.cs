@@ -44,17 +44,33 @@ namespace Deli.Services
                     foreach (var cartorderdto in cart.CartOrderDto)
                     {
                         var item = await _repositoryWrapper.Item.Get(i => i.Id == cartorderdto.ItemId);
-                        var date = DateTime.Now;
-                        var sale = await _repositoryWrapper.Sale.Get(s =>
-                            s.ItemId == item.Id && date >= s.StartDate && date <= s.EndDate);
-                        if (sale != null)
+                        var package = await _repositoryWrapper.Package.Get(i => i.Id == cartorderdto.ItemId);
+                        if (item == null && package == null)
                         {
-                            item.Price = sale.SalePrice;
-                            cartorderdto.Price = sale.SalePrice;
+                           continue;
                         }
-                        cartorderdto.Name = ErrorResponseException.GenerateLocalizedResponse(item.Name, item.ArName, language);
-                        if(cartorderdto.Quantity!=0)
-                        cart.TotalPrice = cart.TotalPrice+ (decimal)(item.Price * cartorderdto.Quantity);
+
+                        if (item != null)
+                        {
+                            var date = DateTime.Now;
+                            var sale = await _repositoryWrapper.Sale.Get(s =>
+                                s.ItemId == item.Id && date >= s.StartDate && date <= s.EndDate);
+                            if (sale != null)
+                            {
+                                item.Price = sale.SalePrice;
+                                cartorderdto.Price = sale.SalePrice;
+                            }
+                            if(cartorderdto.Quantity!=0)
+                            cart.TotalPrice = cart.TotalPrice+ (decimal)(item.Price * cartorderdto.Quantity);
+                            cartorderdto.Name = ErrorResponseException.GenerateLocalizedResponse(item.Name, item.ArName, language);
+                        }
+                        else
+                        {   if(cartorderdto.Quantity!=0)
+                            cart.TotalPrice = cart.TotalPrice + (decimal)(package.Price * cartorderdto.Quantity);
+                            cartorderdto.Name = ErrorResponseException.GenerateLocalizedResponse(package.Name, package.ArName, language);
+                        }
+                        
+                      
                     }
                 
             
@@ -78,37 +94,81 @@ namespace Deli.Services
             foreach (var cartOrder in cartForm.OrderCarForm)
             {
                 var product = await _repositoryWrapper.Item.Get(x => x.Id == cartOrder.ItemId);
+                var package = await _repositoryWrapper.Package.Get(x => x.Id == cartOrder.ItemId, i => i.Include(x => x.Items));
               
-                if (product == null)
+                if (product == null && package == null)
                 {
                     return (null,ErrorResponseException.GenerateLocalizedResponse("Product not found", "لم يتم العثور على المنتج", language));
                 }
 
-                // Check if the quantity is available
-                if (product.Quantity < cartOrder.Quantity)
+                if (product != null)
                 {
-                    return (null, ErrorResponseException.GenerateLocalizedResponse("Quantity not available", "الكمية غير متوفرة", language));
-                }
-              
-                var cartProductEntity = await _repositoryWrapper.ItemOrder.Get(x =>
-                    x.CartId == cart.Id && x.ItemId == cartOrder.ItemId);
-        
-                if (cartProductEntity == null) 
-                {
-                    var newCartProduct = new ItemOrder()
+                    // Check if the quantity is available
+                    if (product.Quantity < cartOrder.Quantity)
                     {
-                        CartId = cart.Id,
-                        ItemId = cartOrder.ItemId,
-                        Quantity = cartOrder.Quantity,
-                        
-                    };
-                    await _repositoryWrapper.ItemOrder.Add(newCartProduct);
+                        return (null,
+                            ErrorResponseException.GenerateLocalizedResponse("Quantity not available",
+                                "الكمية غير متوفرة", language));
+                    }
+
+                    var cartProductEntity = await _repositoryWrapper.ItemOrder.Get(x =>
+                        x.CartId == cart.Id && x.ItemId == cartOrder.ItemId);
+
+                    if (cartProductEntity == null)
+                    {
+                        var newCartProduct = new ItemOrder()
+                        {
+                            CartId = cart.Id,
+                            ItemId = cartOrder.ItemId,
+                            Quantity = cartOrder.Quantity,
+
+                        };
+                        await _repositoryWrapper.ItemOrder.Add(newCartProduct);
+                    }
+                    else
+                    {
+                        return (null,
+                            ErrorResponseException.GenerateLocalizedResponse("Product already exists in the cart",
+                                "المنتج موجود بالفعل في السلة", language));
+                    }
                 }
-                else 
+                else
                 {
-                    return (null, ErrorResponseException.GenerateLocalizedResponse("Product already exists in the cart", "المنتج موجود بالفعل في السلة", language));
+                    foreach (var item in package.Items)
+                    {
+                        if (item.Quantity < cartOrder.Quantity)
+                        {
+                            return (null,
+                                ErrorResponseException.GenerateLocalizedResponse(
+                                    "Quantity is not available for one of the items in the package",
+                                    "الكمية غير متوفرة لاحد العناصر في الحزمة", language));
+                        }
+                    }
+
+                    var cartProductEntity = await _repositoryWrapper.ItemOrder.Get(x =>
+                            x.CartId == cart.Id && x.PackageId == package.Id);
+
+                        if (cartProductEntity == null)
+                        {
+                            var newCartProduct = new ItemOrder()
+                            {
+                                CartId = cart.Id,
+                                PackageId = package.Id,
+                                Quantity = cartOrder.Quantity,
+                                IsPackage = true
+
+                            };
+                            await _repositoryWrapper.ItemOrder.Add(newCartProduct);
+                        }
+                        else
+                        {
+                            return (null,
+                                ErrorResponseException.GenerateLocalizedResponse("Product already exists in the cart",
+                                    "المنتج موجود بالفعل في السلة", language));
+                        }
+                    
                 }
-        
+
             }
             
     

@@ -29,7 +29,7 @@ public interface IOrderServices
     Task<(List<OrderDto>order ,int? totalCount, string? error)> GetMyOrders(Guid userId, string language);
     Task<OrderStatisticsDto> GetOrderStatistics(OrderStatisticsFilter filter, string language);
     Task<FinancialReport> CreateFinancialReport();
-    Task<(Order? order, string? error)> CreateOrderFromCart(Guid userId, string language);
+    //Task<(Order? order, string? error)> CreateOrderFromCart(Guid userId, string language);
 
 }
 
@@ -81,22 +81,39 @@ public class OrderServices : IOrderServices
         foreach (var orderItemForm in cart.CartOrderDto)
         {
             var item = await _repositoryWrapper.Item.Get(x => x.Id == orderItemForm.ItemId);
-            var date = orderForm.OrderDate;
-            var sale = await _repositoryWrapper.Sale.Get(s => s.ItemId == item.Id && date >= s.StartDate && date<= s.EndDate);
-            if (sale != null)
+            var package = await _repositoryWrapper.Package.Get(x => x.Id == orderItemForm.ItemId);
+            if (item == null&&package==null)
+                return (null, ErrorResponseException.GenerateLocalizedResponse("One of the Items is not found", "احد المنتجات غير موجود", language));
+            
+            if(package!=null)
             {
-                item.Price = sale.SalePrice;
+                var orderItem = new OrderItem();
+                orderItem.PackageId = package.Id;
+                orderItem.Quantity = orderItemForm.Quantity;
+                orderItem.OrderId = addedOrder.Id;
+                orderItem.ItemPrice = package.Price;
+                orderItem.IsPackage = true;
+                totalPrice += orderItem.Quantity * (decimal)(package.Price ?? 0.0);
+                await _repositoryWrapper.OrderItem.Add(orderItem);
             }
-            if (item == null)
-                return (null, ErrorResponseException.GenerateLocalizedResponse("Item not found", "المنتج غير موجود", language));
+            else
+            {
+                var date = orderForm.OrderDate;
+                var sale = await _repositoryWrapper.Sale.Get(s =>
+                    s.ItemId == item.Id && date >= s.StartDate && date <= s.EndDate);
+                if (sale != null)
+                {
+                    item.Price = sale.SalePrice;
+                }
 
-            var orderItem = new OrderItem();
-            orderItem.ItemId = item.Id;
-            orderItem.Quantity = orderItemForm.Quantity;
-            orderItem.OrderId = addedOrder.Id;
-            orderItem.ItemPrice = item.Price;
-            totalPrice += orderItem.Quantity * (decimal)(item.Price ?? 0.0);
-            await _repositoryWrapper.OrderItem.Add(orderItem);
+                var orderItem = new OrderItem();
+                orderItem.ItemId = item.Id;
+                orderItem.Quantity = orderItemForm.Quantity;
+                orderItem.OrderId = addedOrder.Id;
+                orderItem.ItemPrice = item.Price;
+                totalPrice += orderItem.Quantity * (decimal)(item.Price ?? 0.0);
+                await _repositoryWrapper.OrderItem.Add(orderItem);
+            }
         }
 
         order.TotalPrice = totalPrice + deliveryPrice;
@@ -131,8 +148,16 @@ public class OrderServices : IOrderServices
             foreach (var orderitemdto in order.OrderItemDto)
             {
                 var orderitem = await _repositoryWrapper.OrderItem.Get(x => x.Id == orderitemdto.Id);
-                var item= await _repositoryWrapper.Item.Get(x => x.Id == orderitem.ItemId);
-                orderitemdto.Name = ErrorResponseException.GenerateLocalizedResponse(item.Name, item.ArName, language);
+                if(orderitem.IsPackage)
+                {
+                    var package = await _repositoryWrapper.Package.Get(x => x.Id == orderitem.PackageId);
+                    orderitemdto.Name = ErrorResponseException.GenerateLocalizedResponse(package.Name, package.ArName, language);
+                }
+                else
+                {
+                    var item= await _repositoryWrapper.Item.Get(x => x.Id == orderitem.ItemId);
+                    orderitemdto.Name = ErrorResponseException.GenerateLocalizedResponse(item.Name, item.ArName, language);
+                }
             }
             var governorate = await _repositoryWrapper.Governorate.Get(x => x.Id == order.GovernorateId);
             if(governorate!=null)
@@ -155,8 +180,18 @@ public class OrderServices : IOrderServices
             foreach (var orderitemdto in order.OrderItemDto)
             {
                 var orderitem = await _repositoryWrapper.OrderItem.Get(x => x.Id == orderitemdto.Id);
-                var item= await _repositoryWrapper.Item.Get(x => x.Id == orderitem.ItemId);
-                orderitemdto.Name = ErrorResponseException.GenerateLocalizedResponse(item.Name, item.ArName, language);
+                if (orderitem.IsPackage)
+                {
+                    var package = await _repositoryWrapper.Package.Get(x => x.Id == orderitem.PackageId);
+                    orderitemdto.Name =
+                        ErrorResponseException.GenerateLocalizedResponse(package.Name, package.ArName, language);
+                }
+                else
+                {
+                    var item = await _repositoryWrapper.Item.Get(x => x.Id == orderitem.ItemId);
+                    orderitemdto.Name =
+                        ErrorResponseException.GenerateLocalizedResponse(item.Name, item.ArName, language);
+                }
             }
         }
      var resault = orders.data.FirstOrDefault();
@@ -324,6 +359,31 @@ public async Task<(string? done, string? error)> Rating(Guid id, Guid userId, Ra
         if (user == null)
             return (null, null, ErrorResponseException.GenerateLocalizedResponse("User not found", "المستخدم غير موجود", language));
         var orders = await _repositoryWrapper.Order.GetAll<OrderDto>(x => x.UserId == userId);
+        foreach (var order in orders.data)
+        {
+            foreach (var orderitemdto in order.OrderItemDto)
+            {
+                var orderitem = await _repositoryWrapper.OrderItem.Get(x => x.Id == orderitemdto.Id);
+                if (orderitem.IsPackage)
+                {
+                    var package = await _repositoryWrapper.Package.Get(x => x.Id == orderitem.PackageId);
+                    orderitemdto.Name =
+                        ErrorResponseException.GenerateLocalizedResponse(package.Name, package.ArName, language);
+                }
+                else
+                {
+                    var item = await _repositoryWrapper.Item.Get(x => x.Id == orderitem.ItemId);
+                    orderitemdto.Name =
+                        ErrorResponseException.GenerateLocalizedResponse(item.Name, item.ArName, language);
+                }
+            }
+            var governorate = await _repositoryWrapper.Governorate.Get(x => x.Id == order.GovernorateId);
+            if (governorate != null)
+                order.GovernorateName = ErrorResponseException.GenerateLocalizedResponse(governorate.Name, governorate.ArName, language);
+        }
+        
+            
+        
         return (orders.data, orders.totalCount, null);
     }
     public async Task<OrderStatisticsDto> GetOrderStatistics(OrderStatisticsFilter filter, string language)
@@ -436,7 +496,7 @@ public async Task<(string? done, string? error)> Rating(Guid id, Guid userId, Ra
 
     return report;
 }
-    public async Task<(Order? order, string? error)> CreateOrderFromCart(Guid userId, string language)
+ /*   public async Task<(Order? order, string? error)> CreateOrderFromCart(Guid userId, string language)
     {
         var (carts, totalCount) = await _repositoryWrapper.Cart.GetAll<CartDto>(x => x.UserId == userId);
         var cart = carts.FirstOrDefault();
@@ -471,7 +531,7 @@ public async Task<(string? done, string? error)> Rating(Guid id, Guid userId, Ra
         await _repositoryWrapper.Cart.Update(_mapper.Map<Cart>(cart));
 
         return (addedOrder, null);
-    }
+    }*/
 
     private long GenerateOrderNumber()
     {

@@ -9,16 +9,9 @@ namespace Deli.DATA.DTOs
         public string Description { get; set; }
         public string Image { get; set; }
         public List<ItemDto> Items { get; set; }
-        public decimal DiscountPercentage { get; set; }
+        public double? DiscountPercentage { get; set; }
 
-        public decimal TotalPrice
-        {
-            get
-            {
-                decimal totalPrice = Items.Sum(item => (decimal)(item.Price ?? 0.0));
-                decimal discountAmount = totalPrice * DiscountPercentage / 100;
-                return totalPrice - discountAmount;
-            }
-        }
+        public double? Price { get; set; }
+      
     }
 }

@@ -8,17 +8,8 @@ namespace Deli.Entities
         public string? ArDescription { get; set; }
         public string? Image { get; set; }
         
-        public List<Item>? Items { get; set; } = new List<Item>(); 
-        public decimal DiscountPercentage { get; set; }
-
-        public decimal TotalPrice
-        {
-            get
-            {
-                decimal totalPrice = Items.Sum(item => (decimal)(item.Price ?? 0.0));
-                decimal discountAmount = totalPrice * DiscountPercentage / 100;
-                return totalPrice - discountAmount;
-            }
-        }
+        public List<Item>? Items { get; set; } = new List<Item>();
+        public double? Price { get; set; }
+        
     }
 }
