@@ -1,4 +1,5 @@
 using AutoMapper;
+using Deli.DATA;
 using Deli.DATA.DTOs;
 using Deli.DATA.DTOs.cart;
 using Deli.DATA.DTOs.Cart;
@@ -36,14 +37,17 @@ public class OrderServices : IOrderServices
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
+    private readonly DataContext _context;
 
     public OrderServices(
         IMapper mapper,
-        IRepositoryWrapper repositoryWrapper
+        IRepositoryWrapper repositoryWrapper,
+        DataContext context
     )
     {
         _mapper = mapper;
         _repositoryWrapper = repositoryWrapper;
+        _context = context;
     }
 
 
@@ -52,14 +56,13 @@ public class OrderServices : IOrderServices
         var order = _mapper.Map<Order>(orderForm);
         order.UserId = userId;
         order.DateOfAccepted = null;
-        order.OrderNumber = RandomNumberGeneratorNumber.GenerateUnique6DigitNumber(_repositoryWrapper);
 
         var user = await _repositoryWrapper.User.Get(x => x.Id == userId);
         if (user == null)
             return (null, ErrorResponseException.GenerateLocalizedResponse("User not found", "المستخدم غير موجود", language));
         order.OrderStatus = OrderStatus.Pending;
         order.AddressId = user.AddressId;
-        order.OrderNumber = RandomNumberGeneratorNumber.GenerateUnique6DigitNumber(_repositoryWrapper);
+        order.OrderNumber = GenerateOrderNumber();
 
         var addedOrder = await _repositoryWrapper.Order.Add(order);
         if (addedOrder == null)
@@ -468,5 +471,21 @@ public async Task<(string? done, string? error)> Rating(Guid id, Guid userId, Ra
         await _repositoryWrapper.Cart.Update(_mapper.Map<Cart>(cart));
 
         return (addedOrder, null);
+    }
+
+    private long GenerateOrderNumber()
+    {
+
+        var OrderNumber = _context.RefNumbers.FirstOrDefault();
+        if (OrderNumber == null)
+        {
+            var orderNumber = new SequentialNumbers();
+            _context.RefNumbers.Add(orderNumber);
+        }
+        OrderNumber.LastOrderNumber++;
+        _context.SaveChanges();
+        return +OrderNumber.LastOrderNumber;
+
+
     }
 }

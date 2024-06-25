@@ -15,6 +15,7 @@ public class DataContext : DbContext
 
 
     // here to add
+    public DbSet<SequentialNumbers> RefNumbers { get; set; }
 public DbSet<ItemTag> ItemTags { get; set; }
 public DbSet<Tag> Tags { get; set; }
 public DbSet<Package> Packages { get; set; }

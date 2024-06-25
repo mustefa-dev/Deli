@@ -9,7 +9,6 @@ namespace Deli.DATA.DTOs
         public  string ArMainDetails { get; set; }
         public string? Description { get; set; }
         public string? ArDescription { get; set; }
-        public string? RefNumber { get; set; }
         public Dictionary<string, string> AdditionalInfo{ get; set; }
         public string[] imaages { get; set; }
         public double? Price { get; set; }

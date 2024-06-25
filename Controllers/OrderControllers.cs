@@ -56,7 +56,5 @@ namespace Deli.Controllers
         [HttpGet("CreateFinancialReport")]
         public async Task<ActionResult<string>> CreateFinancialReport([FromQuery] OrderStatisticsFilter filter) => Ok(await _orderServices.CreateFinancialReport());
         
-        [HttpPost("CreateOrderFromCart")]
-        public async Task<ActionResult<Order>> CreateOrderFromCart() => Ok(await _orderServices.CreateOrderFromCart(Id,Language));
     }
 }

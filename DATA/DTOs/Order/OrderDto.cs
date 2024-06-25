@@ -1,3 +1,4 @@
+using Deli.DATA.DTOs.User;
 using Deli.Entities;
 
 namespace Deli.DATA.DTOs
@@ -9,6 +10,7 @@ namespace Deli.DATA.DTOs
         public OrderStatus? OrderStatus { get; set; }
         public string? Note { get; set; }
         public AddressDto? Address { get; set; }
+        public UserDto? User { get; set; }
         public ICollection<OrderItemDto> OrderItemDto { get; set; }      
         public string? ClientName { get; set; }
         public string? ClientEmail { get; set; }

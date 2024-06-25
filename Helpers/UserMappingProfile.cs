@@ -125,8 +125,8 @@ CreateMap<Order, OrderDto>()
     .ForMember(dest => dest.ClientName, opt => opt.MapFrom(src => src.User.FullName ))
     .ForMember(dest => dest.ClientEmail, opt => opt.MapFrom(src => src.User.Email))
     .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => Convert.ToDecimal(src.TotalPrice) + src.User.Governorate.DeliveryPrice))
-    .ForMember(dest => dest.orderstatus, opt => opt.MapFrom(src => src.OrderStatus.ToString())
-    );
+    .ForMember(dest => dest.orderstatus, opt => opt.MapFrom(src => src.OrderStatus.ToString()))
+        .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User));
         
     
 CreateMap<OrderForm,Order>();
