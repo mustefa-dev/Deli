@@ -52,6 +52,7 @@ public async Task<(ReviewDto? review, string? error)> Create(ReviewForm reviewFo
     
     var review = _mapper.Map<Review>(reviewForm);
     review.UserId = userId;
+    review.User = await _repositoryWrapper.User.Get(x => x.Id == userId);
     var result = await _repositoryWrapper.Review.Add(review);
     if (result == null)
     {

@@ -3,6 +3,7 @@ namespace Deli.Entities
     public class AppUser : BaseEntity<Guid>
     {
         public string? Email { get; set; }
+        public string? Image { get; set; }
         
         public string? FullName { get; set; }
         
