@@ -12,6 +12,7 @@ namespace Deli.Services;
 public interface IReviewServices
 {
 Task<(ReviewDto? review, string? error)> Create(ReviewForm reviewForm, Guid userId, string language);
+Task<(ReviewDto? review, string? error)> GetById(Guid id, string language);
 Task<(List<ReviewDto> reviews, int? totalCount, string? error)> GetAll(ReviewFilter filter, string language);
 Task<(ReviewDto? review, string? error)> Update(Guid id , ReviewUpdate reviewUpdate, Guid userId, string language);
 Task<(ReviewDto? review, string? error)> Delete(Guid id, string language);
@@ -100,6 +101,12 @@ public async Task<(ReviewDto? review, string? error)> Delete(Guid id, string lan
         if (result == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Error in deleting review", "خطأ في حذف التقييم", language));
         return (_mapper.Map<ReviewDto>(result), null);
    
+    }
+public async Task<(ReviewDto? review, string? error)> GetById(Guid id, string language)
+    {
+        var review = await _repositoryWrapper.Review.Get(x => x.Id == id);
+        if (review == null) return (null, ErrorResponseException.GenerateLocalizedResponse("Review not found", "لم يتم العثور على التقييم", language));
+        return (_mapper.Map<ReviewDto>(review), null);
     }
 
 }

@@ -65,6 +65,8 @@ namespace Deli.Controllers
         
         [HttpGet("GetAllReviews")]
         public async Task<ActionResult<List<ReviewDto>>> GetAllReviews([FromQuery] ReviewFilter filter) => Ok(await _reviewServices.GetAll(filter,Language) , filter.PageNumber , filter.PageSize);
+        [HttpGet("GetReview{id}")]
+        public async Task<ActionResult<ReviewDto>> GetReviewById(Guid id) => Ok(await _reviewServices.GetById(id,Language));
 
         
         [HttpPost("CreateReview")]
