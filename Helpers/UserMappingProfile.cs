@@ -14,6 +14,7 @@ namespace Deli.Helpers;
 public class UserMappingProfile : Profile
 {
     public UserMappingProfile()
+    
     {
         var baseUrl = "http://139.84.174.215:3387/";
 
