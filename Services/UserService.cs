@@ -76,7 +76,7 @@ namespace Deli.Services
             if (user == null) return (null, ErrorResponseException.GenerateLocalizedResponse("User not found", "المستخدم غير متوفر", language));
             await _repositoryWrapper.User.SoftDelete(id);
             var userEvent = new GenericDataUpdateDto<AppUser> { Event = "Deleted", Data = user };
-            await _usersHub.BroadcastUserEvent(userEvent);
+            await _usersHubContext.Clients.All.SendAsync("event", userEvent);
             return (user, null);
         }
 
@@ -120,7 +120,7 @@ namespace Deli.Services
             user = _mapper.Map(updateUserForm, user);
             await _repositoryWrapper.User.UpdateUser(user);
             var userEvent = new GenericDataUpdateDto<AppUser> { Event = "Updated", Data = user };
-            await _usersHub.BroadcastUserEvent(userEvent);
+            await _usersHubContext.Clients.All.SendAsync("event", userEvent);
 
             return (user, null);
         }
